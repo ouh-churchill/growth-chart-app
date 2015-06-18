@@ -43,7 +43,9 @@ gem 'sprockets', '~> 2.11.0' # Require to create gzipped assets
 # when building via Jenkins. See build.sh file.
 group :cerner, :default do
   source 'http://repo.release.cerner.corp/main/rubygems/'
-  gem 'igneous-smart', git: 'http://github.cerner.com/Igneous/igneous-smart.git'
+  source 'http://repo.release.cerner.corp/internal/rubygems/'
+
+  gem 'igneous-smart', '~> 1.0'
   gem 'timber', '~> 1.7.0', :source => 'http://repo.release.cerner.corp/main/rubygems/'
   gem 'ion_common', '~> 3.7'
   gem 'hi-checkup', '~> 1.6'
