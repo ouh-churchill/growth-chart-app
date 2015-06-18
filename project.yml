@@ -1,0 +1,28 @@
+name: Igneous Smart Server
+group_id: com.cerner.igneous
+artifact_id: igneous-smart_server
+version: 0.0.1.SNAPSHOT
+test: rspec
+doc: tomdoc
+coverage:
+  directory: coverage
+github:
+  project_url: http://github.cerner.com/Igneous/igneous-smart_server/
+  previous_version: 0.0.1
+repository:
+  id: cerner-internal-release
+  url: http://repo.release.cerner.corp/internal/repo/
+site_repository:
+  id: cerner-release-internal-site
+  url: http://repo.release.cerner.corp/internal/site/
+snapshot_repository:
+  id: exodus-snapshot
+  url: http://repo.exodus.cerner.corp/snapshot-repo/
+snapshot_site_repository:
+  id: exodus-snapshot-site
+  url: http://repo.exodus.cerner.corp/snapshot-site/
+philter:
+  ruby:
+    exclusions: ['target/**/*']
+  javascript:
+    exclusions: ['**/*']

@@ -1,0 +1,8 @@
+---
+development:
+  primary:
+  - {name: oauth2, type: service, path: 'https://fhir.devcernerpowerchart.com/oauth2/meta/health'}
+
+production:
+  primary:
+  - {name: oauth2, type: service, path: 'https://fhir.devcernerpowerchart.com/oauth2/meta/health'}

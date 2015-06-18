@@ -1,0 +1,186 @@
+---
+development:
+  fhir:
+    cerner:
+      open_url: https://fhir.devcernerpowerchart.com/fhir/open/@tenant_id@
+      auth_url: https://fhir.devcernerpowerchart.com/fhir/@tenant_id@
+    hspc:
+      open_url: http://hspc.isalusconsulting.com/open-hsp-api
+    relay_health:
+      open_url: https://fhirbrokereast.azurewebsites.net/api/fhir
+  smart_apps:
+    '1':
+      name: Bilirubin Chart
+      icon: bilirubin_chart_icon.png
+      company: Intermountain Healthcare
+      url: http://hspc.isalusconsulting.com/demo/apps/bilirubin-chart/launch.html
+      fhir: cerner
+      authorization: false
+      responsive: true
+    '2':
+      name: Bilirubin Chart (Auth)
+      icon: bilirubin_chart_icon.png
+      company: Intermountain Healthcare
+      url: http://hspc.isalusconsulting.com/demo/apps/bilirubin-chart/launch.html
+      fhir: cerner
+      authorization: true
+      responsive: true
+    '3':
+      name: Blood Pressure Percentiles
+      icon: blood_pressure_percentiles_icon.png
+      company: Boston Children's Hospital
+      url: https://fhir.smarthealthit.org/apps/bp-centiles/launch.html
+      fhir: cerner
+      authorization: false
+      responsive: true
+    '4':
+      name: Blood Pressure Percentiles (Auth)
+      icon: blood_pressure_percentiles_icon.png
+      company: Boston Children's Hospital
+      url: https://fhir.smarthealthit.org/apps/bp-centiles/launch.html
+      fhir: cerner
+      authorization: true
+      responsive: true
+    '5':
+      name: Cardiac Risk
+      icon: cardiac_risk_icon.png
+      company: Boston Children's Hospital
+      url: https://fhir.smarthealthit.org/apps/cardiac-risk/launch.html
+      fhir: cerner
+      authorization: false
+      responsive: true
+    '6':
+      name: Cardiac Risk (Auth)
+      icon: cardiac_risk_icon.png
+      company: Boston Children's Hospital
+      url: https://fhir.smarthealthit.org/apps/cardiac-risk/launch.html
+      fhir: cerner
+      authorization: true
+      responsive: true
+    '7':
+      name: Charts
+      icon: charts_icon.png
+      company: Boston Children's Hospital
+      url: org.chip.ios.charts://
+      fhir: cerner
+      authorization: false
+      responsive: true
+    '8':
+      name: CommonWell Viewer
+      icon: commonwell_icon.png
+      company: Cerner
+      url: https://fhir.devcernerpowerchart.com/fhir/commonwell/index.html
+      fhir: relay_health
+      authorization: false
+      responsive: true
+      commonwell: himss
+    '9':
+      name: CommonWell Viewer (Demo)
+      icon: commonwell_icon.png
+      company: Cerner
+      url: https://fhir.devcernerpowerchart.com/fhir/commonwell/index.html
+      fhir: relay_health
+      authorization: false
+      responsive: true
+      commonwell: demo
+    '10':
+      name: Crimson Care Management
+      icon: crimson_care_management_icon.png
+      company: The Advisory Board
+      url: https://fhirdemo.advisory.com/launcher/launch.html
+      fhir: cerner
+      authorization: true
+      responsive: true
+    '11':
+      name: EnrG|Rheum (Disabled)
+      icon: ''
+      company: xG Health Solutions
+      url: http://www.example.com/
+      fhir: cerner
+      authorization: false
+      responsive: false
+      type: rheum
+    '12':
+      name: Healthwise
+      icon: healthwise_icon.png
+      company: Healthwise
+      url: https://smart.healthwise.net/initialize
+      fhir: cerner
+      authorization: false
+      responsive: true
+      type: healthwise
+    '13':
+      name: Healthwise (Auth)
+      icon: healthwise_icon.png
+      company: Healthwise
+      url: https://smart.healthwise.net/initialize
+      fhir: cerner
+      authorization: true
+      responsive: true
+      type: healthwise
+    '14':
+      name: Health Ally
+      icon: health_ally_icon.png
+      company: OSIA Medical
+      url: https://hspc-portal-conditionplatform-osiamedical.azurewebsites.net/launch.html
+      fhir: cerner
+      authorization: false
+      responsive: true
+    '15':
+      name: Health Ally (Auth)
+      icon: health_ally_icon.png
+      company: OSIA Medical
+      url: https://hspc-portal-conditionplatform-osiamedical.azurewebsites.net/launch.html
+      fhir: cerner
+      authorization: true
+      responsive: true
+    '16':
+      name: Meducation
+      icon: meducation_icon.png
+      company: Polyglot Systems
+      url: https://fhir.meducation.com/launch.html
+      fhir: cerner
+      authorization: false
+      responsive: true
+    '17':
+      name: Meducation (Auth)
+      icon: meducation_icon.png
+      company: Polyglot Systems
+      url: https://fhir.meducation.com/launch.html
+      fhir: cerner
+      authorization: true
+      responsive: true
+    '18':
+      name: Pediatric Growth Chart
+      icon: pediatric_growth_chart_icon.png
+      company: Boston Children's Hospital
+      url: https://fhir.smarthealthit.org/apps/growth-chart/launch.html
+      fhir: cerner
+      authorization: false
+      responsive: true
+    '19':
+      name: Pediatric Growth Chart (Auth)
+      icon: pediatric_growth_chart_icon.png
+      company: Boston Children's Hospital
+      url: https://fhir.smarthealthit.org/apps/growth-chart/launch.html
+      fhir: cerner
+      authorization: true
+      responsive: true
+    '20':
+      name: VisualDX
+      icon: visualdx_icon.png
+      company: VisualDX
+      url: http://clupea.visualdx.com/visualdx/widgets/smart.jsp
+      fhir: cerner
+      authorization: false
+      responsive: true
+      type: visualdx
+    '21':
+      name: VisualDX (Auth)
+      icon: visualdx_icon.png
+      company: VisualDX
+      url: http://clupea.visualdx.com/visualdx/widgets/smart/launch.html
+      fhir: cerner
+      authorization: true
+      responsive: true
+      type: visualdx
