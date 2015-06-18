@@ -1,6 +1,6 @@
 issue_base_uri: http://jira2.cerner.corp/browse/
 versions:
   - version: 0.0.1
-    release_date: 2015-06-??
+    release_date: 2015-06-18
     changes:
       - {author: kk014173, comment: Initial commit of igneous-smart server, issue: OPENSVC-346, type: add}
