@@ -1,3 +1,10 @@
+GIT
+  remote: http://github.cerner.com/Igneous/igneous-smart.git
+  revision: 0c60d24473fb71fa9655d547f5e79b443e4a6abe
+  specs:
+    igneous-smart (1.1.0.SNAPSHOT)
+      rails (~> 4.2)
+
 GEM
   remote: https://rubygems.org/
   remote: http://repo.release.cerner.corp/internal/rubygems/
@@ -106,8 +113,6 @@ GEM
     httpclient (2.6.0.1)
     i18n (0.7.0)
     ice_nine (0.11.1)
-    igneous-smart (1.0.0)
-      rails (~> 4.2)
     ion_common (3.7.0)
       activesupport
       basset-client (~> 1.5)
@@ -289,7 +294,7 @@ DEPENDENCIES
   combustion (~> 0.5)
   flatten_jbuilder (~> 1.2.0)
   hi-checkup (~> 1.6)
-  igneous-smart (~> 1.0)
+  igneous-smart!
   ion_common (~> 3.7)
   jbuilder (~> 2.0)
   jquery-rails
