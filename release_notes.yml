@@ -1,7 +1,7 @@
 issue_base_uri: http://jira2.cerner.corp/browse/
 versions:
   - version: 0.0.3
-    release_date: 2015-06-xx
+    release_date: 2015-06-29
     changes:
       - {author: kk014173, comment: Support SMART launch context, issue: OPENSVC-372, type: add}
   - version: 0.0.2
