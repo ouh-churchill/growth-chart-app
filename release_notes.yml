@@ -3,7 +3,7 @@ versions:
   - version: 0.0.3
     release_date: 2015-06-xx
     changes:
-      - {author: ab0000, comment: TODO, issue: OPENSVC-00, type: add}
+      - {author: kk014173, comment: Support SMART launch context, issue: OPENSVC-372, type: add}
   - version: 0.0.2
     release_date: 2015-06-19
     changes:
