@@ -11,10 +11,8 @@ ion_common_location = File.join(Gem::Specification.find_all_by_name('ion_common'
 Dir.glob(ion_common_location + '/*.rake', &method(:load))
 
 require 'rake/clean'
-# define the intermediary artifacts that 'clean' removes
-CLEAN.include ['Gemfile.lock', 'target/coverage', 'target/doc', 'target/reports']
 
-# items in CLEAN and CLOBBER
-CLOBBER.include ['target/site', 'target/*.gem']
+# define the intermediary artifacts that 'clean' removes
+CLEAN.include ['coverage', 'target']
 
 Rails.application.load_tasks
