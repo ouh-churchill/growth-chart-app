@@ -39,7 +39,7 @@ group :cerner, :default do
   source 'http://repo.release.cerner.corp/main/rubygems/'
   source 'http://repo.release.cerner.corp/internal/rubygems/'
 
-  gem 'igneous-smart', git: 'http://github.cerner.com/Igneous/igneous-smart.git'
+  gem 'igneous-smart', '0.0.3'
   gem 'timber', '~> 1.7.0', :source => 'http://repo.release.cerner.corp/main/rubygems/'
   gem 'ion_common', '~> 3.7'
   gem 'hi-checkup', '~> 1.6'
