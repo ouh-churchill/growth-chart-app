@@ -1,9 +1,9 @@
 issue_base_uri: http://jira2.cerner.corp/browse/
 versions:
   - version: 0.0.4
-    release_date: 2015-07-xx
+    release_date: 2015-07-02
     changes:
-      - {author: ab0000, comment: TODO, issue: OPENSVC-00, type: add}
+      - {author: KT026311, comment: Update server to point to latest version of SMART engine, issue: OPENSVC-404, type: update}
   - version: 0.0.3
     release_date: 2015-06-29
     changes:
