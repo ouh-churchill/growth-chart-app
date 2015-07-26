@@ -31,7 +31,7 @@ rvm --force gemset empty
 
 # update dependencies
 rm -rf cerner_gems
-curl -O https://github.cerner.com/ion-server-core/Ecosystem/raw/master/jenkins/cerner_gems
+curl -O --insecure https://github.cerner.com/ion-server-core/Ecosystem/raw/master/jenkins/cerner_gems
 chmod +x cerner_gems
 eval $(./cerner_gems)
 
