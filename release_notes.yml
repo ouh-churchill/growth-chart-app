@@ -3,7 +3,7 @@ versions:
   - version: 0.0.5
     release_date: 2015-xx-xx
     changes:
-      - {author: ab0000, comment: TODO, issue: OPENSVC-00, type: add}
+      - {author: kt026311, comment: Add migrations to support storing SMART apps in the database, issue: OPENSVC-432, type: add}
   - version: 0.0.4
     release_date: 2015-07-02
     changes:
