@@ -1,7 +1,7 @@
 issue_base_uri: http://jira2.cerner.corp/browse/
 versions:
   - version: 0.0.5
-    release_date: 2015-xx-xx
+    release_date: 2015-07-26
     changes:
       - {author: kt026311, comment: Add migrations to support storing SMART apps in the database, issue: OPENSVC-432, type: add}
   - version: 0.0.4
