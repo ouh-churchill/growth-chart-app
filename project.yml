@@ -1,7 +1,7 @@
 name: Igneous Smart Server
 group_id: com.cerner.igneous
 artifact_id: igneous-smart_server
-version: 0.0.5.SNAPSHOT
+version: 0.0.5
 test: rspec
 doc: tomdoc
 package:
@@ -12,7 +12,7 @@ jira:
 coverage:
   directory: coverage
 github:
-  project_url: http://github.cerner.com/Igneous/igneous-smart_server/
+  project_url: https://github.cerner.com/Igneous/igneous-smart_server/
 repository:
   id: cerner-internal-release
   url: http://repo.release.cerner.corp/internal/repo/
