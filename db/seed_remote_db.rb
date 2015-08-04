@@ -48,7 +48,7 @@ def add_fhir_servers(*data)
 end
 
 def add_smart_apps(*data)
-  uri = URI.parse("#{SMART_SERVER}/dummy-tenant/apps")
+  uri = URI.parse("#{SMART_SERVER}/apps")
   data.each do | app |
     post(uri, app)
   end
