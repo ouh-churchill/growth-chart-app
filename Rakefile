@@ -5,6 +5,7 @@
 require File.expand_path('../config/application', __FILE__)
 require 'roll_out/jira' if defined?(RollOut::JIRA)
 require 'roll_out/security' if defined?(RollOut::Security)
+require 'philter/lint_results'
 
 #load common rake files
 ion_common_location = File.join(Gem::Specification.find_all_by_name('ion_common').first.full_gem_path, 'lib', 'tasks')
