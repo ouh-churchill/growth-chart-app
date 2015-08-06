@@ -1,7 +1,7 @@
-issue_base_uri: http://jira2.cerner.corp/browse/
+issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 0.0.6
-    release_date: 2015-xx-xx
+    release_date: 2015-08-06
     changes:
       - {author: kt026311, comment: Add Rubocop support for the igneous smart, issue: OPENSVC-452, type: update}
       - {author: kt026311, comment: Move igneous-smart engine into igneous-smart_server, issue: OPENSVC-445, type: add}
