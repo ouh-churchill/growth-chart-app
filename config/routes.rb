@@ -1,5 +1,5 @@
 IgneousSmartServer::Application.routes.draw do
-  #health check
+  # health check
   mount Hi::Checkup::Engine, at: '/'
 
   require 'igneous/smart'
@@ -9,8 +9,8 @@ IgneousSmartServer::Application.routes.draw do
   # The first route matches calls to the domain, while the second route matches everything else.
   # Matching on * does not work for both scenarios (for some reason)
   match '/', via: [:options],
-        to:  lambda {|env| [204, {}, []]}
+             to:  ->(_env) { [204, {}, []] }
   match '*unmatched', via: [:options],
-        to:  lambda {|env| [204, {}, []]}
+                      to:  ->(_env) { [204, {}, []] }
 
 end

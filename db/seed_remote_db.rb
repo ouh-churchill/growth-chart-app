@@ -4,25 +4,25 @@ require 'json'
 require 'net/https'
 require 'uri'
 
-unless (['localhost', 'dev', 'staging', 'sandbox', 'production'].include? ARGV[0])
+unless %w(localhost dev staging sandbox production).include? ARGV[0]
   raise ArgumentError, 'You must specify an environment: localhost|dev|staging|sandbox|production'
 end
 
 SMART_SERVER = if 'localhost' == ARGV[0]
-  'http://localhost:3000/smart'
-elsif ['dev', 'staging', 'sandbox'].include? ARGV[0]
-  "https://smart.#{ARGV[0]}cernerpowerchart.com/smart"
-else
-  "https://smart.cernerpowerchart.com/smart"
-end
+                 'http://localhost:3000/smart'
+               elsif %w(dev staging sandbox).include? ARGV[0]
+                 "https://smart.#{ARGV[0]}cernerpowerchart.com/smart"
+               else
+                 'https://smart.cernerpowerchart.com/smart'
+               end
 
 FHIR_SERVER = if 'localhost' == ARGV[0]
-  'http://localhost:3000'
-elsif ['dev', 'staging', 'sandbox'].include? ARGV[0]
-  "https://fhir.#{ARGV[0]}cernerpowerchart.com"
-else
-  "https://fhir.cernerpowerchart.com"
-end
+                'http://localhost:3000'
+              elsif %w(dev staging sandbox).include? ARGV[0]
+                "https://fhir.#{ARGV[0]}cernerpowerchart.com"
+              else
+                'https://fhir.cernerpowerchart.com'
+              end
 
 def post(uri, data)
   http = Net::HTTP.new(uri.host, uri.port)
@@ -33,7 +33,7 @@ def post(uri, data)
   request['Content-Type'] = 'application/json'
 
   response = http.request(request)
-  if ['201', '204'].include? response.code
+  if %w(201 204).include? response.code
     puts "Success (#{response.code}): #{data}"
   else
     puts "Failure (#{response.code}): #{data}"

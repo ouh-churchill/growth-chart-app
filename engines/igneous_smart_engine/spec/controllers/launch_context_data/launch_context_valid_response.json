@@ -1,0 +1,16 @@
+{
+    "params": {
+        "patient": "123",
+        "encounter": "456",
+        "ppr": "567",
+        "user": "12345"
+    },
+    "claims": {
+        "patient": "123",
+        "encounter": "456",
+        "ppr": "567",
+        "user": "12345"
+    },
+    "ver": "1.0",
+    "userfhirurl": "https://fhir.devcernerpowerchart.com/fhir/2c400054-42d8-4e74-87b7-80b5bd5fde9f/Practitioner/12345"
+}

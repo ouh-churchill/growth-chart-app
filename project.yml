@@ -2,10 +2,12 @@ name: Igneous Smart Server
 group_id: com.cerner.igneous
 artifact_id: igneous-smart_server
 version: 0.0.6.SNAPSHOT
-test: rspec
+test: rake
 doc: tomdoc
 package:
   type: rails
+  files:
+    - engines/**/*
 jira:
   url: http://jira2.cerner.corp
   project: OPENSVC
@@ -27,6 +29,6 @@ snapshot_site_repository:
   url: http://repo.exodus.cerner.corp/snapshot-site/
 philter:
   ruby:
-    exclusions: ['target/**/*']
+    exclusions: ['target/**/*', 'tmp/**/*', 'config/initializers/secret_token.rb', 'db/**/*']
   javascript:
-    exclusions: ['**/*']
+    exclusions: ['target/**/*', 'tmp/**/*', 'vendor/**/*', 'coverage/assets/**/*']

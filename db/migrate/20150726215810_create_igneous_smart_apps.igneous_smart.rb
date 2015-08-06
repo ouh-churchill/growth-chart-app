@@ -2,9 +2,9 @@
 class CreateIgneousSmartApps < ActiveRecord::Migration
   def change
     create_table :igneous_smart_apps do |t|
-      t.string :app_id, index: {unique: true}, null: false, limit: 36
-      t.string :name, index: {unique: true}, null: false, limit: 190
-      t.string :launch_url, index:true, null: false, limit: 190
+      t.string :app_id, index: { unique: true }, null: false, limit: 36
+      t.string :name, index: { unique: true }, null: false, limit: 190
+      t.string :launch_url, index: true, null: false, limit: 190
       t.boolean :authorized, default: true, null: false
       t.timestamps null: false
     end

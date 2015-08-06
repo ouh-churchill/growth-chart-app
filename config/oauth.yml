@@ -1,0 +1,6 @@
+---
+development:
+  oauth2_base_url: https://authorization.devcerner.com
+
+test:
+  oauth2_base_url: https://authorization.example.com/oauth2

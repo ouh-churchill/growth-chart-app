@@ -25,7 +25,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
 gem 'spring',        group: :development
 
-gem 'rack-cors', '~> 0.3' ,:require => 'rack/cors'
+gem 'rack-cors', '~> 0.3', require: 'rack/cors'
 gem 'yui-compressor', '0.12.0' # using exact version since different version creates different css compressed file
 gem 'sprockets', '~> 2.11.0' # Require to create gzipped assets
 gem 'libv8', '~> 3.16.14.11' # Since 3.16.14.9 got yanked, we had to restrict to point to the latest one
@@ -40,10 +40,10 @@ group :cerner, :default do
   source 'http://repo.release.cerner.corp/main/rubygems/'
   source 'http://repo.release.cerner.corp/internal/rubygems/'
 
-  gem 'igneous-smart', '~> 0.0.4'
-  gem 'timber', '~> 1.7.0', :source => 'http://repo.release.cerner.corp/main/rubygems/'
+  gem 'timber', '~> 1.7.0'
   gem 'ion_common', '~> 3.7'
   gem 'hi-checkup', '~> 1.6'
+  gem 'igneous-smart', '1.0.0', path: 'engines/igneous_smart_engine'
 end
 
 group :development do
@@ -56,9 +56,13 @@ group :development do
   gem 'philter', '~> 1.8'
 end
 
-group :test do
+group :development,:test do
   gem 'rspec-rails', '~> 3.2'
   gem 'combustion', '~> 0.5'
   gem 'simplecov', '~> 0.10'
   gem 'rspec-collection_matchers', '~> 1.1'
+  gem 'rspec', '~> 3.2'
+  gem 'rspec-mocks', '~> 3.2'
+  gem 'rspec-activemodel-mocks', '~> 1.0'
+  gem 'factory_girl_rails', '~> 4.0'
 end

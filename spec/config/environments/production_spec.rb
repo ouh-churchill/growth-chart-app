@@ -9,4 +9,3 @@ describe Rails.application.config do
     expect(config.paths['log'].first).to eq('/var/log/igneous-smart_server/production.log')
   end
 end
-

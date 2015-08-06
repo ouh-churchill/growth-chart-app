@@ -3,19 +3,23 @@ versions:
   - version: 0.0.6
     release_date: 2015-xx-xx
     changes:
-      - {author: xxx, comment: xxx, issue: OPENSVC-xxx, type: add}
+      - {author: kt026311, comment: Add Rubocop support for the igneous smart, issue: OPENSVC-452, type: update}
+      - {author: kt026311, comment: Move igneous-smart engine into igneous-smart_server, issue: OPENSVC-445, type: add}
   - version: 0.0.5
     release_date: 2015-07-26
     changes:
       - {author: kt026311, comment: Add migrations to support storing SMART apps in the database, issue: OPENSVC-432, type: add}
+      - {author: kt026311, comment: Store SMART apps in a database, issue: OPENSVC-432, type: add}
+      - {author: kk014173, comment: Refactor SMART launch context, issue: OPENSVC-431, type: update}
+      - {author: kk014173, comment: Add Millennium Integrated Auth Token, issue: OPENSVC-451, type: add}
   - version: 0.0.4
     release_date: 2015-07-02
     changes:
-      - {author: KT026311, comment: Update server to point to latest version of SMART engine, issue: OPENSVC-404, type: update}
+      - {author: KT026311, comment: Store launch context as a JSON string rather than a serialized object, issue: OPENSVC-403, type: fix}
   - version: 0.0.3
     release_date: 2015-06-29
     changes:
-      - {author: kk014173, comment: Support SMART launch context, issue: OPENSVC-372, type: add}
+      - {author: KT026311, comment: Support SMART launch context, issue: OPENSVC-355, type: add}
   - version: 0.0.2
     release_date: 2015-06-19
     changes:
@@ -24,3 +28,12 @@ versions:
     release_date: 2015-06-18
     changes:
       - {author: kk014173, comment: Initial commit of igneous-smart server, issue: OPENSVC-346, type: add}
+      - {author: ks8252, comment: Initial creation, issue: OPENSVC-94, type: add}
+      - {author: ks8252, comment: Add route to list all SMART apps, issue: OPENSVC-141, type: add}
+      - {author: ks8252, comment: URL encode FHIR URL parameter, issue: OPENSVC-150, type: add}
+      - {author: ks8252, comment: Add URL launch logic for CommonWell, issue: OPENSVC-149, type: add}
+      - {author: mp028833, comment: Style SMART app listing, issue: OPENSVC-151, type: add}
+      - {author: ks8252, comment: Support enrG rheum app launches, issue: OPENSVC-180, type: add}
+      - {author: ks8252, comment: Support Healthwise open app launches, issue: OPENSVC-91, type: add}
+      - {author: ks8252, comment: Ensure the trailing .00 is stripped from context parameters, issue: OPENSVC-207, type: fix}
+      - {author: ks8252, comment: Add credentials to VisualDx launch URL, issue: OPENSVC-215, type: add}
