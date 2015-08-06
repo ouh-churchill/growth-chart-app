@@ -1,0 +1,10 @@
+test:
+  level: info
+
+development:
+  level: debug
+  console: true
+
+production:
+  level: debug
+  beacon_url: https://clientlog.devcerner.com/igneous

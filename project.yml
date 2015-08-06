@@ -9,7 +9,7 @@ package:
   files:
     - engines/**/*
 jira:
-  url: http://jira2.cerner.corp
+  url: https://jira2.cerner.com
   project: OPENSVC
 coverage:
   directory: coverage

@@ -43,6 +43,7 @@ group :cerner, :default do
   gem 'timber', '~> 1.7.0'
   gem 'ion_common', '~> 3.7'
   gem 'hi-checkup', '~> 1.6'
+  gem 'canadarm_ruby', '~> 1.0'
   gem 'igneous-smart', '1.0.0', path: 'engines/igneous_smart_engine'
 end
 

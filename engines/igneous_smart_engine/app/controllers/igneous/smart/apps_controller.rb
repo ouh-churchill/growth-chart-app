@@ -25,6 +25,8 @@ module Igneous
 
         logger.info "#{self.class.name}, No base url configured for OAuth2." if OAUTH2_BASE_URL.blank?
 
+        response.headers['SMART-Launch'] = context_id
+
         render locals: {
           launch_url: launch_url,
           oauth2_base_url: OAUTH2_BASE_URL

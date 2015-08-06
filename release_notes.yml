@@ -5,6 +5,7 @@ versions:
     changes:
       - {author: kt026311, comment: Add Rubocop support for the igneous smart, issue: OPENSVC-452, type: update}
       - {author: kt026311, comment: Move igneous-smart engine into igneous-smart_server, issue: OPENSVC-445, type: add}
+      - {author: kk014173, comment: Refactor Millennium Integrated Auth Token JavaScript code, issue: OPENSVC-467, type: add}
   - version: 0.0.5
     release_date: 2015-07-26
     changes:
