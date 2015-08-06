@@ -1,5 +1,9 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
+  - version: 0.0.7
+    release_date: 2015-xx-xx
+    changes:
+      - {author: xxx, comment: xxx, issue: OPENSVC-xxx, type: add}
   - version: 0.0.6
     release_date: 2015-08-06
     changes:
