@@ -17,11 +17,15 @@ module Igneous
         context = LaunchContext.find_by context_id: params['launch']
 
         if validate_version || validate_launch_id(context)
+          audit_smart_event(:smart_launch_context_resolve, :minor_failure, tenant: params['tnt'],
+                                                                           error: @error_response['error'])
           render status: 400, json: @error_response.to_json
           return
         end
 
         if validate_launch_context(context)
+          audit_smart_event(:smart_launch_context_resolve, :minor_failure, tenant: params['tnt'],
+                                                                           error: @error_response['error'])
           render status: 500, json: @error_response.to_json
           return
         end
@@ -45,6 +49,15 @@ module Igneous
 
         @response_context['ver'] = params['ver']
         @response_context['userfhirurl'] = user_fhir_url(context_data['user'].to_i.to_s)
+
+        audit_hash = {
+          tenant: params['tnt'],
+          user_id: context_data['user'],
+          patient_id: context_data['patient'],
+          encounter_id: context_data['encounter']
+        }.reject { |_k, v| v.nil? }
+
+        audit_smart_event(:smart_launch_context_resolve, :success, audit_hash)
 
         render status: 200, json: @response_context.to_json
       end

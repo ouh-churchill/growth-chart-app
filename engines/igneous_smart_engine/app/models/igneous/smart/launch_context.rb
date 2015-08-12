@@ -37,10 +37,7 @@ module Igneous
         add_context.call('device_location', 'DEV_Location', false)
         add_context.call('app_name',        'APP_AppName', false)
 
-        context_id = SecureRandom.uuid
-        create(context_id: context_id, data: smart_context.to_json)
-
-        context_id
+        create(context_id: SecureRandom.uuid, data: smart_context.to_json)
       end
     end
   end

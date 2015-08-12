@@ -15,7 +15,18 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
       FactoryGirl.create(:fhir_server_factory, name: 'cerner', url: 'https://fhir.devcernerpowerchart.com/fhir/@tenant_id@')
     end
 
-    it 'returns success when the matching record is found' do
+    it 'returns success when the matching record is found and audits as success' do
+
+      audit_hash = {
+        tenant: '2c400054-42d8-4e74-87b7-80b5bd5fde9f',
+        user_id: '12345',
+        patient_id: '123',
+        encounter_id: '456'
+      }
+
+      expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
+        .with(:smart_launch_context_resolve, :success, audit_hash)
+
       post(:resolve, format: 'json', aud: 'https://fhir.devcernerpowerchart.com/fhir/foo',
                      launch: '6e1b99f7-e05b-42d1-b304-d8180858ce8c',
                      sub: '12345',
@@ -30,7 +41,13 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
       expect(JSON.parse(response.body)).to eql response_in_json
     end
 
-    it 'returns failure when there is a version mismatch' do
+    it 'returns failure when there is a version mismatch and audits as minor_failure' do
+
+      expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
+        .with(:smart_launch_context_resolve, :minor_failure,
+              tenant: '2c400054-42d8-4e74-87b7-80b5bd5fde9f',
+              error: 'urn:com:cerner:authorization:error:launch:unsupported-version')
+
       post(:resolve, format: 'json', aud: 'https://fhir.devcernerpowerchart.com/fhir/foo',
                      launch: '6e1b99f7-e05b-42d1-b304-d8180858ce8c',
                      sub: '12345',
@@ -43,7 +60,13 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
       expect(parsed_response_body['error']).to eql 'urn:com:cerner:authorization:error:launch:unsupported-version'
     end
 
-    it 'returns failure when the launch id is nil or launch id not passed in as a parameter' do
+    it 'returns failure when the launch id is nil or launch id not passed in as a parameter and audits as minor_failure' do
+
+      expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
+        .with(:smart_launch_context_resolve, :minor_failure,
+              tenant: '2c400054-42d8-4e74-87b7-80b5bd5fde9f',
+              error: 'urn:com:cerner:authorization:error:launch:invalid-launch-code')
+
       post(:resolve, format: 'json', aud: 'https://fhir.devcernerpowerchart.com/fhir/foo',
                      sub: '12345',
                      ver: '1.0',
@@ -55,7 +78,13 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
       expect(parsed_response_body['error']).to eql 'urn:com:cerner:authorization:error:launch:invalid-launch-code'
     end
 
-    it 'returns failure when the launch context record cannot be found' do
+    it 'returns failure when the launch context record cannot be found and audits as minor_failure' do
+
+      expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
+        .with(:smart_launch_context_resolve, :minor_failure,
+              tenant: '2c400054-42d8-4e74-87b7-80b5bd5fde9f',
+              error: 'urn:com:cerner:authorization:error:launch:invalid-launch-code')
+
       post(:resolve, format: 'json', aud: 'https://fhir.devcernerpowerchart.com/fhir/foo',
                      launch: '6e1b99f7-e05b-42d1-b304-d8180858c999',
                      sub: '12345',

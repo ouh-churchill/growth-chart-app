@@ -1,0 +1,5 @@
+development:
+  auditor: LoggingAuditor
+
+test:
+  auditor: LoggingAuditor

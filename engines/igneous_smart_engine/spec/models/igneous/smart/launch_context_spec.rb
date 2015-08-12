@@ -17,19 +17,19 @@ describe Igneous::Smart::LaunchContext do
 
       allow(SecureRandom).to receive(:uuid).and_return '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
 
-      context_id = launch_context.context(params)
-      context = launch_context.find_by context_id: context_id
+      context = launch_context.context(params)
+      retrieved_context = launch_context.find_by context_id: context.context_id
 
-      expect(context.context_id).to eq '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
-      expect(JSON.parse(context.data)).to include('patient' => '1', 'ppr' => '2', 'encounter' => '3',
-                                                  'user' => '4', 'position' => '5', 'device_location' => '6',
-                                                  'app_name' => '7')
+      expect(retrieved_context.context_id).to eq '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
+      expect(JSON.parse(retrieved_context.data)).to include('patient' => '1', 'ppr' => '2', 'encounter' => '3',
+                                                            'user' => '4', 'position' => '5', 'device_location' => '6',
+                                                            'app_name' => '7')
     end
 
     it 'constructs an empty SMART context when no params are present' do
-      context_id = launch_context.context({})
-      context = launch_context.find_by context_id: context_id
-      expect(JSON.parse(context.data)).to be_empty
+      context = launch_context.context({})
+      retrieved_context = launch_context.find_by context_id: context.context_id
+      expect(JSON.parse(retrieved_context.data)).to be_empty
     end
 
     it 'constructs a complete SMART context when all params are present' do
@@ -43,11 +43,11 @@ describe Igneous::Smart::LaunchContext do
         'APP_AppName'    => '7'
       }
 
-      context_id = launch_context.context(params)
-      context = launch_context.find_by context_id: context_id
-      expect(JSON.parse(context.data)).to include('patient' => '1', 'ppr' => '2', 'encounter' => '3',
-                                                  'user' => '4', 'position' => '5', 'device_location' => '6',
-                                                  'app_name' => '7')
+      context = launch_context.context(params)
+      retrieved_context = launch_context.find_by context_id: context.context_id
+      expect(JSON.parse(retrieved_context.data)).to include('patient' => '1', 'ppr' => '2', 'encounter' => '3',
+                                                            'user' => '4', 'position' => '5', 'device_location' => '6',
+                                                            'app_name' => '7')
     end
 
     it 'strips .00 added by PowerChart from all numeric parameter values' do
@@ -58,11 +58,11 @@ describe Igneous::Smart::LaunchContext do
         'APP_AppName'  => 'Spec Test'
       }
 
-      context_id = launch_context.context(params)
-      context = launch_context.find_by context_id: context_id
-      expect(JSON.parse(context.data)).to include('patient' => '1', 'encounter' => '2',
-                                                  'device_location' => 'East Wing',
-                                                  'app_name' => 'Spec Test')
+      context = launch_context.context(params)
+      retrieved_context = launch_context.find_by context_id: context.context_id
+      expect(JSON.parse(retrieved_context.data)).to include('patient' => '1', 'encounter' => '2',
+                                                            'device_location' => 'East Wing',
+                                                            'app_name' => 'Spec Test')
     end
 
     it 'will not add key, value pair when value is not supplied or nil' do
@@ -74,10 +74,11 @@ describe Igneous::Smart::LaunchContext do
         'APP_AppName'  => nil
       }
 
-      context_id = launch_context.context(params)
-      context = launch_context.find_by context_id: context_id
-      expect(JSON.parse(context.data)).to include('patient' => '1', 'encounter' => '2')
-      expect(JSON.parse(context.data)).to_not include('ppr' => '0', 'device_location' => nil, 'app_name' => nil)
+      context = launch_context.context(params)
+      retrieved_context = launch_context.find_by context_id: context.context_id
+      expect(JSON.parse(retrieved_context.data)).to include('patient' => '1', 'encounter' => '2')
+      expect(JSON.parse(retrieved_context.data)).to_not include('ppr' => '0', 'device_location' => nil,
+                                                                'app_name' => nil)
     end
   end
 end

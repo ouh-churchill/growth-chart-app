@@ -1,0 +1,45 @@
+smart_launch_app:
+  description: The user launches the smart app.
+  tenant:
+    description: The tenant to which the user is associated.
+    type: system_key
+  attributes:
+    user_id:
+      description: The user id for the user.
+      type: simple
+    patient_id:
+      description: The Cerner Millennium patient_id for the patient associated to the event.
+      type: simple
+    encounter_id:
+      description: The Cerner Millennium encounter_id for the patient associated to the event.
+      type: simple
+    app_name:
+      description: The EHR application that is launching the SMART app.
+      type: simple
+    remote_ip:
+      description: The originating IP address.
+      type: ip_address
+    error:
+      description: The reason for the failure
+      type: simple
+smart_launch_context_resolve:
+  description: The launch context gets resolved.
+  tenant:
+    description: The tenant to which the user is associated.
+    type: system_key
+  attributes:
+    user_id:
+      description: The user id for the user.
+      type: simple
+    patient_id:
+      description: The Cerner Millennium patient_id for the patient associated to the event.
+      type: simple
+    encounter_id:
+      description: The Cerner Millennium encounter_id for the patient associated to the event.
+      type: simple
+    remote_ip:
+      description: The originating IP address.
+      type: ip_address
+    error:
+      description: The reason for the failure
+      type: simple

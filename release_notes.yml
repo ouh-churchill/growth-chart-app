@@ -3,7 +3,7 @@ versions:
   - version: 0.0.7
     release_date: 2015-xx-xx
     changes:
-      - {author: xxx, comment: xxx, issue: OPENSVC-xxx, type: add}
+      - {author: kt026311, comment: Add auditing support, issue: OPENSVC-486, type: add}
   - version: 0.0.6
     release_date: 2015-08-06
     changes:

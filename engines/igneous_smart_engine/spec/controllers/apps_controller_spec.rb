@@ -53,7 +53,7 @@ describe Igneous::Smart::AppsController, type: :controller do
         expect(response).to redirect_to('http://smart.example5.com/?fhirServiceUrl=http%3A%2F%2Ffhir.example.com&patientId=0')
       end
 
-      it 'create launch context and compute launch URL' do
+      it 'audits as success, create launch context and compute launch URL' do
         FactoryGirl.create(:fhir_server_factory)
         FactoryGirl.create(:app_factory,
                            app_id: 'app1',
@@ -63,6 +63,10 @@ describe Igneous::Smart::AppsController, type: :controller do
 
         allow(SecureRandom).to receive(:uuid).and_return 'launch-context-id'
 
+        expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
+          .with(:smart_launch_app, :success, tenant: 'foo', user_id: '400',
+                                             patient_id: '100', encounter_id: '300', app_id: 'app1')
+
         get :show, ehr_source_id: 'foo', id: 'app1', 'PAT_PersonId' => '100.00', 'PAT_PPRCode' => '200.00',
                    'VIS_EncntrId' => '300.00', 'USR_PersonId' => '400.00'
         expect(response).to have_http_status(200)
@@ -70,11 +74,15 @@ describe Igneous::Smart::AppsController, type: :controller do
         context = Igneous::Smart::LaunchContext.find_by context_id: 'launch-context-id'
         expect(JSON.parse(context.data)).to include('patient' => '100', 'ppr' => '200',
                                                     'encounter' => '300', 'user' => '400')
+
       end
     end
 
     context 'when a SMART app cannot be found' do
-      it 'returns 404' do
+      it 'audits as minor_failure and returns 404' do
+        expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
+          .with(:smart_launch_app, :minor_failure, app_id: '666', error: 'Unknown Application')
+
         get :show, ehr_source_id: 'foo', id: '666'
         expect(response).to have_http_status(404)
       end
