@@ -1,7 +1,7 @@
 name: Igneous Smart Server
 group_id: com.cerner.igneous
 artifact_id: igneous-smart_server
-version: 0.0.7.SNAPSHOT
+version: 0.0.7
 test: rake
 doc: tomdoc
 package:
