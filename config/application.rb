@@ -35,5 +35,10 @@ module IgneousSmartServer
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+
+    # Swap Rails::Rack::Logger with Igneous::Smart::Logger to inject additional information
+    # in the log. The actual implementation will not be altered as super will be called to execute the logic in
+    # Rails::Rack::Logger after the additional logging information is injected.
+    config.middleware.swap Rails::Rack::Logger, Igneous::Smart::Logger
   end
 end
