@@ -31,4 +31,5 @@ philter:
   ruby:
     exclusions: ['target/**/*', 'tmp/**/*', 'config/initializers/secret_token.rb', 'db/**/*']
   javascript:
-    exclusions: ['target/**/*', 'tmp/**/*', 'vendor/**/*', 'coverage/assets/**/*']
+    exclusions: ['target/**/*', 'tmp/**/*', 'engines/**/vendor/**/*', 'coverage/assets/**/*', 'public/assets/*']
+    globals: ['XMLCclRequest', 'Canadarm']

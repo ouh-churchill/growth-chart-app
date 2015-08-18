@@ -1,5 +1,6 @@
 require 'securerandom'
 require 'igneous/smart/launch_context'
+require 'igneous/smart/app'
 
 describe Igneous::Smart::AppsController, type: :controller do
   routes { Igneous::Smart::Engine.routes }
@@ -11,30 +12,17 @@ describe Igneous::Smart::AppsController, type: :controller do
 
   describe 'GET index' do
     it 'retrieves SMART apps and renders them' do
-      allow(SecureRandom).to receive(:uuid).and_return '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
-
       get :index, ehr_source_id: 'foo'
       expect(response).to have_http_status(200)
       expect(response).to render_template(:index)
-
-      context = Igneous::Smart::LaunchContext.find_by context_id: '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
-      expect(context).to_not be_nil
-      expect(JSON.parse(context.data)).to be_empty
     end
 
     it 'retrieves SMART apps with context and renders them' do
-      allow(SecureRandom).to receive(:uuid).and_return '46134c2c-7412-4d53-b09e-e8ced4c73123'
-
       get :index, ehr_source_id: 'foo', 'PAT_PersonId' => '1', 'PAT_PPRCode' => '2', 'VIS_EncntrId' => '3',
                   'USR_PersonId' => '4', 'USR_PositionCd' => '5', 'DEV_Location' => '6',
                   'APP_AppName' => '7'
       expect(response).to have_http_status(200)
       expect(response).to render_template(:index)
-
-      context = Igneous::Smart::LaunchContext.find_by context_id: '46134c2c-7412-4d53-b09e-e8ced4c73123'
-      expect(JSON.parse(context.data)).to include('patient' => '1', 'ppr' => '2', 'encounter' => '3',
-                                                  'user' => '4', 'position' => '5',
-                                                  'device_location' => '6', 'app_name' => '7')
     end
   end
 
@@ -53,7 +41,7 @@ describe Igneous::Smart::AppsController, type: :controller do
         expect(response).to redirect_to('http://smart.example5.com/?fhirServiceUrl=http%3A%2F%2Ffhir.example.com&patientId=0')
       end
 
-      it 'audits as success, create launch context and compute launch URL' do
+      it 'audits as success, create launch context and redirect to preauthenticate the user' do
         FactoryGirl.create(:fhir_server_factory)
         FactoryGirl.create(:app_factory,
                            app_id: 'app1',
@@ -61,7 +49,7 @@ describe Igneous::Smart::AppsController, type: :controller do
                            launch_url: 'http://smart.example6.com/',
                            authorized: true)
 
-        allow(SecureRandom).to receive(:uuid).and_return 'launch-context-id'
+        allow(SecureRandom).to receive(:uuid).and_return '11309546-4ef4-4dba-8f36-53ef3834d90e'
 
         expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
           .with(:smart_launch_app, :success, tenant: 'foo', user_id: '400',
@@ -69,12 +57,17 @@ describe Igneous::Smart::AppsController, type: :controller do
 
         get :show, ehr_source_id: 'foo', id: 'app1', 'PAT_PersonId' => '100.00', 'PAT_PPRCode' => '200.00',
                    'VIS_EncntrId' => '300.00', 'USR_PersonId' => '400.00'
-        expect(response).to have_http_status(200)
 
-        context = Igneous::Smart::LaunchContext.find_by context_id: 'launch-context-id'
+        expect(response).to have_http_status(302)
+        expect(response).to redirect_to('http://test.host/smart/user/preauth?context_id=11309546-4ef4-4dba-8f36-53ef3834d90e')
+
+        context = Igneous::Smart::LaunchContext.find_by context_id: '11309546-4ef4-4dba-8f36-53ef3834d90e'
         expect(JSON.parse(context.data)).to include('patient' => '100', 'ppr' => '200',
                                                     'encounter' => '300', 'user' => '400')
 
+        expect(context.app_id).to eq 'app1'
+        expect(context.smart_launch_url).to eq 'http://smart.example6.com/?iss=http%3A%2F%2Ffhir.example.com&' \
+          'launch=11309546-4ef4-4dba-8f36-53ef3834d90e'
       end
     end
 

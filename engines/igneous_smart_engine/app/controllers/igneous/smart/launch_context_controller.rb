@@ -13,7 +13,6 @@ module Igneous
       def resolve
         @error_response = {}
         @response_context = {}
-
         context = LaunchContext.find_by context_id: params['launch']
 
         if validate_version || validate_launch_id(context)
@@ -31,7 +30,6 @@ module Igneous
         end
 
         context_data =  JSON.parse(context.data)
-
         # commenting these lines out temporarily as this always fails today
         # (we need to work out the contract between us & OAuth 2)
         # if validate_user(context_data['user'])
@@ -48,8 +46,15 @@ module Igneous
         }.reject { |_k, v| v.nil? }
 
         @response_context['ver'] = params['ver']
-        @response_context['userfhirurl'] = user_fhir_url(context_data['user'].to_i.to_s)
+        @response_context['userfhirurl'] = user_fhir_url(context.app_id, context_data['user'].to_i.to_s)
 
+        audit_launch_context_resolve(context_data)
+        render status: 200, json: @response_context.to_json
+      end
+
+      private
+
+      def audit_launch_context_resolve(context_data)
         audit_hash = {
           tenant: params['tnt'],
           user_id: context_data['user'],
@@ -58,11 +63,7 @@ module Igneous
         }.reject { |_k, v| v.nil? }
 
         audit_smart_event(:smart_launch_context_resolve, :success, audit_hash)
-
-        render status: 200, json: @response_context.to_json
       end
-
-      private
 
       def validate_version
         return if version_components(params['ver'].to_s).first.eql?(version_components(AUTHZ_API_VERSION.to_s).first)
@@ -114,8 +115,8 @@ module Igneous
         log_info(info)
       end
 
-      def user_fhir_url(user_id)
-        "#{fhir_url}/Practitioner/#{user_id}"
+      def user_fhir_url(app_id, user_id)
+        "#{fhir_url(app_id)}/Practitioner/#{user_id}"
       end
 
       def version_components(version)
@@ -123,10 +124,15 @@ module Igneous
         [major, minor, patch, *other]
       end
 
-      def fhir_url
-        # TODO: - Need to associate a launch context by app and look up the correct FHIR server
-        fhir_server = FhirServer.find_by name: 'cerner'
-        fhir_server.url.sub('@tenant_id@', params['tnt'])
+      def fhir_url(app_id)
+        logger.warn "#{self.class.name}, App id is nil or blank." \
+          and return nil if app_id.blank?
+
+        app = App.find_by app_id: app_id
+        logger.warn "#{self.class.name}, App is not found for app_id: #{app_id}" \
+          and return nil if app.nil?
+
+        app.fhir_server.url.sub('@tenant_id@', params['tnt'])
       end
 
       def log_info(info)

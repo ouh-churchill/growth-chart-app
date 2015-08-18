@@ -1,16 +1,14 @@
-require 'yaml'
 require 'igneous/smart'
 
 module Igneous
   module Smart
     class AppsController < Igneous::Smart::ApplicationController
-      OAUTH2_BASE_URL = YAML.load_file("#{Rails.root}/config/oauth.yml")[Rails.env]['oauth2_base_url']
 
       def index
         render locals: {
-          params: params,
+          ehr_source_id: params['ehr_source_id'],
           apps: App.all,
-          context_id: LaunchContext.context(params).context_id
+          query_string: request.query_string
         }
       end
 
@@ -23,31 +21,28 @@ module Igneous
           return
         end
 
-        context = LaunchContext.context(params)
-        launch_url = app.smart_launch_url(params, context.context_id)
-        redirect_to launch_url and return unless app.authorized
+        launch_context = LaunchContext.new
+        smart_launch_url = app.smart_launch_url(params, launch_context.context_id)
+        context = launch_context.context(params, app.app_id, smart_launch_url)
 
-        logger.info "#{self.class.name}, No base url configured for OAuth2." if OAUTH2_BASE_URL.blank?
-
-        response.headers['SMART-Launch'] = context.context_id
-
-        render locals: {
-          launch_url: launch_url,
-          oauth2_base_url: OAUTH2_BASE_URL
-        }
-
-        context_data =  JSON.parse(context.data)
+        context_data = JSON.parse(context.data)
 
         audit_hash = {
           tenant: params['ehr_source_id'],
           user_id: context_data['user'],
           patient_id: context_data['patient'],
           encounter_id: context_data['encounter'],
-          app_name: context_data['app_name'],
+          container_name: context_data['container_name'],
           app_id: params['id']
         }.reject { |_k, v| v.nil? }
 
         audit_smart_event(:smart_launch_app, :success, audit_hash)
+
+        if app.authorized
+          redirect_to controller: 'user', action: 'preauth', context_id: launch_context.context_id
+        else
+          redirect_to smart_launch_url
+        end
       end
 
       def create

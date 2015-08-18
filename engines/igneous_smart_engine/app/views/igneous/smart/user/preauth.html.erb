@@ -7,7 +7,7 @@
 <%= canadarm_logging_tag %>
 <%= javascript_include_tag "igneous-smart.min" %>
 </head>
-<body onload="performPreauthentication('<%= oauth2_base_url %>', '<%= launch_url %>')">
+<body onload="performPreauthentication('<%= oauth2_base_url %>', '<%= smart_launch_url %>')">
   <p>Loading...</p>
   <div id="iframe" style="display:block; visibility:hidden">
     <iframe name="loader" id="loader"></iframe>

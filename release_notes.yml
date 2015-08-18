@@ -3,7 +3,7 @@ versions:
   - version: 0.0.8
     release_date: 2015-xx-xx
     changes:
-      - {author: xxx, comment: xxx, issue: OPENSVC-xxx, type: add}
+      - {author: kk014173, comment: 'Add a User#preauth route to remove patient identifiers from the referer header redirects', issue: OPENSVC-472, type: add}
   - version: 0.0.7
     release_date: 2015-08-13
     changes:

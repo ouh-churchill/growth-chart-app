@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150726215810) do
+ActiveRecord::Schema.define(version: 20150812191305) do
 
   create_table "igneous_smart_apps", force: :cascade do |t|
     t.string   "app_id",                       limit: 36,                 null: false
@@ -38,12 +38,15 @@ ActiveRecord::Schema.define(version: 20150726215810) do
   add_index "igneous_smart_fhir_servers", ["url"], name: "index_igneous_smart_fhir_servers_on_url", unique: true
 
   create_table "igneous_smart_launch_contexts", force: :cascade do |t|
-    t.string   "context_id", limit: 40, null: false
+    t.string   "context_id",       limit: 40, null: false
     t.text     "data"
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.string   "app_id",           limit: 36, null: false
+    t.text     "smart_launch_url",            null: false
   end
 
+  add_index "igneous_smart_launch_contexts", ["app_id"], name: "index_igneous_smart_launch_contexts_on_app_id"
   add_index "igneous_smart_launch_contexts", ["context_id"], name: "index_igneous_smart_launch_contexts_on_context_id"
   add_index "igneous_smart_launch_contexts", ["created_at"], name: "index_igneous_smart_launch_contexts_on_created_at"
 

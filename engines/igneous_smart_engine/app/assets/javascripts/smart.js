@@ -99,6 +99,7 @@ var preAuthFailed = function () {
  * If it takes longer than 5 seconds, the user will be asked to log in.
  * Once logged in, the user will be redirected to the SMART app.
  */
+/*jshint unused:false*/
 function performPreauthentication(oauth2BaseUrl, launchUrl) {
   oauth2BaseURL = oauth2BaseUrl;
   launchURL = launchUrl;

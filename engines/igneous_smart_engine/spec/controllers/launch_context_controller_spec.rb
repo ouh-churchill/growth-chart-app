@@ -11,8 +11,22 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
   describe 'POST resolve' do
     before(:each) do
       data = { patient: '123', encounter: '456', ppr: '567', user: '12345' }.to_json
-      FactoryGirl.create(:launch_context_factory, context_id: '6e1b99f7-e05b-42d1-b304-d8180858ce8c', data: data)
-      FactoryGirl.create(:fhir_server_factory, name: 'cerner', url: 'https://fhir.devcernerpowerchart.com/fhir/@tenant_id@')
+      FactoryGirl.create(:launch_context_factory,
+                         context_id: '6e1b99f7-e05b-42d1-b304-d8180858ce8c',
+                         data: data,
+                         app_id: 'd193fa79-c165-4daa-a8fd-c187fba2af4d',
+                         smart_launch_url: 'http://example.com/smart/launch.html')
+
+      FactoryGirl.create(:fhir_server_factory,
+                         name: 'cerner',
+                         url: 'https://fhir.devcernerpowerchart.com/fhir/@tenant_id@')
+
+      FactoryGirl.create(:app_factory,
+                         app_id: 'd193fa79-c165-4daa-a8fd-c187fba2af4d',
+                         name: 'cardia9',
+                         launch_url: 'http://smart.example5.com/',
+                         igneous_smart_fhir_server_id: 1,
+                         authorized: true)
     end
 
     it 'returns success when the matching record is found and audits as success' do
@@ -60,7 +74,8 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
       expect(parsed_response_body['error']).to eql 'urn:com:cerner:authorization:error:launch:unsupported-version'
     end
 
-    it 'returns failure when the launch id is nil or launch id not passed in as a parameter and audits as minor_failure' do
+    it 'returns failure when the launch id is nil or launch id' \
+       'not passed in as a parameter and audits as minor_failure' do
 
       expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
         .with(:smart_launch_context_resolve, :minor_failure,
@@ -119,8 +134,22 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
   describe 'POST resolve context having patient and user fields' do
     it 'returns success when the matching record is found' do
       data = { 'patient' => '123', 'user' => '12345' }.to_json
-      FactoryGirl.create(:launch_context_factory, context_id: '6e1b99f7-e05b-42d1-b304-d8180858ce8d', data: data)
-      FactoryGirl.create(:fhir_server_factory, name: 'cerner', url: 'https://fhir.devcernerpowerchart.com/fhir/@tenant_id@')
+      FactoryGirl.create(:launch_context_factory,
+                         context_id: '6e1b99f7-e05b-42d1-b304-d8180858ce8d',
+                         data: data,
+                         app_id: 'd193fa79-c165-4daa-a8fd-c187fba2af4d',
+                         smart_launch_url: 'http://example.com/smart/launch.html')
+
+      FactoryGirl.create(:fhir_server_factory,
+                         name: 'cerner',
+                         url: 'https://fhir.devcernerpowerchart.com/fhir/@tenant_id@')
+
+      FactoryGirl.create(:app_factory,
+                         app_id: 'd193fa79-c165-4daa-a8fd-c187fba2af4d',
+                         name: 'cardia9',
+                         launch_url: 'http://smart.example5.com/',
+                         igneous_smart_fhir_server_id: 1,
+                         authorized: true)
 
       post(:resolve, format: 'json', aud: 'https://fhir.devcernerpowerchart.com/fhir/foo',
                      launch: '6e1b99f7-e05b-42d1-b304-d8180858ce8d',

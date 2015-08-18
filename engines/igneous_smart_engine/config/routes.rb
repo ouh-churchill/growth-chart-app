@@ -6,5 +6,6 @@ Igneous::Smart::Engine.routes.draw do
   resources :apps, only: [:create]
   resources :fhir_servers, only: [:create]
 
+  get 'user/preauth' => 'user#preauth'
   post 'launch/resolve' => 'launch_context#resolve', :constraints => { format: :json }
 end

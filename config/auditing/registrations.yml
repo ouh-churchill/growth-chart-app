@@ -13,8 +13,8 @@ smart_launch_app:
     encounter_id:
       description: The Cerner Millennium encounter_id for the patient associated to the event.
       type: simple
-    app_name:
-      description: The EHR application that is launching the SMART app.
+    container_name:
+      description: The container application that is launching the SMART app.
       type: simple
     remote_ip:
       description: The originating IP address.

@@ -3,16 +3,22 @@ require 'securerandom'
 module Igneous
   module Smart
     class LaunchContext < ActiveRecord::Base
-      validates_presence_of :context_id, :data
+      validates_presence_of :context_id, :data, :app_id, :smart_launch_url
       validates_uniqueness_of :context_id
+
+      after_initialize do
+        self.context_id ||= SecureRandom.uuid if self.new_record?
+      end
 
       # Public: Constructs the SMART context from the given request parameters.
       #         Save the context to the launch_context table.
       #
       # params - The request parameters Hash.
+      # app_id - The ID of the SMART app being launched.
+      # smart_launch_url - The launch URL of the SMART app.
       #
-      # Returns a context id associated with the given request parameters.
-      def self.context(params)
+      # Returns a context object associated with the given request parameters.
+      def context(params, app_id, smart_launch_url)
         smart_context = {}
 
         add_context = lambda do |i, j, is_numeric = true|
@@ -35,9 +41,12 @@ module Igneous
         add_context.call('user',            'USR_PersonId')
         add_context.call('position',        'USR_PositionCd')
         add_context.call('device_location', 'DEV_Location', false)
-        add_context.call('app_name',        'APP_AppName', false)
+        add_context.call('container_name',  'APP_AppName', false)
 
-        create(context_id: SecureRandom.uuid, data: smart_context.to_json)
+        LaunchContext.create(context_id: self.context_id,
+                             data: smart_context.to_json,
+                             app_id: app_id,
+                             smart_launch_url: smart_launch_url)
       end
     end
   end

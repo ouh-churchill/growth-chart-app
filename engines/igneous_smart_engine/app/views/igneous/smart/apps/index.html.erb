@@ -10,8 +10,8 @@
   <ul>
   <% apps.each do |app| %>
     <li>
-      <a href=<%= app.smart_launch_url(params, context_id) %>>
-        <p class="app_name"><%= app.name %></p>
+      <a href=<%= "#{app_path(ehr_source_id, app.app_id)}?#{query_string}" %>>
+        <p class='app_name'><%= app.name %></p>
       </a>
     </li>
   <% end %>
