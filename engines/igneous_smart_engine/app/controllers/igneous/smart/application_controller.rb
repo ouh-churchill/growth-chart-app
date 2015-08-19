@@ -5,6 +5,12 @@ module Igneous
       # Prevent CSRF attacks by using the default :null_session.
       protect_from_forgery
 
+      skip_before_filter :verify_authenticity_token, if: :json_request?
+
+      def json_request?
+        request.format.json?
+      end
+
       # Internal: Audits an event with the provided attributes.
       #
       # event_key - The event key of the event to audit (cannot be blank).
