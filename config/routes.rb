@@ -1,4 +1,7 @@
 IgneousSmartServer::Application.routes.draw do
+
+  root to: 'application#page_not_found'
+
   # health check
   mount Hi::Checkup::Engine, at: '/'
 
