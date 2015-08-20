@@ -1,7 +1,7 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 0.0.8
-    release_date: 2015-xx-xx
+    release_date: 2015-08-20
     changes:
       - {author: kk014173, comment: 'Add a User#preauth route to remove patient identifiers from the referer header redirects', issue: OPENSVC-472, type: add}
       - {author: kt026311, comment: Add correlation id when logging , issue: OPENSVC-545, type: add}
