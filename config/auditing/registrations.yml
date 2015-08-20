@@ -37,6 +37,9 @@ smart_launch_context_resolve:
     encounter_id:
       description: The Cerner Millennium encounter_id for the patient associated to the event.
       type: simple
+    launch_context_id:
+      description: The launch context id to resolve
+      type: simple
     remote_ip:
       description: The originating IP address.
       type: ip_address

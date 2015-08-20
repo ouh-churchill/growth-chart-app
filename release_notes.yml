@@ -7,6 +7,7 @@ versions:
       - {author: kt026311, comment: Add correlation id when logging , issue: OPENSVC-545, type: add}
       - {author: kt026311, comment: Disable CSRF protection for API POST requests, issue: OPENSVC-544, type: update}
       - {author: kt026311, comment: Return 404 for root path , issue: OPENSVC-548, type: add}
+      - {author: kt026311, comment: Add context id to the audit logs for launch context resolve , issue: OPENSVC-562, type: add}
   - version: 0.0.7
     release_date: 2015-08-13
     changes:

@@ -35,7 +35,8 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
         tenant: '2c400054-42d8-4e74-87b7-80b5bd5fde9f',
         user_id: '12345',
         patient_id: '123',
-        encounter_id: '456'
+        encounter_id: '456',
+        launch_context_id: '6e1b99f7-e05b-42d1-b304-d8180858ce8c'
       }
 
       expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
@@ -60,6 +61,7 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
       expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
         .with(:smart_launch_context_resolve, :minor_failure,
               tenant: '2c400054-42d8-4e74-87b7-80b5bd5fde9f',
+              launch_context_id: '6e1b99f7-e05b-42d1-b304-d8180858ce8c',
               error: 'urn:com:cerner:authorization:error:launch:unsupported-version')
 
       post(:resolve, format: 'json', aud: 'https://fhir.devcernerpowerchart.com/fhir/foo',
@@ -80,6 +82,7 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
       expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
         .with(:smart_launch_context_resolve, :minor_failure,
               tenant: '2c400054-42d8-4e74-87b7-80b5bd5fde9f',
+              launch_context_id: nil,
               error: 'urn:com:cerner:authorization:error:launch:invalid-launch-code')
 
       post(:resolve, format: 'json', aud: 'https://fhir.devcernerpowerchart.com/fhir/foo',
@@ -98,6 +101,7 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
       expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
         .with(:smart_launch_context_resolve, :minor_failure,
               tenant: '2c400054-42d8-4e74-87b7-80b5bd5fde9f',
+              launch_context_id: '6e1b99f7-e05b-42d1-b304-d8180858c999',
               error: 'urn:com:cerner:authorization:error:launch:invalid-launch-code')
 
       post(:resolve, format: 'json', aud: 'https://fhir.devcernerpowerchart.com/fhir/foo',

@@ -17,6 +17,7 @@ module Igneous
 
         if validate_version || validate_launch_id(context)
           audit_smart_event(:smart_launch_context_resolve, :minor_failure, tenant: params['tnt'],
+                                                                           launch_context_id: params['launch'],
                                                                            error: @error_response['error'])
           render status: 400, json: @error_response.to_json
           return
@@ -59,7 +60,8 @@ module Igneous
           tenant: params['tnt'],
           user_id: context_data['user'],
           patient_id: context_data['patient'],
-          encounter_id: context_data['encounter']
+          encounter_id: context_data['encounter'],
+          launch_context_id: params['launch']
         }.reject { |_k, v| v.nil? }
 
         audit_smart_event(:smart_launch_context_resolve, :success, audit_hash)
