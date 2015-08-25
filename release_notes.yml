@@ -3,7 +3,7 @@ versions:
   - version: 0.0.9
     release_date: 2015-xx-xx
     changes:
-      - {author: xxx, comment: xxx, issue: OPENSVC-xxx, type: add}
+      - {author: kk014173, comment: Upgrade to ruby-2.2.3 and rails 4.2.4, issue: OPENSVC-589, type: add}
   - version: 0.0.8
     release_date: 2015-08-20
     changes:
