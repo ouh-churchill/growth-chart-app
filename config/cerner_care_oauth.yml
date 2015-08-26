@@ -1,0 +1,9 @@
+---
+development:
+  oauth_key: 52da6595-0993-4705-bc6a-de511627bf24
+  oauth_secret: 1F3n5weNWtIWXOEUBHBEgG5dtDFeg3TC
+  oauth_access_token_url: https://api.devcernercare.com/oauth/access
+test:
+  oauth_key: 52da6595-0993-4705-bc6a-de511627bf24
+  oauth_secret: 1F3n5weNWtIWXOEUBHBEgG5dtDFeg3TC
+  oauth_access_token_url: https://api.devcernercare.com/oauth/access

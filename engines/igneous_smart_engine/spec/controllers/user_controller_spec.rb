@@ -1,3 +1,5 @@
+require 'yaml'
+
 describe Igneous::Smart::UserController, type: :controller do
   routes { Igneous::Smart::Engine.routes }
 
