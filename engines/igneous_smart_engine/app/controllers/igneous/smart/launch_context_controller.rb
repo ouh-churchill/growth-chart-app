@@ -20,16 +20,18 @@ module Igneous
 
         context = LaunchContext.find_by context_id: params['launch']
         context_data = JSON.parse(context.data) unless context.blank? || context.data.blank?
+        context_data['tenant'] = context.tenant if context_data
         user_id = context_data['user'] unless context_data.blank?
 
         return if invalid_request?(context, user_id)
 
-        @response_context['params'] = context_data
+        @response_context['params'] = context_data.except('ppr')
         @response_context['claims'] = {
           encounter: context_data['encounter'],
           patient: context_data['patient'],
           ppr: context_data['ppr'],
-          user: context_data['user']
+          user: context_data['user'],
+          tenant: context_data['tenant']
         }.reject { |_k, v| v.nil? }
 
         @response_context['ver'] = params['ver']
@@ -42,7 +44,8 @@ module Igneous
       private
 
       def invalid_request?(context, user)
-        if invalid_version? || invalid_launch_id?(context) || invalid_url?(context.app_id)
+        if invalid_version? || invalid_launch_id?(context) || invalid_url?(context.app_id) ||
+           invalid_tenant?(context.tenant)
           audit_smart_event(:smart_launch_context_resolve, :minor_failure, tenant: params['tnt'],
                                                                            launch_context_id: params['launch'],
                                                                            error: @error_response['error'])
@@ -119,6 +122,17 @@ module Igneous
 
         logger.error "#{self.class.name}, #{context.errors.messages} thrown on retrieving context"\
                                 "for the launch id #{params['launch']}"
+        true
+      end
+
+      def invalid_tenant?(tenant)
+        return false if tenant.to_s.eql?(params['tnt'].to_s)
+        @error_response['ver'] = params['ver']
+        @error_response['error'] = 'urn:com:cerner:authorization:error:launch:invalid-tenant'
+        @error_response['id'] = SecureRandom.uuid
+
+        info = "tenant #{params['tnt']} is different from the tenant #{tenant} in the context"
+        log_info(info)
         true
       end
 

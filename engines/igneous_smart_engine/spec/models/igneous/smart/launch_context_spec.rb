@@ -15,7 +15,8 @@ describe Igneous::Smart::LaunchContext do
         'USR_PersonId'   => '4',
         'USR_PositionCd' => '5',
         'DEV_Location'   => '6',
-        'APP_AppName'    => '7'
+        'APP_AppName'    => '7',
+        'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
       }
 
       context_id = '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
@@ -31,15 +32,19 @@ describe Igneous::Smart::LaunchContext do
                                                   'container_name' => '7')
       expect(context.app_id).to eq app_id
       expect(context.smart_launch_url).to eq smart_launch_url
+      expect(context.tenant).to eq params['ehr_source_id']
     end
 
     it 'constructs an empty SMART context when no params are present' do
 
+      params = {
+        'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
+      }
       context_id = '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
       app_id = 'd193fa79-c165-4daa-a8fd-c187fba2af4d'
       smart_launch_url = 'http://example.com/smart/launch.html'
       allow(SecureRandom).to receive(:uuid).and_return(context_id)
-      launch_context.context({}, app_id, smart_launch_url)
+      launch_context.context(params, app_id, smart_launch_url)
 
       context = Igneous::Smart::LaunchContext.find_by context_id: context_id
       expect(JSON.parse(context.data)).to be_empty
@@ -54,7 +59,8 @@ describe Igneous::Smart::LaunchContext do
         'USR_PersonId'   => '4',
         'USR_PositionCd' => '5',
         'DEV_Location'   => '6',
-        'APP_AppName'    => '7'
+        'APP_AppName'    => '7',
+        'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
       }
 
       context_id = '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
@@ -74,7 +80,8 @@ describe Igneous::Smart::LaunchContext do
         'PAT_PersonId' => '1.00',
         'VIS_EncntrId' => '2.00',
         'DEV_Location' => 'East Wing',
-        'APP_AppName'  => 'Spec Test'
+        'APP_AppName'  => 'Spec Test',
+        'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
       }
 
       context_id = '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
@@ -95,7 +102,8 @@ describe Igneous::Smart::LaunchContext do
         'VIS_EncntrId' => '2.00',
         'PAT_PPRCode' => nil,
         'DEV_Location' => nil,
-        'APP_AppName'  => nil
+        'APP_AppName'  => nil,
+        'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
       }
 
       context_id = '46134c2c-7412-4d53-b09e-e8ced4c73dbc'

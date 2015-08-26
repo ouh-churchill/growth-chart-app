@@ -11,5 +11,6 @@ FactoryGirl.define do
     end
     app_id '6e1b99f7-e05b-42d1-b304-d8180858ce81'
     smart_launch_url 'http://example.com/smart/launch.html'
+    tenant '2c400054-42d8-4e74-87b7-80b5bd5fde9f'
   end
 end

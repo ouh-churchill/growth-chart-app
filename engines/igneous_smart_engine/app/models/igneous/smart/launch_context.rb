@@ -46,7 +46,8 @@ module Igneous
         LaunchContext.create(context_id: self.context_id,
                              data: smart_context.to_json,
                              app_id: app_id,
-                             smart_launch_url: smart_launch_url)
+                             smart_launch_url: smart_launch_url,
+                             tenant: params['ehr_source_id'])
       end
     end
   end
