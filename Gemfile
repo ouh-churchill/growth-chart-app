@@ -29,7 +29,6 @@ gem 'rack-cors', '~> 0.3', require: 'rack/cors'
 gem 'yui-compressor', '0.12.0' # using exact version since different version creates different css compressed file
 gem 'sprockets', '~> 2.11.0' # Require to create gzipped assets
 gem 'libv8', '~> 3.16.14.11' # Since 3.16.14.9 got yanked, we had to restrict to point to the latest one
-gem 'basset-client', '~> 1.8', require: 'basset/client/rails'
 
 group :production do
   gem 'mysql2', '0.3.18'
@@ -38,24 +37,18 @@ end
 # All gems listed in this group will be updated
 # when building via Jenkins. See build.sh file.
 group :cerner, :default do
-  source 'http://repo.release.cerner.corp/main/rubygems/'
-  source 'http://repo.release.cerner.corp/internal/rubygems/'
-
-  gem 'timber', '~> 1.7.0'
-  gem 'ion_common', '~> 3.7'
-  gem 'hi-checkup', '~> 1.6'
-  gem 'canadarm_ruby', '~> 1.0'
-  gem 'igneous-smart', '1.0.0', path: 'engines/igneous_smart_engine'
+  gem 'basset-client', '~> 1.8',   source: 'http://repo.release.cerner.corp/main/rubygems/', require: 'basset/client/rails'
+  gem 'timber',        '~> 1.7.0', source: 'http://repo.release.cerner.corp/main/rubygems/'
+  gem 'ion_common',    '~> 3.7',   source: 'http://repo.release.cerner.corp/main/rubygems/'
+  gem 'hi-checkup',    '~> 1.6',   source: 'http://repo.release.cerner.corp/main/rubygems/'
+  gem 'canadarm_ruby', '~> 1.0',   source: 'http://repo.release.cerner.corp/main/rubygems/'
+  gem 'igneous-smart', '1.0.0',    path:   'engines/igneous_smart_engine'
 end
 
 group :development do
-  source 'http://repo.release.cerner.corp/internal/rubygems/'
-  source 'http://repo.release.cerner.corp/main/rubygems/'
-
-  gem 'roll_out', '~> 1.10'
-  gem 'roll_out-security', '~> 1.3'
-  gem 'flatten_jbuilder', '~>1.2.0'
-  gem 'philter', '~> 1.8'
+  gem 'roll_out',          '~> 1.10', source: 'http://repo.release.cerner.corp/internal/rubygems/'
+  gem 'roll_out-security', '~> 1.3',  source: 'http://repo.release.cerner.corp/internal/rubygems/'
+  gem 'philter',           '~> 1.8',  source: 'http://repo.release.cerner.corp/internal/rubygems/'
 end
 
 group :development,:test do
