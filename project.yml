@@ -1,7 +1,7 @@
 name: Igneous Smart Server
 group_id: com.cerner.igneous
 artifact_id: igneous-smart_server
-version: 0.0.9.SNAPSHOT
+version: 1.0.0.SNAPSHOT
 test: rake
 doc: tomdoc
 package:
@@ -11,16 +11,17 @@ package:
 jira:
   url: https://jira2.cerner.com
   project: OPENSVC
+  component: 25820
 coverage:
   directory: coverage
 github:
   project_url: https://github.cerner.com/Igneous/igneous-smart_server/
 repository:
-  id: cerner-internal-release
-  url: http://repo.release.cerner.corp/internal/repo/
+  id: cerner-main-release
+  url: http://repo.release.cerner.corp/main/repo/
 site_repository:
-  id: cerner-release-internal-site
-  url: http://repo.release.cerner.corp/internal/site/
+  id: cerner-main-release-site
+  url: http://repo.release.cerner.corp/main/site/
 snapshot_repository:
   id: exodus-snapshot
   url: http://repo.exodus.cerner.corp/snapshot-repo/
