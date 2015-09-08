@@ -93,5 +93,6 @@ add_smart_apps(
   # smart_app('b45fc6ec-4c77-4d97-a5a1-8c1709c29804', 'InterSystems',                  't', 1, 'https://argonaut.intersystems.com/resp/csp/sys/oauth2/OAuth2.Response.cls' ),
   # smart_app('03d6e496-4005-4827-a6c1-5bdc4d78a6a5', 'Ascend',                        't', 1, 'https://insight.ascendhit.com/Home/Launch' ),
   # smart_app('d7ab7c44-e5eb-4bb3-856a-168a051688b4', 'EnrG|Rheum Test',               't', 1, 'https://xg-demoapps1v.xg.local/EnrGRheum/Test/SecurePointOfEntry/Index' ),
-  # smart_app('e4fac650-757e-4127-9607-492e0c92f082', 'EnrG|Rheum Questionnaire Test', 't', 1, 'https://xg-demoapps1v.xg.local/RheumQuestionnaire/Test/SecurePointOfEntry' )
+  # smart_app('e4fac650-757e-4127-9607-492e0c92f082', 'EnrG|Rheum Questionnaire Test', 't', 1, 'https://xg-demoapps1v.xg.local/RheumQuestionnaire/Test/SecurePointOfEntry' ),
+  # smart_app('a8307594-a60b-4d03-9d2a-cf2fc3e61d96', 'Cerner Direct Referrals (Localhost)', 't', 1, 'http://localhost:8080/launch' )
 )
