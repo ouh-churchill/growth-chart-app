@@ -20,18 +20,18 @@ module Igneous
 
         context = LaunchContext.find_by context_id: params['launch']
         context_data = JSON.parse(context.data) unless context.blank? || context.data.blank?
-        context_data['tenant'] = context.tenant if context_data
+        context_data['tenant'] = params['tnt'] if context_data
         user_id = context_data['user'] unless context_data.blank?
 
         return if invalid_request?(context, user_id)
+        context_data['username'] = params['sub'] if context_data
 
         @response_context['params'] = context_data.except('ppr')
         @response_context['claims'] = {
           encounter: context_data['encounter'],
           patient: context_data['patient'],
           ppr: context_data['ppr'],
-          user: context_data['user'],
-          tenant: context_data['tenant']
+          user: context_data['user']
         }.reject { |_k, v| v.nil? }
 
         @response_context['ver'] = params['ver']

@@ -214,7 +214,7 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
       allow(controller).to receive(:personnel_id).and_return '6789'
       post(:resolve, format: 'json', aud: 'https://fhir.example.com/fhir/2c400054-42d8-4e74-87b7-80b5bd5fde9f',
                      launch: '6e1b99f7-e05b-42d1-b304-d8180858ce8d',
-                     sub: 'username',
+                     sub: 'myusername',
                      ver: '1.0',
                      tnt: '2c400054-42d8-4e74-87b7-80b5bd5fde9f')
 

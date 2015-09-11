@@ -2,12 +2,12 @@
   "params": {
     "patient": "123",
     "user": "6789",
-    "tenant": "2c400054-42d8-4e74-87b7-80b5bd5fde9f"
+    "tenant": "2c400054-42d8-4e74-87b7-80b5bd5fde9f",
+    "username": "myusername"
   },
   "claims": {
     "patient": "123",
-    "user": "6789",
-    "tenant": "2c400054-42d8-4e74-87b7-80b5bd5fde9f"
+    "user": "6789"
   },
   "ver": "1.0",
   "userfhirurl": "https://fhir.example.com/fhir/2c400054-42d8-4e74-87b7-80b5bd5fde9f/Practitioner/6789"

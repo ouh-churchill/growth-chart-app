@@ -3,7 +3,7 @@ versions:
   - version: 1.1.0
     release_date: 2015-xx-xx
     changes:
-      - {author: xx, comment: xx, issue: OPENSVC-xxx, type: add}
+      - {author: kk014173, comment: Return username via params hash when resolving launch context, issue: OPENSVC-707, type: add}
   - version: 1.0.0
     release_date: 2015-08-27
     changes:
