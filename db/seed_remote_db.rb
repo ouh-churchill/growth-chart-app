@@ -66,6 +66,10 @@ def smart_app(app_id, name, authorized, fhir_server_id, launch_url)
   }.to_json
 end
 
+def smart_app_validator_url
+  SMART_SERVER.sub(/smart\z/, 'smart-app-validator/launch.html')
+end
+
 # add_fhir_servers(
 #   fhir_server('cerner',      "#{FHIR_SERVER}/may2015/@tenant_id@"),
 #   fhir_server('cerner_open', "#{FHIR_SERVER}/may2015/open/@tenant_id@")
@@ -95,4 +99,5 @@ add_smart_apps(
   # smart_app('d7ab7c44-e5eb-4bb3-856a-168a051688b4', 'EnrG|Rheum Test',               't', 1, 'https://xg-demoapps1v.xg.local/EnrGRheum/Test/SecurePointOfEntry/Index' ),
   # smart_app('e4fac650-757e-4127-9607-492e0c92f082', 'EnrG|Rheum Questionnaire Test', 't', 1, 'https://xg-demoapps1v.xg.local/RheumQuestionnaire/Test/SecurePointOfEntry' ),
   # smart_app('a8307594-a60b-4d03-9d2a-cf2fc3e61d96', 'Cerner Direct Referrals (Localhost)', 't', 1, 'http://localhost:8080/launch' )
+  smart_app('2122ef84-ab35-4c7a-88a8-db0a192b5136', 'Cerner SMART App Validator', 't', 1, smart_app_validator_url )
 )

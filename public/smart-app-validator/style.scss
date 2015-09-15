@@ -1,0 +1,44 @@
+$allWidth: 100%;
+$allHeight: 100%;
+$iconLength: 40px;
+
+@mixin defaultFont($fontSize) {
+	font-family: Helvetica;
+	font-size: $fontSize;
+	color: #1C1F21;
+}
+
+@mixin borderLine() {
+	height: 1px;
+	background: #aaa;
+	position: relative;
+}
+
+.sectionHeader {
+	@include defaultFont(18px);
+}
+
+#headerContainer {
+	width: $allWidth;
+	text-align: justify;
+	height: 61px;
+	position: relative;
+
+	#title {
+		float: left;
+		font-size: 200%;
+		height: inherit;
+		@include defaultFont(14px);
+	}
+
+	#info {
+		float: right;
+		height: inherit;
+		vertical-align: middle;
+	}
+}
+
+.borderLine {
+	@include borderLine();
+}
+

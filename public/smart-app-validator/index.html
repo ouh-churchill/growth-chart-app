@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <title>SMART App Validator</title>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+    <link rel='stylesheet' type='text/css' href='style.css'>
+    <script src='./lib/fhir-client.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js'></script>
+    <script src='https://code.jquery.com/jquery-migrate-1.2.1.min.js'></script>
+    <script src='./js/app_validator.js'></script>
+  </head>
+  <body>
+    <div id='headerContainer'>
+      <div id='title'><h3>SMART App Validator</h3></div>
+    </div>
+    <div class='borderLine'></div>
+    <div id='browser'><p><strong>Browser Info</strong></p></div>
+    <div id='browser-info'><p> Browser:</p></div>
+    <div id='browser-user-agent'><p> User Agent:</p></div>
+
+    <div id='healthchecks'><p><strong>Health Checks</strong></p></div>
+    <div id='SMARTAppServiceHealthCheck'><p> SMART App Service Health Check:</p></div>
+    <div id='AuthorizationServer'><p> Authorization (OAuth2):</p></div>
+    <div id='FHIRServiceHealthCheck'><p> FHIR Service Health Check:</p></div>
+
+    <div id='resources'><p><strong>Resources</strong></p></div>
+    <div id='Conformance'><p> Conformance:</p></div>
+    <div id='Patient'><p> Patient:</p></div>
+    <div id='Encounter'><p> Encounter:</p></div>
+    <div id='Condition'><p> Condition:</p></div>
+    <div id='AllergyIntolerance'><p> AllergyIntolerance:</p></div>
+    <div id='Observation'><p> Observation:</p></div>
+    <div id='DiagnosticReport'><p> DiagnosticReport:</p></div>
+    <div id='Immunization'><p> Immunization:</p></div>
+    <div id='MedicationPrescription'><p> MedicationPrescription:</p></div>
+    <div id='DocumentReference'><p> DocumentReference:</p></div>
+
+    <script>
+      // Load the data
+      AppValidator.loadData().then(function(p) {});
+
+      $('#Conformance').click(function() { $('#Conformance-details').toggle(); });
+      $('#Patient').click(function() { $('#Patient-details').toggle(); });
+      $('#Encounter').click(function() { $('#Encounter-details').toggle(); });
+      $('#Condition').click(function() { $('#Condition-details').toggle(); });
+      $('#AllergyIntolerance').click(function() { $('#AllergyIntolerance-details').toggle(); });
+      $('#Observation').click(function() { $('#Observation-details').toggle(); });
+      $('#DiagnosticReport').click(function() { $('#DiagnosticReport-details').toggle(); });
+      $('#Immunization').click(function() { $('#Immunization-details').toggle(); });
+      $('#MedicationPrescription').click(function() { $('#MedicationPrescription-details').toggle(); });
+      $('#DocumentReference').click(function() { $('#DocumentReference-details').toggle(); });
+    </script>
+  </body>
+</html>
