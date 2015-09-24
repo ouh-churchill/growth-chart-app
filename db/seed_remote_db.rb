@@ -102,5 +102,7 @@ add_smart_apps(
   # smart_app('2122ef84-ab35-4c7a-88a8-db0a192b5136', 'Cerner SMART App Validator',    't', 1, smart_app_validator_url ),
   # smart_app('1b7bce27-c1d3-4f36-8bad-6e64b649363d', 'RxCheck',                       't', 1, 'https://www.rxcheck.com/fhir/launch' ),
   # smart_app('8ebb0d60-ae59-411c-86dc-9103b71557f4', 'FHIR Client Tool (Avinash Shanbhag from ONC)', 't', 1, 'http://localhost:8080/avifhircliient' ),
-  # smart_app('efb76056-47bc-40f9-a818-20e38da82841', 'HealtheIntent Test App', 't', 1, 'http://localhost:3000/smart/launch' )
+  # smart_app('efb76056-47bc-40f9-a818-20e38da82841', 'HealtheIntent Test App', 't', 1, 'http://localhost:3000/smart/launch' ),
+  # smart_app('e6beb7e2-f68a-4a12-8e4f-7507f3a4f960', 'EnrG|Rheum (Integration)', 't', 1, 'https://enrg.xghealth.com/EnrGRheum/Integration/SecurePointOfEntry/Index' ),
+  # smart_app('d35518be-49bf-404b-9593-a36edc7f4968', 'EnrG|Rheum Questionnaire (Integration)', 't', 1, 'https://enrg.xghealth.com/RheumQuestionnaire/Integration/SecurePointOfEntry' ),
 )
