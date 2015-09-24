@@ -18,6 +18,17 @@ describe Igneous::Smart::AppsController, type: :routing do
                VIS_EncntrId: '2')
   end
 
+  it 'routes to apps#show when there is no tenant id' do
+    expect(get('apps/2?PAT_PersonId=3.00&VIS_EncntrId=4.0&USR_PersonId=200.0&PAT_PPRCode=123')).to \
+      route_to(controller: 'igneous/smart/apps',
+               action: 'show',
+               id: '2',
+               PAT_PersonId: '3.00',
+               VIS_EncntrId: '4.0',
+               USR_PersonId: '200.0',
+               PAT_PPRCode: '123')
+  end
+
   it 'routes to apps#create' do
     expect(post('apps?name=cardiac&launch_url=https://fhir.example.com&fhir_server=cerner&authorized=true')).to \
       route_to(controller: 'igneous/smart/apps',

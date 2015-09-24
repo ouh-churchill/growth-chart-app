@@ -80,6 +80,14 @@ describe Igneous::Smart::AppsController, type: :controller do
         expect(response).to have_http_status(404)
       end
     end
+
+    context 'when tenant id is not supplied' do
+      it 'renders html page' do
+        get :show, id: '777'
+        expect(response).to have_http_status(:ok)
+        expect(response).to render_template(:show)
+      end
+    end
   end
 
   describe '#create' do

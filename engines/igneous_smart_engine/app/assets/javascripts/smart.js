@@ -8,6 +8,31 @@ var requestSync = new XMLCclRequest();
 
 /**
  * Use XMLCclRequest to execute mp_exec_std_request having the target
+ * script/EJS as 99999115 - StartOAuthSession.User.  This function
+ * will return an OAuth consumer key if the request was successful.  It will
+ * return an empty string when the request failed.
+ */
+function getOAuthConsumerKey() {
+  // Setup a synch request of mp_exec_std_request script
+  requestSync.open('GET','mp_exec_std_request', 0);
+
+  // Populating the request info with request structure and ATR
+  // for the request that we want to execute:
+  // 99999115 - StartOAuthSession.User
+  requestSync.send('~MINE~,~{"REQUESTIN":{}}~,3202004,3202004,99999115');
+
+  if (requestSync.status === 200) {
+    var parsedJSON = JSON.parse(requestSync.responseText);
+
+    if (parsedJSON.RECORD_DATA.STATUS.SUCCESS_IND === 1) {
+      return parsedJSON.RECORD_DATA.OAUTH_RESPONSE.OAUTH_CONSUMER_KEY.valueOf();
+    }
+  }
+  return '';
+}
+
+/**
+ * Use XMLCclRequest to execute mp_exec_std_request having the target
  * script/EJS as 99999124 - GenerateSingleUseIdentityToken.  This function
  * will return an identity token if the request was successful.  It will
  * return an empty string when the request failed.
@@ -114,5 +139,31 @@ function performPreauthentication(oauth2BaseUrl, launchUrl) {
     // The user would need to log into the domain.
     // After logging in, the user will be redirected to the SMART App.
     window.location.href = launchURL;
+  }
+}
+
+/**
+ * Unable to launch SMART app because tenant id could not be obtained.
+ */
+var getOAuthConsumerKeyFailed = function () {
+  Canadarm.error('Unable to launch SMART app because tenant id could not be obtained.', errorObj);
+};
+
+/**
+* Retrieve tenant id with getOAuthConsumerKey() call.
+* The tenant id is equivalent to oauth consumer key.
+* Once that is done, we redirect the user to this
+* new URL.
+*/
+/*jshint unused:false*/
+function retrieveTenantIdAndRedirect(urlWithTenantPlaceHolder) {
+  var consumerKey = getOAuthConsumerKey();
+  setTimeout(getOAuthConsumerKeyFailed, 10000); // 10 Second timeout
+
+  if (consumerKey) {
+    var launch_url = urlWithTenantPlaceHolder.replace(':tenant_id', consumerKey);
+    window.location.href = launch_url;
+  } else {
+    getOAuthConsumerKeyFailed();
   }
 }

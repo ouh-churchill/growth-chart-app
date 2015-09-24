@@ -13,6 +13,13 @@ module Igneous
       end
 
       def show
+        if params['ehr_source_id'].blank?
+          render locals: {
+            url_with_tenant_place_holder: "#{app_url(':tenant_id', params[:id])}?#{request.query_string}"
+          }
+          return
+        end
+
         app = App.find_by app_id: params[:id]
 
         if app.nil?
