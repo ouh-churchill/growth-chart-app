@@ -4,6 +4,7 @@ versions:
     release_date: 2015-xx-xx
     changes:
       - {author: kk014173, comment: Create another route to allow launching SMART app without tenant id from PowerChart, issue: OPENSVC-736, type: add}
+      - {author: kk014173, comment: 'Add growth-chart-app, cardiac-risk-app, fhir-client to public directory', issue: OPENSVC-729, type: add}
   - version: 1.1.0
     release_date: 2015-09-15
     changes:
