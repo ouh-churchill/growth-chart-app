@@ -89,20 +89,22 @@ add_smart_apps(
   # smart_app('6cee11fa-876c-4339-8a40-30ab993cf481', 'Meducation',                    't', 1, 'https://fhir.meducation.com/launch.html'),
   # smart_app('1407ed74-394d-4ceb-b2eb-00a0bcd2a557', 'VisualDX',                      't', 1, 'http://clupea.visualdx.com/visualdx/widgets/smart/launch.html'),
   # smart_app('a9b3e26a-13c3-4888-82c7-ac130bccae55', 'Qvera Argonaut Client',         't', 1, 'http://mhutton-m4700/form/form.html?urlKey=FHIRClient'),
-  # smart_app('3203fa36-0431-4ddf-add1-c14a343ca386', 'VisualDX (DSTU 2)',             't', 1, 'https://www.visualdx.com/visualdx/widgets/smart/launch.html')
+  # smart_app('3203fa36-0431-4ddf-add1-c14a343ca386', 'VisualDX (DSTU 2)',             't', 1, 'https://www.visualdx.com/visualdx/widgets/smart/launch.html'),
   # smart_app('b4c2eb41-3252-41a2-9d38-34aad35db8e7', 'MITRE Crucible',                't', 1, 'http://localhost:4200/'),
   # smart_app('f1ce5e11-ad41-4b57-9afd-ef79f5aeba3b', 'EnrG|Rheum Questionnaire',      't', 1, 'http://localhost:4272/SecurePointOfEntry'),
   # smart_app('2dd93cdf-d9cc-4f42-81c7-cc21f86319ea', 'MAEHC',                         't', 1, 'https://dev.qdc.maehc.org/fhir'),
-  # smart_app('7a259ec0-4afa-40cc-970e-bef0bfcdb581', 'PRP (Premier Inc)',             't', 1, 'http://localhost:8080/fhir-app/PRPHome.html')
+  # smart_app('7a259ec0-4afa-40cc-970e-bef0bfcdb581', 'PRP (Premier Inc)',             't', 1, 'http://localhost:8080/fhir-app/PRPHome.html'),
   # smart_app('b45fc6ec-4c77-4d97-a5a1-8c1709c29804', 'InterSystems',                  't', 1, 'https://argonaut.intersystems.com/resp/csp/sys/oauth2/OAuth2.Response.cls' ),
   # smart_app('03d6e496-4005-4827-a6c1-5bdc4d78a6a5', 'Ascend',                        't', 1, 'https://insight.ascendhit.com/Home/Launch' ),
   # smart_app('d7ab7c44-e5eb-4bb3-856a-168a051688b4', 'EnrG|Rheum Test',               't', 1, 'https://xg-demoapps1v.xg.local/EnrGRheum/Test/SecurePointOfEntry/Index' ),
   # smart_app('e4fac650-757e-4127-9607-492e0c92f082', 'EnrG|Rheum Questionnaire Test', 't', 1, 'https://xg-demoapps1v.xg.local/RheumQuestionnaire/Test/SecurePointOfEntry' ),
-  # smart_app('a8307594-a60b-4d03-9d2a-cf2fc3e61d96', 'Cerner Direct Referrals (Localhost)', 't', 1, 'http://localhost:8080/launch' )
+  # smart_app('a8307594-a60b-4d03-9d2a-cf2fc3e61d96', 'Cerner Direct Referrals (Localhost)', 't', 1, 'http://localhost:8080/gwx-toc-webapp/smart/launch' ),
   # smart_app('2122ef84-ab35-4c7a-88a8-db0a192b5136', 'Cerner SMART App Validator',    't', 1, smart_app_validator_url ),
   # smart_app('1b7bce27-c1d3-4f36-8bad-6e64b649363d', 'RxCheck',                       't', 1, 'https://www.rxcheck.com/fhir/launch' ),
   # smart_app('8ebb0d60-ae59-411c-86dc-9103b71557f4', 'FHIR Client Tool (Avinash Shanbhag from ONC)', 't', 1, 'http://localhost:8080/avifhircliient' ),
   # smart_app('efb76056-47bc-40f9-a818-20e38da82841', 'HealtheIntent Test App', 't', 1, 'http://localhost:3000/smart/launch' ),
   # smart_app('e6beb7e2-f68a-4a12-8e4f-7507f3a4f960', 'EnrG|Rheum (Integration)', 't', 1, 'https://enrg.xghealth.com/EnrGRheum/Integration/SecurePointOfEntry/Index' ),
   # smart_app('d35518be-49bf-404b-9593-a36edc7f4968', 'EnrG|Rheum Questionnaire (Integration)', 't', 1, 'https://enrg.xghealth.com/RheumQuestionnaire/Integration/SecurePointOfEntry' ),
+  # smart_app('334afd39-6ad1-4b10-8081-f760a67c94b8', 'Cerner Direct Referrals (DEV)', 't', 1, 'http://dev.gwx.cerner.corp/toc/smart/launch' ),
+
 )
