@@ -35,7 +35,7 @@ module Igneous
         }.reject { |_k, v| v.nil? }
 
         @response_context['ver'] = params['ver']
-        @response_context['userfhirurl'] = user_fhir_url(context.app_id, context_data['user'].to_i.to_s)
+        @response_context['userfhirurl'] = user_fhir_url(context.app_id, context_data['user'].to_i.to_s, params['tnt'])
 
         audit_launch_context_resolve(context_data)
         render status: :ok, json: @response_context.to_json
@@ -87,19 +87,20 @@ module Igneous
         @error_response['error']  = 'urn:com:cerner:authorization:error:launch:unsupported-version'
         @error_response['id'] = SecureRandom.uuid
 
-        info = "version #{params['ver']} is unsupported"
-        log_info(info)
+        log_info("error_id = #{@error_response['id']}, version '#{params['ver']}' is different "\
+                           "from the supported authorization API version '#{AUTHZ_API_VERSION}'")
         true
       end
 
       def invalid_url?(app_id)
-        return false if fhir_url(app_id).eql?(params['aud'].to_s)
+        fhir_url = fhir_url(app_id, params['tnt'])
+        return false if fhir_url.eql?(params['aud'].to_s)
         @error_response['ver'] = params['ver']
         @error_response['error']  = 'urn:com:cerner:authorization:error:launch:unknown-resource-server'
         @error_response['id'] = SecureRandom.uuid
 
-        info = "server #{params['aud']} is unknown"
-        log_info(info)
+        log_info("error_id = #{@error_response['id']}, server '#{params['aud']}' "\
+                             "is different from supported fhir server '#{fhir_url}'")
         true
       end
 
@@ -109,8 +110,7 @@ module Igneous
         @error_response['error'] = 'urn:com:cerner:authorization:error:launch:invalid-launch-code'
         @error_response['id'] = SecureRandom.uuid
 
-        info = 'invalid launch code'
-        log_info(info)
+        log_info("error_id = #{@error_response['id']}, No launch param or context specified")
         true
       end
 
@@ -120,8 +120,8 @@ module Igneous
         @error_response['error'] = 'urn:com:cerner:authorization:error:launch:unspecified-error'
         @error_response['id'] = SecureRandom.uuid
 
-        logger.error "#{self.class.name}, #{context.errors.messages} thrown on retrieving context"\
-                                "for the launch id #{params['launch']}"
+        logger.error "#{self.class.name}, error_id = #{@error_response['id']}, #{context.errors.messages} "\
+                                "thrown on retrieving context for the launch id '#{params['launch']}'"
         true
       end
 
@@ -131,24 +131,25 @@ module Igneous
         @error_response['error'] = 'urn:com:cerner:authorization:error:launch:invalid-tenant'
         @error_response['id'] = SecureRandom.uuid
 
-        info = "tenant #{params['tnt']} is different from the tenant #{tenant} in the context"
-        log_info(info)
+        log_info("error_id = #{@error_response['id']}, tenant '#{params['tnt']}' is "\
+                                "different from the tenant '#{tenant}' in the context")
         true
       end
 
       def invalid_user?(user_id)
+        personnel_id = find_user_id_by_username_and_tenant(params['sub'], params['tnt'])
         return false if personnel_id.eql?(user_id.to_s)
         @error_response['ver'] = params['ver']
         @error_response['error'] = 'urn:com:cerner:authorization:error:launch:mismatch-identity-subject'
         @error_response['id'] = SecureRandom.uuid
 
-        info =  "unknown subject #{params['sub']}"
-        log_info(info)
+        log_info("error_id = #{@error_response['id']}, subject '#{params['sub']}' with personnel id '#{personnel_id}'"\
+                          " is different from the id '#{user_id}' in the context")
         true
       end
 
-      def user_fhir_url(app_id, user_id)
-        "#{fhir_url(app_id)}/Practitioner/#{user_id}"
+      def user_fhir_url(app_id, user_id, tenant)
+        "#{fhir_url(app_id, tenant)}/Practitioner/#{user_id}"
       end
 
       def version_components(version)
@@ -156,7 +157,7 @@ module Igneous
         [major, minor, patch, *other]
       end
 
-      def fhir_url(app_id)
+      def fhir_url(app_id, tenant)
         if app_id.blank?
           logger.warn "#{self.class.name}, App id is nil or blank."
           return nil
@@ -168,20 +169,26 @@ module Igneous
           return nil
         end
 
-        app.fhir_server.url.sub('@tenant_id@', params['tnt'])
+        app.fhir_server.url.sub('@tenant_id@', tenant)
       end
 
-      def personnel_id
-        url = "#{USER_ROSTER_BASE_URL}/scim/v1/Realms/#{params['tnt']}/Users?filter=userName eq \"#{params['sub']}\""
+      def find_user_id_by_username_and_tenant(username, tenant)
+        url = "#{USER_ROSTER_BASE_URL}/scim/v1/Realms/#{tenant}/Users?filter=userName eq \"#{username}\""
 
         access_token = Igneous::Smart.cerner_care_oauth_consumer.get_access_token(nil)
         response = access_token.get(url, 'Accept' => 'application/json')
         json_response = JSON.parse(response.body)
-        json_response['Resources'].first['externalId'] unless json_response['Resources'].blank?
+
+        if json_response['Resources'].blank?
+          log_info("user '#{username}' not found by calling the url '#{url}'")
+          return
+        end
+
+        json_response['Resources'].first['externalId']
       end
 
       def log_info(info)
-        ::Rails.logger.info "#{self.class.name}, #{info} for the launch id #{params['launch']}"
+        ::Rails.logger.info "#{self.class.name}, #{info} for the launch id '#{params['launch']}'"
       end
     end
   end

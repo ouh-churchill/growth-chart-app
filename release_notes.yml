@@ -3,7 +3,8 @@ versions:
   - version: 1.3.0
     release_date: 2015-xx-xx
     changes:
-      - {author: xx, comment: xx, issue: OPENSVC-xx, type: add}
+      - {author: kt026311, comment: Provide better logging for error scenarios, issue: OPENSVC-792, type: update}
+      - {author: kt026311, comment: Change WARN to INFO when the launch context_id is not found, issue: OPENSVC-815, type: update}
   - version: 1.2.0
     release_date: 2015-09-24
     changes:

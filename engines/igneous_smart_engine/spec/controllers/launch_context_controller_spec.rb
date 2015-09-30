@@ -41,7 +41,7 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
         launch_context_id: '6e1b99f7-e05b-42d1-b304-d8180858ce8c'
       }
 
-      allow(controller).to receive(:personnel_id).and_return '12345'
+      allow(controller).to receive(:find_user_id_by_username_and_tenant).and_return '12345'
       expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
         .with(:smart_launch_context_resolve, :success, audit_hash)
 
@@ -122,7 +122,7 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
     end
 
     it 'returns failure when the user is invalid' do
-      allow(controller).to receive(:personnel_id).and_return '2342'
+      allow(controller).to receive(:find_user_id_by_username_and_tenant).and_return '2342'
 
       post(:resolve, format: 'json', aud: 'https://fhir.devcernerpowerchart.com/fhir/'\
                                           '2c400054-42d8-4e74-87b7-80b5bd5fde9f',
@@ -139,7 +139,7 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
     end
 
     it 'returns failure when resource server is unknown' do
-      allow(controller).to receive(:personnel_id).and_return '2342'
+      allow(controller).to receive(:find_user_id_by_username_and_tenant).and_return '2342'
 
       post(:resolve, format: 'json', aud: 'https://fhir.example.com/fhir/'\
                                           '2c400054-42d8-4e74-87b7-80b5bd5fde9f',
@@ -156,7 +156,7 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
     end
 
     it 'returns failure when the tenant is invalid' do
-      allow(controller).to receive(:personnel_id).and_return '2342'
+      allow(controller).to receive(:find_user_id_by_username_and_tenant).and_return '2342'
 
       post(:resolve, format: 'json', aud: 'https://fhir.devcernerpowerchart.com/fhir/'\
                                           '2c400054-42d8-4e74-87b7-80b5bd5fde45',
@@ -173,7 +173,7 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
     end
 
     it 'returns failure when there is an unspecified error' do
-      allow(controller).to receive(:personnel_id).and_return '2342'
+      allow(controller).to receive(:find_user_id_by_username_and_tenant).and_return '2342'
 
       allow_any_instance_of(Igneous::Smart::LaunchContext).to receive(:valid?).and_return false
       post(:resolve, format: 'json', aud: 'https://fhir.devcernerpowerchart.com/fhir/'\
@@ -211,7 +211,7 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
                          igneous_smart_fhir_server_id: 1,
                          authorized: true)
 
-      allow(controller).to receive(:personnel_id).and_return '6789'
+      allow(controller).to receive(:find_user_id_by_username_and_tenant).and_return '6789'
       post(:resolve, format: 'json', aud: 'https://fhir.example.com/fhir/2c400054-42d8-4e74-87b7-80b5bd5fde9f',
                      launch: '6e1b99f7-e05b-42d1-b304-d8180858ce8d',
                      sub: 'myusername',
@@ -226,7 +226,7 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
     end
   end
 
-  describe '#personnel_id' do
+  describe '#find_user_id_by_username' do
 
     before(:each) do
       @fake_response = Net::HTTPResponse.new('1.0', '200', 'Success')
@@ -242,33 +242,34 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
       body = {'Resources' => [{'id': '5bf02e61-09fe-49c3-8ca8-05084c30ca23', 'externalId': '1900022',
                                'displayName': 'Test, Name', 'userName': 'username0134'}]}
       allow(@fake_response).to receive(:body).and_return(body.to_json)
-      expect(controller.send(:personnel_id)).to eq '1900022'
+      expect(controller.send(:find_user_id_by_username_and_tenant, 'username0134', nil)).to eq '1900022'
     end
 
     it 'returns nil when username is not found' do
       body = {'Resources': []}
       allow(@fake_response).to receive(:body).and_return(body.to_json)
-      expect(controller.send(:personnel_id)).to eq nil
+      expect(controller).to receive(:log_info)
+      expect(controller.send(:find_user_id_by_username_and_tenant, 'username0134', nil)).to eq nil
     end
 
     it 'returns nil when Resources not returned' do
       body = {}
       allow(@fake_response).to receive(:body).and_return(body.to_json)
-      expect(controller.send(:personnel_id)).to eq nil
+      expect(controller.send(:find_user_id_by_username_and_tenant, 'username0134', nil)).to eq nil
     end
   end
 
   describe '#fhir_url' do
     it 'returns returns nil when app_id is nil' do
-      expect(controller.send(:fhir_url, nil)).to be nil
+      expect(controller.send(:fhir_url, nil, nil)).to be nil
     end
 
     it 'returns returns nil when app_id is empty' do
-      expect(controller.send(:fhir_url, '')).to be nil
+      expect(controller.send(:fhir_url, '', nil)).to be nil
     end
 
     it 'returns returns nil when app_id is provided but app is not found' do
-      expect(controller.send(:fhir_url, '5bf02e61-09fe-49c3-8ca8-05084c30ca22')).to be nil
+      expect(controller.send(:fhir_url, '5bf02e61-09fe-49c3-8ca8-05084c30ca22', nil)).to be nil
     end
   end
 

@@ -16,7 +16,7 @@ module Igneous
 
         context = LaunchContext.find_by context_id: params[:context_id]
         if context.nil?
-          logger.warn "#{self.class.name}, Launch context_id is not found."
+          logger.info "#{self.class.name}, Launch context_id is not found."
           return head :not_found
         end
 
