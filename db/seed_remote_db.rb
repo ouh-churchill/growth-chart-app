@@ -76,8 +76,8 @@ end
 # )
 
 add_smart_apps(
-  # smart_app('bf7d70ce-56a9-4096-bc36-d91dfff00854', 'EnrG|Rheum',                    't', 1, 'http://localhost:4271/PointOfEntry'),
-  # smart_app('d63f966e-db03-4f4f-9d17-8c604a7b4dd1', 'EnrG|Rheum (No Auth)',          'f', 2, 'http://localhost:4271/PointOfEntry'),
+  # smart_app('bf7d70ce-56a9-4096-bc36-d91dfff00854', 'EnrG|Rheum (local dev)',        't', 1, 'http://localhost:4271/PointOfEntry'),
+  # smart_app('d63f966e-db03-4f4f-9d17-8c604a7b4dd1', 'EnrG|Rheum (local dev No Auth)','f', 2, 'http://localhost:4271/PointOfEntry'),
   # smart_app('3175a80b-47b7-471b-aba5-d09349ae7526', 'Cardiac Risk',                  't', 1, 'https://fhir.smarthealthit.org/apps/cardiac-risk/launch.html'),
   # smart_app('2dda2e15-9990-4045-b449-00de236b194b', 'BP Percentiles',                't', 1, 'https://fhir.smarthealthit.org/apps/bp-centiles/launch.html'),
   # smart_app('194099bd-080c-48ae-9f0e-5cb1bf559c2a', 'Pediatric Growth Chart',        't', 1, 'https://fhir.smarthealthit.org/apps/growth-chart/launch.html'),
@@ -91,7 +91,7 @@ add_smart_apps(
   # smart_app('a9b3e26a-13c3-4888-82c7-ac130bccae55', 'Qvera Argonaut Client',         't', 1, 'http://mhutton-m4700/form/form.html?urlKey=FHIRClient'),
   # smart_app('3203fa36-0431-4ddf-add1-c14a343ca386', 'VisualDX (DSTU 2)',             't', 1, 'https://www.visualdx.com/visualdx/widgets/smart/launch.html'),
   # smart_app('b4c2eb41-3252-41a2-9d38-34aad35db8e7', 'MITRE Crucible',                't', 1, 'http://localhost:4200/'),
-  # smart_app('f1ce5e11-ad41-4b57-9afd-ef79f5aeba3b', 'EnrG|Rheum Questionnaire',      't', 1, 'http://localhost:4272/SecurePointOfEntry'),
+  # smart_app('f1ce5e11-ad41-4b57-9afd-ef79f5aeba3b', 'EnrG|Rheum Questionnaire (local dev)', 't', 1, 'http://localhost:4272/SecurePointOfEntry'),
   # smart_app('2dd93cdf-d9cc-4f42-81c7-cc21f86319ea', 'MAEHC',                         't', 1, 'https://dev.qdc.maehc.org/fhir'),
   # smart_app('7a259ec0-4afa-40cc-970e-bef0bfcdb581', 'PRP (Premier Inc)',             't', 1, 'http://localhost:8080/fhir-app/PRPHome.html'),
   # smart_app('b45fc6ec-4c77-4d97-a5a1-8c1709c29804', 'InterSystems',                  't', 1, 'https://argonaut.intersystems.com/resp/csp/sys/oauth2/OAuth2.Response.cls' ),
@@ -106,5 +106,6 @@ add_smart_apps(
   # smart_app('e6beb7e2-f68a-4a12-8e4f-7507f3a4f960', 'EnrG|Rheum (Integration)', 't', 1, 'https://enrg.xghealth.com/EnrGRheum/Integration/SecurePointOfEntry/Index' ),
   # smart_app('d35518be-49bf-404b-9593-a36edc7f4968', 'EnrG|Rheum Questionnaire (Integration)', 't', 1, 'https://enrg.xghealth.com/RheumQuestionnaire/Integration/SecurePointOfEntry' ),
   # smart_app('334afd39-6ad1-4b10-8081-f760a67c94b8', 'Cerner Direct Referrals (DEV)', 't', 1, 'http://dev.gwx.cerner.corp/toc/smart/launch' ),
-
+  # smart_app('8afe32cd-5fdf-4eff-b19b-7c3fb3cdf49e', 'EnrG|Rheum',                    't', 1, 'https://demoapp.xghealth.com/EnrGRheum/Demo/SecurePointOfEntry/Index' ),
+  # smart_app('59059b31-700e-411c-a9db-44e57105009a', 'EnrG|Rheum Questionnaire',      't', 1, 'https://demoapp.xghealth.com/RheumQuestionnaire/Demo/SecurePointOfEntry' )
 )
