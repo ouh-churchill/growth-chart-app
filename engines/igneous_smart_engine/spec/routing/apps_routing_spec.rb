@@ -1,6 +1,10 @@
 describe Igneous::Smart::AppsController, type: :routing do
   routes { Igneous::Smart::Engine.routes }
 
+  it 'does not route when the ehr_source_id exceeds 36 characters' do
+    expect(get('1234567890123456789012345678901234567/apps')).not_to be_routable
+  end
+
   it 'routes to apps#index' do
     expect(get('foo/apps')).to \
       route_to(controller: 'igneous/smart/apps',
