@@ -1,7 +1,7 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.4.0
-    release_date: 2015-10-xx
+    release_date: 2015-10-08
     changes:
       - {author: ks8252, comment: Stop creating sessions, issue: OPENSVC-850, type: add}
       - {author: ks8252, comment: 'Constrain ehr_source_id param on /:ehr_source_id/apps route', issue: OPENSVC-851, type: add}
