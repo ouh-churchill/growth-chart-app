@@ -18,9 +18,17 @@ describe Igneous::Smart::AppsController, type: :controller do
     end
 
     it 'retrieves SMART apps with context and renders them' do
-      get :index, ehr_source_id: 'foo', 'PAT_PersonId' => '1', 'PAT_PPRCode' => '2', 'VIS_EncntrId' => '3',
-                  'USR_PersonId' => '4', 'USR_PositionCd' => '5', 'DEV_Location' => '6',
+      get :index, ehr_source_id: 'foo', 'pat_personid' => '1', 'pat_pprcode' => '2', 'vis_encntrid' => '3',
+                  'usr_personid' => '4', 'usr_positioncd' => '5', 'dev_location' => '6',
                   'APP_AppName' => '7'
+      expect(response).to have_http_status(200)
+      expect(response).to render_template(:index)
+    end
+
+    it 'retrieves SMART apps with context and renders them even if query params are in lower case' do
+      get :index, ehr_source_id: 'foo', 'pat_personid' => '1', 'pat_pprcode' => '2', 'vis_encntrid' => '3',
+                  'usr_personid' => '4', 'usr_positioncd' => '5', 'dev_location' => '6',
+                  'app_appname' => '7'
       expect(response).to have_http_status(200)
       expect(response).to render_template(:index)
     end
@@ -55,8 +63,8 @@ describe Igneous::Smart::AppsController, type: :controller do
           .with(:smart_launch_app, :success, tenant: 'foo', user_id: '400',
                                              patient_id: '100', encounter_id: '300', app_id: 'app1')
 
-        get :show, ehr_source_id: 'foo', id: 'app1', 'PAT_PersonId' => '100.00', 'PAT_PPRCode' => '200.00',
-                   'VIS_EncntrId' => '300.00', 'USR_PersonId' => '400.00'
+        get :show, ehr_source_id: 'foo', id: 'app1', 'pat_personid' => '100.00', 'pat_pprcode' => '200.00',
+                   'vis_encntrid' => '300.00', 'usr_personid' => '400.00'
 
         expect(response).to have_http_status(302)
         expect(response).to redirect_to('http://test.host/smart/user/preauth?context_id=11309546-4ef4-4dba-8f36-53ef3834d90e')
@@ -129,4 +137,35 @@ describe Igneous::Smart::AppsController, type: :controller do
       expect(response.headers).to have_key('Location')
     end
   end
+
+  describe '#lowercase_app_params' do
+    it 'converts PowerChart query params to lowercase' do
+      params = {
+        'PAT_PersonId'   => '1',
+        'PAT_PPRCode'    => '2',
+        'VIS_EncntrId'   => '3',
+        'USR_PersonId'   => '4',
+        'USR_PositionCd' => '5',
+        'DEV_Location'   => '6',
+        'APP_AppName'    => '7',
+        'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc',
+        'id' => 'a3f7b4ef-a793-48a3-8a0b-5729b0ed57a6',
+        'TEST' => 'test'
+      }
+
+      expect(controller.send(:lowercase_app_params, params)).to include(
+       'pat_personid'   => '1',
+       'pat_pprcode'    => '2',
+       'vis_encntrid'   => '3',
+       'usr_personid'   => '4',
+       'usr_positioncd' => '5',
+       'dev_location'   => '6',
+       'app_appname'    => '7',
+       'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc',
+       'id' => 'a3f7b4ef-a793-48a3-8a0b-5729b0ed57a6')
+
+      expect(controller.send(:lowercase_app_params, params)).to_not include('test' => 'test')
+    end
+  end
+
 end

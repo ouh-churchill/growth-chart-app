@@ -9,9 +9,9 @@ describe Igneous::Smart::App do
 
   describe '#launch_url' do
     params = {
-      ehr_source_id: 'foo',
-      'PAT_PersonId' => '123.00',
-      'VIS_EncntrId' => '456.00'
+      'ehr_source_id' => 'foo',
+      'pat_personid' => '123.00',
+      'vis_encntrid' => '456.00'
     }
 
     it 'constructs an authorized launch url' do

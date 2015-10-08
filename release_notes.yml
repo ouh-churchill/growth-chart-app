@@ -6,6 +6,7 @@ versions:
       - {author: ks8252, comment: Stop creating sessions, issue: OPENSVC-850, type: add}
       - {author: ks8252, comment: 'Constrain ehr_source_id param on /:ehr_source_id/apps route', issue: OPENSVC-851, type: add}
       - {author: kk014173, comment: 1.4.0 release review, issue: OPENSVC-820, type: add}
+      - {author: kk014173, comment: Convert PowerChart params to lowercase, issue: OPENSVC-829, type: add}
   - version: 1.3.0
     release_date: 2015-09-30
     changes:

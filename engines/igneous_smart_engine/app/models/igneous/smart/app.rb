@@ -29,7 +29,7 @@ module Igneous
 
       # Private: Builds and returns the FHIR URL for the current tenant.
       #
-      # params - The request parameters Hash. The ehr_source_id parameter is expected to be present.
+      # params - The app parameters Hash. The ehr_source_id parameter is expected to be present.
       #
       # Example (given a FHIR url of https://fhir.example.com/@tenant_id@/open)
       #   build_fhir_url({ehr_source_id: 'd075cf8b-3261-481d-97e5-ba6c48d3b41f'})
@@ -37,17 +37,17 @@ module Igneous
       #
       # Returns the FHIR URL of this SMART app based on the current tenant (URL encoded).
       def build_fhir_url(params)
-        ERB::Util.url_encode(fhir_server.url.sub('@tenant_id@', params[:ehr_source_id]))
+        ERB::Util.url_encode(fhir_server.url.sub('@tenant_id@', params['ehr_source_id']))
       end
 
       # Public: Returns the URL to launch this SMART app.
       #
-      # params - The request parameters Hash.
+      # params - The app parameters Hash.
       # context_id - The launch context uuid associated with values in the params.
       #
       # Returns the URL to launch this SMART app.
       def smart_launch_url(params, context_id)
-        patient_id = params['PAT_PersonId'].to_i.to_s
+        patient_id = params['pat_personid'].to_i.to_s
 
         if authorized
           return build_launch_url("iss=#{build_fhir_url(params)}", "launch=#{context_id}")

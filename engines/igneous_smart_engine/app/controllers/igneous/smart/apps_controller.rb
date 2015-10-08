@@ -3,6 +3,9 @@ require 'igneous/smart'
 module Igneous
   module Smart
     class AppsController < Igneous::Smart::ApplicationController
+      # Rubocop will generate a lint issue; however, this statement is perfectly fine.
+      @@app_param_keys = %w(ehr_source_id id pat_personid pat_pprcode vis_encntrid \
+                            usr_personid usr_positioncd dev_location app_appname)
 
       def index
         render locals: {
@@ -29,8 +32,8 @@ module Igneous
         end
 
         launch_context = LaunchContext.new
-        smart_launch_url = app.smart_launch_url(params, launch_context.context_id)
-        context = launch_context.context(params, app.app_id, smart_launch_url)
+        smart_launch_url = app.smart_launch_url(lowercase_app_params(params), launch_context.context_id)
+        context = launch_context.context(lowercase_app_params(params), app.app_id, smart_launch_url)
 
         context_data = JSON.parse(context.data)
 
@@ -61,6 +64,15 @@ module Igneous
 
       def app_params
         params.require(:app).permit(:app_id, :name, :launch_url, :igneous_smart_fhir_server_id, :authorized)
+      end
+
+      def lowercase_app_params(params)
+        # Convert PowerChart params to lowercase as they pass in keys with varying case (see OPENSVC-829)
+        app_params = {}
+        params.each do |k, v|
+          app_params[k.downcase] = v if @@app_param_keys.include?(k.downcase)
+        end
+        app_params
       end
     end
   end

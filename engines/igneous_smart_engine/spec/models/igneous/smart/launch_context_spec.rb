@@ -9,13 +9,42 @@ describe Igneous::Smart::LaunchContext do
     it 'creates launch context hash' do
 
       params = {
-        'PAT_PersonId'   => '1',
-        'PAT_PPRCode'    => '2',
-        'VIS_EncntrId'   => '3',
-        'USR_PersonId'   => '4',
-        'USR_PositionCd' => '5',
-        'DEV_Location'   => '6',
-        'APP_AppName'    => '7',
+        'pat_personid'   => '1',
+        'pat_pprcode'    => '2',
+        'vis_encntrid'   => '3',
+        'usr_personid'   => '4',
+        'usr_positioncd' => '5',
+        'dev_location'   => '6',
+        'app_appname'    => '7',
+        'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
+      }
+
+      context_id = '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
+      app_id = 'd193fa79-c165-4daa-a8fd-c187fba2af4d'
+      smart_launch_url = 'http://example.com/smart/launch.html'
+      allow(SecureRandom).to receive(:uuid).and_return(context_id)
+      launch_context.context(params, app_id, smart_launch_url)
+
+      context = Igneous::Smart::LaunchContext.find_by context_id: context_id
+      expect(context.context_id).to eq '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
+      expect(JSON.parse(context.data)).to include('patient' => '1', 'ppr' => '2', 'encounter' => '3',
+                                                  'user' => '4', 'position' => '5', 'device_location' => '6',
+                                                  'container_name' => '7')
+      expect(context.app_id).to eq app_id
+      expect(context.smart_launch_url).to eq smart_launch_url
+      expect(context.tenant).to eq params['ehr_source_id']
+    end
+
+    it 'accepts query parameters with lower case' do
+
+      params = {
+        'pat_personid'   => '1',
+        'pat_pprcode'    => '2',
+        'vis_encntrid'   => '3',
+        'usr_personid'   => '4',
+        'usr_positioncd' => '5',
+        'dev_location'   => '6',
+        'app_appname'    => '7',
         'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
       }
 
@@ -53,13 +82,13 @@ describe Igneous::Smart::LaunchContext do
     it 'constructs a complete SMART context when all params are present' do
 
       params = {
-        'PAT_PersonId'   => '1',
-        'PAT_PPRCode'    => '2',
-        'VIS_EncntrId'   => '3',
-        'USR_PersonId'   => '4',
-        'USR_PositionCd' => '5',
-        'DEV_Location'   => '6',
-        'APP_AppName'    => '7',
+        'pat_personid'   => '1',
+        'pat_pprcode'    => '2',
+        'vis_encntrid'   => '3',
+        'usr_personid'   => '4',
+        'usr_positioncd' => '5',
+        'dev_location'   => '6',
+        'app_appname'    => '7',
         'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
       }
 
@@ -77,10 +106,10 @@ describe Igneous::Smart::LaunchContext do
 
     it 'strips .00 added by PowerChart from all numeric parameter values' do
       params = {
-        'PAT_PersonId' => '1.00',
-        'VIS_EncntrId' => '2.00',
-        'DEV_Location' => 'East Wing',
-        'APP_AppName'  => 'Spec Test',
+        'pat_personid' => '1.00',
+        'vis_encntrid' => '2.00',
+        'dev_location' => 'East Wing',
+        'app_appname'  => 'Spec Test',
         'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
       }
 
@@ -98,11 +127,11 @@ describe Igneous::Smart::LaunchContext do
 
     it 'will not add key, value pair when value is not supplied or nil' do
       params = {
-        'PAT_PersonId' => '1.00',
-        'VIS_EncntrId' => '2.00',
-        'PAT_PPRCode' => nil,
-        'DEV_Location' => nil,
-        'APP_AppName'  => nil,
+        'pat_personid' => '1.00',
+        'vis_encntrid' => '2.00',
+        'pat_pprcode' => nil,
+        'dev_location' => nil,
+        'app_appname'  => nil,
         'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
       }
 
