@@ -88,7 +88,7 @@
             uri += '&' + params;
           }
 
-          return uri;
+          return encodeURI(uri);
         };
       }
 
@@ -163,11 +163,34 @@
         }
 
         var additionalParam = null;
+        if (resource === 'AllergyIntolerance') {
+          additionalParam = 'status=unconfirmed';
+        }
+
+        if (resource === 'Condition') {
+          additionalParam = 'category=diagnosis&clinicalstatus=confirmed,unknown';
+        }
+
         if (resource === 'MedicationPrescription') {
-          additionalParam = 'status=active';
+          additionalParam = 'status=active&_count=20';
+        }
+
+        if (resource === 'Observation') {
+          var currentDate = new Date();
+
+          var priorDate = new Date();
+          var monthsToDeduct = 6;
+          priorDate.setMonth(priorDate.getMonth() - monthsToDeduct);
+
+          additionalParam = 'code=http://loinc.org|30522-7,http://loinc.org|14647-2,http://loinc.org|2093-3,' +
+              'http://loinc.org|2085-9,http://loinc.org|8480-6,http://loinc.org|3141-9,http://loinc.org|8302-2,' +
+              'http://loinc.org|8287-5,http://loinc.org|39156-5,http://loinc.org|18185-9,http://loinc.org|37362-1';
+
+          additionalParam += '&date=<' + currentDate.toISOString() + '&date=>' + priorDate.toISOString() + '&_count=20';
         }
 
         var resourceObj = new Resource(resource, patientId, encounterId, additionalParam);
+
         if (resource === 'Patient') {
           getResourceById(resourceObj.name, resourceObj.patient);
         }
