@@ -60,6 +60,35 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
       expect(JSON.parse(response.body)).to eql response_in_json
     end
 
+    it 'returns success when aud has a "/" at the end of url string' do
+
+      audit_hash = {
+        tenant: '2c400054-42d8-4e74-87b7-80b5bd5fde9f',
+        user_id: '12345',
+        patient_id: '123',
+        encounter_id: '456',
+        launch_context_id: '6e1b99f7-e05b-42d1-b304-d8180858ce8c'
+      }
+
+      allow(controller).to receive(:find_user_id_by_username_and_tenant).and_return '12345'
+      expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
+        .with(:smart_launch_context_resolve, :success, audit_hash)
+
+      post(:resolve, format: 'json', aud: 'https://fhir.devcernerpowerchart.com/fhir/'\
+                                          '2c400054-42d8-4e74-87b7-80b5bd5fde9f/',
+                     launch: '6e1b99f7-e05b-42d1-b304-d8180858ce8c',
+                     sub: 'test_username',
+                     ver: '1.0',
+                     tnt: '2c400054-42d8-4e74-87b7-80b5bd5fde9f')
+
+      expect(response).to have_http_status(:ok)
+
+      response_in_json = JSON.parse(File.read('engines/igneous_smart_engine/spec/controllers/launch_context_data/'\
+                                              'launch_context_valid_response.json'))
+      expect(response.content_type).to eq 'application/json'
+      expect(JSON.parse(response.body)).to eql response_in_json
+    end
+
     it 'returns failure when there is a version mismatch and audits as minor_failure' do
 
       expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)

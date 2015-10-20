@@ -23,7 +23,10 @@ module Igneous
         context_data['tenant'] = params['tnt'] if context_data
         user_id = context_data['user'] unless context_data.blank?
 
-        return if invalid_request?(context, user_id)
+        # Remove the ' / ' from aud before its validated if it exists.
+        aud = (params['aud'].to_s[-1, 1].eql?'/') ? params['aud'].to_s.chop : params['aud']
+
+        return if invalid_request?(context, user_id, aud)
         context_data['username'] = params['sub'] if context_data
 
         @response_context['params'] = context_data.except('ppr')
@@ -43,8 +46,8 @@ module Igneous
 
       private
 
-      def invalid_request?(context, user)
-        if invalid_version? || invalid_launch_id?(context) || invalid_url?(context.app_id) ||
+      def invalid_request?(context, user, aud)
+        if invalid_version? || invalid_launch_id?(context) || invalid_url?(context.app_id, aud) ||
            invalid_tenant?(context.tenant)
           audit_smart_event(:smart_launch_context_resolve, :minor_failure, tenant: params['tnt'],
                                                                            launch_context_id: params['launch'],
@@ -92,9 +95,9 @@ module Igneous
         true
       end
 
-      def invalid_url?(app_id)
+      def invalid_url?(app_id, aud)
         fhir_url = fhir_url(app_id, params['tnt'])
-        return false if fhir_url.eql?(params['aud'].to_s)
+        return false if fhir_url.eql?(aud.to_s)
         @error_response['ver'] = params['ver']
         @error_response['error']  = 'urn:com:cerner:authorization:error:launch:unknown-resource-server'
         @error_response['id'] = SecureRandom.uuid

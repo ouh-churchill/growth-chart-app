@@ -3,7 +3,7 @@ versions:
   - version: 1.5.0
     release_date: 2015-10-xx
     changes:
-      - {author: xx, comment: xx, issue: OPENSVC-xx, type: add}
+      - {author: ss025783, comment: Handle '/' at the end of AUD string, issue: OPENSVC-831, type: add}
   - version: 1.4.0
     release_date: 2015-10-08
     changes:
