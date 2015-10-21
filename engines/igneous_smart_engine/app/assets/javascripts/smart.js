@@ -1,10 +1,13 @@
 // Global variables
-var oauth2BaseURL = '';
-var launchURL = '';
-var errorObj = new Error();
+var CERNER_SMART_LAUNCH = {};
+CERNER_SMART_LAUNCH.oauth2BaseURL = '';
+CERNER_SMART_LAUNCH.launchURL = '';
+CERNER_SMART_LAUNCH.preauthTimeoutVar = null;
+CERNER_SMART_LAUNCH.timeoutIntervalSec = 10; // 10 seconds
+CERNER_SMART_LAUNCH.errorObj = new Error();
 
 // Initialize XMLCclRequest
-var requestSync = new XMLCclRequest();
+CERNER_SMART_LAUNCH.requestSync = new XMLCclRequest();
 
 /**
  * Use XMLCclRequest to execute mp_exec_std_request having the target
@@ -14,15 +17,15 @@ var requestSync = new XMLCclRequest();
  */
 function getOAuthConsumerKey() {
   // Setup a synch request of mp_exec_std_request script
-  requestSync.open('GET','mp_exec_std_request', 0);
+  CERNER_SMART_LAUNCH.requestSync.open('GET','mp_exec_std_request', 0);
 
   // Populating the request info with request structure and ATR
   // for the request that we want to execute:
   // 99999115 - StartOAuthSession.User
-  requestSync.send('~MINE~,~{"REQUESTIN":{}}~,3202004,3202004,99999115');
+  CERNER_SMART_LAUNCH.requestSync.send('~MINE~,~{"REQUESTIN":{}}~,3202004,3202004,99999115');
 
-  if (requestSync.status === 200) {
-    var parsedJSON = JSON.parse(requestSync.responseText);
+  if (CERNER_SMART_LAUNCH.requestSync.status === 200) {
+    var parsedJSON = JSON.parse(CERNER_SMART_LAUNCH.requestSync.responseText);
 
     if (parsedJSON.RECORD_DATA.STATUS.SUCCESS_IND === 1) {
       return parsedJSON.RECORD_DATA.OAUTH_RESPONSE.OAUTH_CONSUMER_KEY.valueOf();
@@ -39,15 +42,15 @@ function getOAuthConsumerKey() {
  */
 function getMillenniumIntegratedAuthToken() {
   // Setup a synch request of mp_exec_std_request script
-  requestSync.open('GET','mp_exec_std_request', 0);
+  CERNER_SMART_LAUNCH.requestSync.open('GET','mp_exec_std_request', 0);
 
   // Populating the request info with request structure and ATR
   // for the request that we want to execute:
   // 99999124 - GenerateSingleUseIdentityToken
-  requestSync.send('~MINE~,~{"REQUESTIN":{}}~,3202004,3202004,99999124');
+  CERNER_SMART_LAUNCH.requestSync.send('~MINE~,~{"REQUESTIN":{}}~,3202004,3202004,99999124');
 
-  if (requestSync.status === 200) {
-    var parsedJSON = JSON.parse(requestSync.responseText);
+  if (CERNER_SMART_LAUNCH.requestSync.status === 200) {
+    var parsedJSON = JSON.parse(CERNER_SMART_LAUNCH.requestSync.responseText);
 
     if (parsedJSON.RECORD_DATA.STATUS.SUCCESS_IND === 1) {
       return parsedJSON.RECORD_DATA.IDENTITY_TOKEN.valueOf();
@@ -64,20 +67,20 @@ function getMillenniumIntegratedAuthToken() {
  */
 function submitToken(token) {
 
-  if (!oauth2BaseURL) {
+  if (!CERNER_SMART_LAUNCH.oauth2BaseURL) {
     // In case when the OAuth2 base URL is not
     // configured correctly, take the user to the
     // app's launch URL.  The user will be asked
     // to sign into the domain first before proceeding
     // to the SMART app.
-    Canadarm.warn('OAuth2 base URL is not set.', errorObj);
-    window.location.href = launchURL;
+    Canadarm.warn('OAuth2 base URL is not set.', CERNER_SMART_LAUNCH.errorObj);
+    window.location.href = CERNER_SMART_LAUNCH.launchURL;
   }
 
   // This invokes an API provided by the authorization server, which directs
   // the user agent to its own endpoint that can signal completion of the
   // pre-authentication workflow.
-  document.getElementById('loader').src = oauth2BaseURL + '/preauth/?token=' + encodeURI(token);
+  document.getElementById('loader').src = CERNER_SMART_LAUNCH.oauth2BaseURL + '/preauth/?token=' + encodeURI(token);
   return false;
 }
 
@@ -85,22 +88,29 @@ function submitToken(token) {
  * This function hooks and waits for the pre-authentication frame to signal completion.
  */
 function receiveMessage(event) {
+  // Clear the timeout
+  clearTimeout(CERNER_SMART_LAUNCH.preauthTimeoutVar);
 
   // Only handle message from the expected origin domain.
-  if (oauth2BaseURL.indexOf(event.origin) === -1) {
+  if (CERNER_SMART_LAUNCH.oauth2BaseURL.indexOf(event.origin) === -1) {
+    Canadarm.warn('The OAuth2 base URLs do not match. Expected: ' + CERNER_SMART_LAUNCH.oauth2BaseURL +
+                  ' but got: ' + event.origin, CERNER_SMART_LAUNCH.errorObj);
+    window.location.href = CERNER_SMART_LAUNCH.launchURL;
     return;
   }
 
   // Successfully pre-authenticated
   if (event.data === 'com.cerner.authorization:notification:preauthentication-complete') {
-    window.location.href = launchURL;
+    Canadarm.info('Preauthentication completed. Navigating to: ' +
+                   CERNER_SMART_LAUNCH.launchURL, CERNER_SMART_LAUNCH.errorObj);
   } else if (event.data.substring(0, event.data.lastIndexOf(':')) ===
             ('com.cerner.authorization:notification:preauthentication-failure:error')) {
-    Canadarm.warn('Pre-authentication completed with failure: ' + event.data, errorObj);
+    Canadarm.warn('Pre-authentication completed with failure: ' + event.data, CERNER_SMART_LAUNCH.errorObj);
     // The user would need to log into the domain.
     // After logging in, the user will be redirected to the SMART app.
-    window.location.href = launchURL;
   }
+
+  window.location.href = CERNER_SMART_LAUNCH.launchURL;
 }
 
 // Listen on the message and invoke receiveMessage function.
@@ -111,34 +121,36 @@ window.addEventListener('message', receiveMessage, false);
  * Upon completion, the user will be redirected to the SMART app.
  */
 var preAuthFailed = function () {
-  Canadarm.warn('Pre-authentication was not completed after 5 seconds of waiting.', errorObj);
+  Canadarm.warn('Pre-authentication was not completed after ' + CERNER_SMART_LAUNCH.timeoutIntervalSec +
+                ' seconds of waiting.', CERNER_SMART_LAUNCH.errorObj);
   // The user would need to log into the domain.
   // After logging in, the user will be redirected to the SMART app.
-  window.location.href = launchURL;
+  window.location.href = CERNER_SMART_LAUNCH.launchURL;
 };
 
 /**
  * Get the Millennium Integrated Auth Token.
  * When the token is obtained, call the OAuth2 preauth workflow.
- * Set a timeout of 5 seconds for preauth workflow to complete.
- * If it takes longer than 5 seconds, the user will be asked to log in.
+ * Set a timeout based on CERNER_SMART_LAUNCH.timeoutIntervalSec
+ * for preauth workflow to complete. If it takes longer than the
+ * specified value, the user will be asked to log in.
  * Once logged in, the user will be redirected to the SMART app.
  */
 /*jshint unused:false*/
 function performPreauthentication(oauth2BaseUrl, launchUrl) {
-  oauth2BaseURL = oauth2BaseUrl;
-  launchURL = launchUrl;
+  CERNER_SMART_LAUNCH.oauth2BaseURL = oauth2BaseUrl;
+  CERNER_SMART_LAUNCH.launchURL = launchUrl;
 
   var token = getMillenniumIntegratedAuthToken();
 
   if (token) {
     submitToken(token);
-    setTimeout(preAuthFailed, 5000); // 5 Second timeout
+    CERNER_SMART_LAUNCH.preauthTimeoutVar = setTimeout(preAuthFailed, CERNER_SMART_LAUNCH.timeoutIntervalSec*1000);
   } else {
-    Canadarm.info('Unable to retrieve Millennium Integrated Auth Token.', errorObj);
+    Canadarm.info('Unable to retrieve Millennium Integrated Auth Token.', CERNER_SMART_LAUNCH.errorObj);
     // The user would need to log into the domain.
     // After logging in, the user will be redirected to the SMART App.
-    window.location.href = launchURL;
+    window.location.href = CERNER_SMART_LAUNCH.launchURL;
   }
 }
 
@@ -146,7 +158,7 @@ function performPreauthentication(oauth2BaseUrl, launchUrl) {
  * Unable to launch SMART app because tenant id could not be obtained.
  */
 var getOAuthConsumerKeyFailed = function () {
-  Canadarm.error('Unable to launch SMART app because tenant id could not be obtained.', errorObj);
+  Canadarm.error('Unable to launch SMART app because tenant id could not be obtained.', CERNER_SMART_LAUNCH.errorObj);
 };
 
 /**
@@ -157,12 +169,14 @@ var getOAuthConsumerKeyFailed = function () {
 */
 /*jshint unused:false*/
 function retrieveTenantIdAndRedirect(urlWithTenantPlaceHolder) {
+  var timeoutInterval = setTimeout(getOAuthConsumerKeyFailed, CERNER_SMART_LAUNCH.timeoutIntervalSec*1000);
   var consumerKey = getOAuthConsumerKey();
-  setTimeout(getOAuthConsumerKeyFailed, 10000); // 10 Second timeout
 
   if (consumerKey) {
-    var launch_url = urlWithTenantPlaceHolder.replace(':tenant_id', consumerKey);
-    window.location.href = launch_url;
+    clearTimeout(timeoutInterval);
+
+    var launchURL = urlWithTenantPlaceHolder.replace(':tenant_id', consumerKey);
+    window.location.href = launchURL;
   } else {
     getOAuthConsumerKeyFailed();
   }
