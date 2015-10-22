@@ -5,6 +5,7 @@ versions:
     changes:
       - {author: ss025783, comment: Handle '/' at the end of AUD string, issue: OPENSVC-831, type: add}
       - {author: kk014173, comment: Clear timer when the Authorization server responds to preauthentication, issue: OPENSVC-886, type: add}
+      - {author: kt026311, comment: Ensure appropriate security headers are set on each response, issue: OPENSVC-779, type: add}
   - version: 1.4.0
     release_date: 2015-10-08
     changes:

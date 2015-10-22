@@ -40,5 +40,7 @@ module IgneousSmartServer
     # in the log. The actual implementation will not be altered as super will be called to execute the logic in
     # Rails::Rack::Logger after the additional logging information is injected.
     config.middleware.swap Rails::Rack::Logger, Igneous::Smart::Logger
+
+    config.action_dispatch.default_headers.merge!('Strict-Transport-Security' => 'max-age=631152000')
   end
 end
