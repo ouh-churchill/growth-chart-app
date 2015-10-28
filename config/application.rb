@@ -42,5 +42,10 @@ module IgneousSmartServer
     config.middleware.swap Rails::Rack::Logger, Igneous::Smart::Logger
 
     config.action_dispatch.default_headers.merge!('Strict-Transport-Security' => 'max-age=631152000')
+
+    # Disable profiler for tests
+    if Rails.env.test?
+      config.disable_profiler = true
+    end
   end
 end

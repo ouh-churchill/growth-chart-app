@@ -43,6 +43,7 @@ group :cerner, :default do
   gem 'hi-checkup',    '~> 1.6',   source: 'http://repo.release.cerner.corp/main/rubygems/'
   gem 'canadarm_ruby', '~> 1.0',   source: 'http://repo.release.cerner.corp/main/rubygems/'
   gem 'igneous-smart', '1.0.0',    path:   'engines/igneous_smart_engine'
+  gem 'ion_profiler_engine', '~> 1.7', source: 'http://repo.release.cerner.corp/main/rubygems/'
 end
 
 group :development do
