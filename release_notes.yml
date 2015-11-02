@@ -4,6 +4,7 @@ versions:
     release_date: 2015-10-xx
     changes:
       - {author: kk014173, comment: Consume ion_profiler_engine for performance metrics, issue: OPENSVC-580, type: add}
+      - {author: kk014173, comment: Inform the user that page refresh in PowerChart for SMART app is not yet supported, issue: OPENSVC-971, type: add}
   - version: 1.5.0
     release_date: 2015-10-22
     changes:
