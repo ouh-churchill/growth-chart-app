@@ -111,6 +111,38 @@ Status: 200 OK
 }
 ```
 
+## Reporting SMART App Validator results
+
+The SMART App Validator will send down the validation results to the SMART server for the logging purposes via POST call.
+
+### Example
+
+```
+POST https://smart.cernerpowerchart.com/smart/validator/results
+```
+Request raw data:
+
+```json
+{ "browserInfo" : { "msie" : "true", "version" : "7.0" },
+  "userAgent" : "mozilla/4.0",
+  "tenant" : "2c400054-42d8-4e74-87b7-80b5bd5fde9f",
+  "user" : "kh046333",
+  "successCount" : 8,
+  "failureCount" : 1,
+  "resourceCount" : 9,
+  "resources" : [{
+      "name" : "conformance",
+      "textStatus" : "success",
+      "statusCode" : 200,
+      "responseHeaders": "Date: Thu, 05 Nov 2015 17:54:38 GMT Cache-Control: no-cache"
+  }]
+}
+```
+
+Response:
+```
+Status: 204
+```
 ## Supported Context Parameters
 
 These context parameters are the [same available within the MPages framework](https://wiki.ucern.com/display/public/1101discernHP/Context+Variables+Available+using+Discern+Explorer).
