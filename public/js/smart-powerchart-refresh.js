@@ -1,5 +1,6 @@
 /**
  * smart-powerchart-refresh.js
+ * Requires jQuery to be loaded before loading this file.
  * This file contains code to workaround a defect in Cerner PowerChart.
  * If there are multiple SMART apps opened, hitting Refresh button could
  * potentially display wrong patient information.  An enhancement is
@@ -27,19 +28,38 @@ function evaluate(x) {
 }
 
 /**
+ * This function makes a call to the MPage framework to register the callback function
+ * so that when refresh occurs inside PowerChart, the callback function will be able
+ * to handle the refresh action accordingly.
+ */
+function registerRefreshOverrideCallback() {
+  try {
+    window.external.MPAGESOVERRIDEREFRESH('overrideRefresh()');
+  } catch (e) {}
+}
+
+/**
  * Refresh is not currently supported for SMART apps inside of PowerChart.
  */
 /*jshint unused:false*/
 function overrideRefresh() {
   window.alert('Refresh action is currently not supported for this application.\n' +
-               'Please use Home button to reload this application.');
+              'Please use Home button to reload this application.');
 }
 
 /**
- * On load, overrides the refresh button in PowerChart with JavaScript refresh() function.
+ * On document ready, overrides the refresh button in PowerChart.
  */
-window.onload = function() {
-  try {
-    window.external.MPAGESOVERRIDEREFRESH('overrideRefresh()');
-  } catch (e) {}
-};
+$(document).ready(function() {
+  registerRefreshOverrideCallback();
+});
+
+/**
+ * Every 2 seconds, register the overrideRefresh() callback function.
+ * The MPage framework listens on page navigation, either to a new page
+ * or to the same page via anchor link and cancels the refresh callback.
+ *
+ * This is so that the callback is re-registered after canceled by MPage.
+ */
+window.setInterval(registerRefreshOverrideCallback, 2000);
+
