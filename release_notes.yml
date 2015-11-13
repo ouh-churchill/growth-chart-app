@@ -1,9 +1,9 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.6.1
-    release_date: 2015-11-xx
+    release_date: 2015-11-13
     changes:
-      - {author: kk014173, comment: Inform the user that page refresh in PowerChart for SMART app is not yet supported, issue: OPENSVC-971, type: add}
+      - {author: kk014173, comment: Rework the logic to block the refresh action by using interval timer to register the callback function, issue: OPENSVC-971, type: update}
       - {author: kk014173, comment: 1.6.1 release review, issue: OPENSVC-1027, type: add}
   - version: 1.6.0
     release_date: 2015-11-05
