@@ -110,4 +110,5 @@ add_smart_apps(
   # smart_app('59059b31-700e-411c-a9db-44e57105009a', 'EnrG|Rheum Questionnaire',      't', 1, 'https://demoapp.xghealth.com/RheumQuestionnaire/Demo/SecurePointOfEntry' ),
   # smart_app('4d2a4dea-641f-4627-b1a2-32d53d4a294f', 'Pediatric Drug Card',           't', 1, 'https://webedgedev.co.ihc.com/smartapp/apps/pediatric-drug-card/launch.html' )
   # smart_app('1bb4ba64-a2f5-4e8c-8e18-569acb5effe5', 'Eligible Argonaut Client',      't', 1, 'http://localhost:8000/fhir-app/index.html' ) #Note: Not launch URL, don't have SMART *yet*
+  # smart_app('9c558021-c9af-41f6-a603-65826c43fe9e', 'UpToDate Search, SMART on FHIR Prototype',      't', 1, 'http://s5www.utdlab.com/prototype1/launch-new.html' )
 )
