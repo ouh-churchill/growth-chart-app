@@ -1,10 +1,11 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.7.0
-    release_date: 2015-11-xx
+    release_date: 2015-11-19
     changes:
       - {author: kk014173, comment: Uplift to Rails 4.2.5, issue: OPENSVC-1037, type: add}
       - {author: kk014173, comment: Prevent access token response from being used by multiple instances of SMART apps, issue: OPENSVC-913, type: add}
+      - {author: kk014173, comment: 1.7.0 release review, issue: OPENSVC-1068, type: add}
   - version: 1.6.1
     release_date: 2015-11-13
     changes:
