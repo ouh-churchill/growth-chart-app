@@ -3,7 +3,7 @@ versions:
   - version: 1.7.0
     release_date: 2015-11-xx
     changes:
-      - {author: xx, comment: xx, issue: OPENSVC-xx, type: add}
+      - {author: kk014173, comment: Uplift to Rails 4.2.5, issue: OPENSVC-1037, type: add}
   - version: 1.6.1
     release_date: 2015-11-13
     changes:
