@@ -4,6 +4,7 @@ versions:
     release_date: 2015-11-xx
     changes:
       - {author: kk014173, comment: Uplift to Rails 4.2.5, issue: OPENSVC-1037, type: add}
+      - {author: kk014173, comment: Prevent access token response from being used by multiple instances of SMART apps, issue: OPENSVC-913, type: add}
   - version: 1.6.1
     release_date: 2015-11-13
     changes:

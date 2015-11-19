@@ -34,8 +34,9 @@ function urlParam(p, forceArray) {
 }
 
 function getPreviousToken(){
-  var ret = sessionStorage.tokenResponse;
-  if (ret) ret = JSON.parse(ret);
+  var state = urlParam('state');
+  var ret = sessionStorage[state];
+  if (ret) ret = JSON.parse(ret).tokenResponse;
   return ret;
 }
 
@@ -69,12 +70,12 @@ function completeCodeFlow(params){
       state: urlParam('state')
     };
   }
-  
+
   var ret =  $.Deferred();
   var state = JSON.parse(sessionStorage[params.state]);
 
   if (window.history.replaceState && BBClient.settings.replaceBrowserHistory){
-    window.history.replaceState({}, "", window.location.toString().replace(window.location.search, ""));
+    window.history.replaceState({}, "", window.location.toString().replace(window.location.search, "?state=" + urlParam('state')));
   }
 
   $.ajax({
@@ -152,9 +153,10 @@ BBClient.ready = function(input, callback, errback){
 
   // decide between token flow (implicit grant) and code flow (authorization code grant)
   var isCode = urlParam('code') || (args.input && args.input.code);
+  var state = urlParam('state') || (args.input && args.input.state);
 
   var accessTokenResolver = null;
-  if (sessionStorage.tokenResponse) { // we're reloading after successful completion
+  if (state && sessionStorage[state] && JSON.parse(sessionStorage[state]).tokenResponse) { // we're reloading after successful completion
     accessTokenResolver = completePageReload();
   } else if (isCode) { // code flow
     accessTokenResolver = completeCodeFlow(args.input);
@@ -166,8 +168,9 @@ BBClient.ready = function(input, callback, errback){
     if (!tokenResponse || !tokenResponse.state) {
       return args.errback("No 'state' parameter found in authorization response.");
     }
-    
-    sessionStorage.tokenResponse = JSON.stringify(tokenResponse);
+
+    var combinedObject = $.extend(true, JSON.parse(sessionStorage[tokenResponse.state]), { 'tokenResponse' : tokenResponse });
+    sessionStorage[tokenResponse.state] = JSON.stringify(combinedObject);
 
     var state = JSON.parse(sessionStorage[tokenResponse.state]);
     if (state.fake_token_response) {
@@ -178,11 +181,11 @@ BBClient.ready = function(input, callback, errback){
       serviceUrl: state.provider.url,
       patientId: tokenResponse.patient
     };
-    
+
     if (tokenResponse.id_token) {
         var id_token = tokenResponse.id_token;
         var payload = jwt.decode(id_token);
-        fhirClientParams["userId"] = payload["profile"]; 
+        fhirClientParams["userId"] = payload["profile"];
     }
 
     if (tokenResponse.access_token !== undefined) {
@@ -286,9 +289,6 @@ BBClient.authorize = function(params, errback){
         console.log("Failed to discover authorization URL given", params);
     };
   }
-  
-  // prevent inheritance of tokenResponse from parent window
-  delete sessionStorage.tokenResponse;
 
   if (!params.client){
     params = {
@@ -336,8 +336,8 @@ BBClient.authorize = function(params, errback){
     var client = params.client;
 
     if (params.provider.oauth2 == null) {
-      sessionStorage[state] = JSON.stringify(params);
-      sessionStorage.tokenResponse = JSON.stringify({state: state});
+      var combinedObject = $.extend(true, params, { 'tokenResponse' : {state: state} });
+      sessionStorage[state] = JSON.stringify(combinedObject);
       window.location.href = client.redirect_uri + "#state="+encodeURIComponent(state);
       return;
     }
@@ -346,14 +346,14 @@ BBClient.authorize = function(params, errback){
 
     console.log("sending client reg", params.client);
 
-    var redirect_to=params.provider.oauth2.authorize_uri + "?" + 
+    var redirect_to=params.provider.oauth2.authorize_uri + "?" +
       "client_id="+encodeURIComponent(client.client_id)+"&"+
       "response_type="+encodeURIComponent(params.response_type)+"&"+
       "scope="+encodeURIComponent(client.scope)+"&"+
       "redirect_uri="+encodeURIComponent(client.redirect_uri)+"&"+
       "state="+encodeURIComponent(state)+"&"+
       "aud="+encodeURIComponent(params.server);
-    
+
     if (typeof client.launch !== 'undefined' && client.launch) {
        redirect_to += "&launch="+encodeURIComponent(client.launch);
     }
@@ -368,7 +368,7 @@ BBClient.resolveAuthType = function (fhirServiceUrl, callback, errback) {
         fhirServiceUrl+"/metadata",
         function(r){
           var type = "none";
-          
+
           try {
             if (r.rest[0].security.service[0].coding[0].code.toLowerCase() === "oauth2") {
                 type = "oauth2";
@@ -494,7 +494,7 @@ function FhirClient(p) {
     };
 
     if (!client.server.serviceUrl || !client.server.serviceUrl.match(/https?:\/\/.+[^\/]$/)) {
-      throw "Must supply a `server` propery whose `serviceUrl` begins with http(s) " + 
+      throw "Must supply a `server` propery whose `serviceUrl` begins with http(s) " +
         "and does NOT include a trailing slash. E.g. `https://fhir.aws.af.cm/fhir`";
     }
 
@@ -512,7 +512,7 @@ function FhirClient(p) {
         var more = client.indexResource(id, r);
         [].push.apply(ret, more);
       });
-      return ret; 
+      return ret;
     };
 
     client.authenticated = function(p) {
@@ -547,7 +547,7 @@ function FhirClient(p) {
 
         if (to.reference.match(/^#/)) {
           return p.contained(from, to.reference.slice(1));
-        } 
+        }
 
         var url = absolute(to.reference, server);
         if (url in cache) {
@@ -561,7 +561,7 @@ function FhirClient(p) {
         return p.remote(url);
       }
     };
-    
+
     function handleBinary(p){
       return function(from, to) {
 
@@ -588,7 +588,7 @@ function FhirClient(p) {
       local: followLocal,
       remote: followRemote
     });
-    
+
     client.followBinary = handleBinary({
       local: followLocal,
       remote: followRemoteBinary
@@ -599,7 +599,7 @@ function FhirClient(p) {
        // Note: `.id` is correct, but `._id` was a longtime (incorrect)
        // production of the FHIR Java RI serialization routine. We checl
        // both here for compatibility.
-        return (c.id === id || c._id === id); 
+        return (c.id === id || c._id === id);
       });
       if (matches.length !== 1)  {
         return null;
@@ -639,7 +639,7 @@ function FhirClient(p) {
       var getParams = relative(url, server);
       return client.get(getParams);
     };
-    
+
     function followRemoteBinary(url) {
       var getParams = relative(url, server);
       return client.getBinary(getParams);
@@ -668,7 +668,7 @@ function FhirClient(p) {
       });
       return ret;
     };
-    
+
     client.getBinary = function(p) {
 
       var ret = new $.Deferred();
@@ -710,7 +710,7 @@ function FhirClient(p) {
         batch = function(vs) {
           vs.forEach(function(v){
             db.push(v);
-          }); 
+          });
         }
       }
 
@@ -722,7 +722,7 @@ function FhirClient(p) {
           cursor.next().done(drain);
         } else {
           d.resolve();
-        } 
+        }
       }).fail(function (err){
           d.reject(err);
       });
@@ -1011,7 +1011,7 @@ module.exports = function(mixins) {
   }
 
 
-  function SearchSpecification(clauses){ 
+  function SearchSpecification(clauses){
 
     if (clauses === undefined) {
       clauses = [];
@@ -1319,18 +1319,18 @@ function Search(p) {
   function gotBundle(d){
     return function(bundle, status) {
 
-      nextPageUrl = null; 
+      nextPageUrl = null;
 
       if(bundle.link) {
         var next = bundle.link.filter(function(l){
           return l.relation === "next";
         });
         if (next.length === 1) {
-          nextPageUrl = next[0].url 
+          nextPageUrl = next[0].url
         }
       }
 
-      var results = search.client.indexBundle(bundle); 
+      var results = search.client.indexBundle(bundle);
       d.resolve(results, search);
     }
   }
@@ -3526,7 +3526,7 @@ module.exports = function (Buffer, Hash) {
     if(!(this instanceof Sha1)) return new Sha1()
     this._w = W
     Hash.call(this, 16*4, 14*4)
-  
+
     this._h = null
     this.init()
   }
@@ -16481,7 +16481,7 @@ module.exports.verify = function(jwtString, secretOrPublicKey, options, callback
   if (options.audience) {
     var audiences = Array.isArray(options.audience)? options.audience : [options.audience];
     var target = Array.isArray(payload.aud) ? payload.aud : [payload.aud];
-    
+
     var match = target.some(function(aud) { return audiences.indexOf(aud) != -1; });
 
     if (!match)
