@@ -1,9 +1,10 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.8.0
-    release_date: 2015-12-xx
+    release_date: 2015-12-02
     changes:
       - {author: kk014173, comment: Support grams unit of measure, issue: OPENSVC-1089, type: add}
+      - {author: ss025783, comment: 1.8.0 release review, issue: OPENSVC-1103, type: add}
   - version: 1.7.0
     release_date: 2015-11-19
     changes:
