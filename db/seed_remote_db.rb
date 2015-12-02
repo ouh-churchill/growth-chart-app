@@ -114,4 +114,5 @@ add_smart_apps(
   # smart_app('da2106e1-d2da-4ac8-bbca-a5392c96411a', 'EnrG|Rheum (DEAC_MT)',                    't', 1, 'https://www.enrgrheum.xghealth.com/EnrGRheum/Billings/SecurePointOfEntry' ),
   # smart_app('6bb9dc25-615d-42a5-a288-4bfbdb56d9fd', 'EnrG|Rheum Questionnaire (DEAC_MT)',      't', 1, 'https://www.enrgrheum.xghealth.com/RheumQuestionnaire/Billings/SecurePointOfEntry' ),
   # smart_app('c3c1fbc7-698a-4e83-adfa-553e285afab3', 'RxCheck (Localhost)',           't', 1, 'http://localhost:3000' )
-)
+  # smart_app('47d041ba-4bbf-40d0-a305-5d9418ab592b', 'NEXTGEN HEALTHCARE',      't', 1, 'http://localhost/HieGatewayAdministrationFhirBranch/1/2/rhioconfig/RedirectOAuth2' ) #Not launch URL, not launch capable yet
+ )
