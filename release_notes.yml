@@ -3,7 +3,7 @@ versions:
   - version: 1.8.0
     release_date: 2015-12-xx
     changes:
-      - {author: xx, comment: xx, issue: OPENSVC-xxxx, type: add}
+      - {author: kk014173, comment: Support grams unit of measure, issue: OPENSVC-1089, type: add}
   - version: 1.7.0
     release_date: 2015-11-19
     changes:
