@@ -114,6 +114,8 @@ add_smart_apps(
   # smart_app('da2106e1-d2da-4ac8-bbca-a5392c96411a', 'EnrG|Rheum (DEAC_MT)',                    't', 1, 'https://www.enrgrheum.xghealth.com/EnrGRheum/Billings/SecurePointOfEntry' ),
   # smart_app('6bb9dc25-615d-42a5-a288-4bfbdb56d9fd', 'EnrG|Rheum Questionnaire (DEAC_MT)',      't', 1, 'https://www.enrgrheum.xghealth.com/RheumQuestionnaire/Billings/SecurePointOfEntry' ),
   # smart_app('c3c1fbc7-698a-4e83-adfa-553e285afab3', 'RxCheck (Localhost)',           't', 1, 'http://localhost:3000' )
-  # smart_app('47d041ba-4bbf-40d0-a305-5d9418ab592b', 'NEXTGEN HEALTHCARE',      't', 1, 'http://localhost/HieGatewayAdministrationFhirBranch/1/2/rhioconfig/RedirectOAuth2' ), #Not launch URL, not launch capable yet
-  # smart_app('a4f64cc5-e30e-4bf0-a116-8d510f36b290', 'DHI Cardiac Risk',      't', 1, 'http://dig64au.vsp.sas.com/DHICardiacRisk' )
+  # smart_app('47d041ba-4bbf-40d0-a305-5d9418ab592b', 'NEXTGEN HEALTHCARE',            't', 1, 'http://localhost/HieGatewayAdministrationFhirBranch/1/2/rhioconfig/RedirectOAuth2' ), #Not launch URL, not launch capable yet
+  # smart_app('a4f64cc5-e30e-4bf0-a116-8d510f36b290', 'DHI Cardiac Risk',              't', 1, 'http://dig64au.vsp.sas.com/DHICardiacRisk' ),
+  # smart_app('1187eeee-0343-457a-82c7-a28fd1dff70b', 'LLIT on FHIR',                  't', 1, 'http://pfz-133-smart-d.appno.net:8000/fhir-app/launch.html' ),
+  # smart_app('5bd4e540-d6cd-4dc8-9080-432532b0361e', 'MAEHC OAuth 2 Test',              't', 1, 'https://dev.qdc.maehc.org/FHIR/OAuth20Test.aspx' )
 )
