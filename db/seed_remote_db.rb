@@ -118,4 +118,8 @@ add_smart_apps(
   # smart_app('a4f64cc5-e30e-4bf0-a116-8d510f36b290', 'DHI Cardiac Risk',              't', 1, 'http://dig64au.vsp.sas.com/DHICardiacRisk' ),
   # smart_app('1187eeee-0343-457a-82c7-a28fd1dff70b', 'LLIT on FHIR',                  't', 1, 'http://pfz-133-smart-d.appno.net:8000/fhir-app/launch.html' ),
   # smart_app('5bd4e540-d6cd-4dc8-9080-432532b0361e', 'MAEHC OAuth 2 Test',              't', 1, 'https://dev.qdc.maehc.org/FHIR/OAuth20Test.aspx' )
+  # smart_app('e26acd85-9394-4f95-9abc-07953d28de4b', 'HexCare',                         't', 1, 'https://hex.care' ),
+  # smart_app('f6f6d7c4-3272-4923-8b19-49b7128c0ebc', 'BCH BP Centiles App Test',        't', 1, 'http://localhost/bpcentiles/launch.html' ),
+  # smart_app('48823dac-e7a0-4200-a284-2f8c2cf86955', 'Pionetechs FHIR Test',            't', 1, 'https://cernerfhir.azurewebsites.net/smart' ),
+  # smart_app('2d10098b-d709-4197-a332-52c493e8e000', 'BCH Growth Chart App Test',        't', 1, 'http://localhost/growthchart/launch.html' )
 )
