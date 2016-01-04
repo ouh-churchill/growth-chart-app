@@ -7,6 +7,9 @@ require 'igneous/smart'
 module Igneous
   module Smart
     class LaunchContextController < Igneous::Smart::ApplicationController
+
+      include ActionView::Helpers::AssetUrlHelper
+
       # The Authorization server api version that is supported.
       AUTHZ_API_VERSION = '1.0'
 
@@ -34,7 +37,8 @@ module Igneous
           encounter: context_data['encounter'],
           patient: context_data['patient'],
           ppr: context_data['ppr'],
-          user: context_data['user']
+          user: context_data['user'],
+          smart_style_url: asset_url('styles/smart-v1.json')
         }.reject { |_k, v| v.nil? }
 
         @response_context['ver'] = params['ver']

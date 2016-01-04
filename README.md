@@ -104,7 +104,8 @@ Status: 200 OK
         "encounter": "456",
         "patient": "123",
         "ppr": "567",
-        "user": "12345"
+        "user": "12345",
+        "smart_style_url": "http://localhost:3000/styles/smart-v1.json
     },
     "ver": "1.0",
     "userfhirurl": "https://fhir.devcernerpowerchart.com/dstu2/2c400054-42d8-4e74-87b7-80b5bd5fde9f/Practitioner/12345"

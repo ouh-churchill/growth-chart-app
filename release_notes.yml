@@ -3,7 +3,7 @@ versions:
   - version: 1.9.0
     release_date: 2015-12-xx
     changes:
-      - {author: xx, comment: xx, issue: OPENSVC-xxxx, type: add}
+      - {author: ks016210, comment: Support smart_styles_url, issue: OPENSVC-1180, type: add}
   - version: 1.8.0
     release_date: 2015-12-02
     changes:
