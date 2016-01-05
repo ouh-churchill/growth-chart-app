@@ -3,6 +3,9 @@ require 'igneous/smart'
 module Igneous
   module Smart
     class AppsController < Igneous::Smart::ApplicationController
+
+      skip_before_action :ensure_request_is_from_cerner_network, only: [:show]
+
       # Rubocop will generate a lint issue; however, this statement is perfectly fine.
       @@app_param_keys = %w(ehr_source_id id pat_personid pat_pprcode vis_encntrid \
                             usr_personid usr_positioncd dev_location app_appname)

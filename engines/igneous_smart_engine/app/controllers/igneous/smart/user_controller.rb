@@ -4,6 +4,8 @@ module Igneous
   module Smart
     class UserController < ApplicationController
 
+      skip_before_action :ensure_request_is_from_cerner_network
+
       OAUTH2_BASE_URL = YAML.load_file("#{Rails.root}/config/oauth.yml")[Rails.env]['oauth2_base_url']
 
       def preauth

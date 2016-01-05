@@ -7,8 +7,20 @@ module Igneous
 
       skip_before_filter :verify_authenticity_token, if: :json_request?
 
+      before_action :ensure_request_is_from_cerner_network
+
       def json_request?
         request.format.json?
+      end
+
+      # Returns 404 if the request is not from the internal Cerner network
+      # The request header 'Cerner-Trusted-Traffic' will have value 'cerner' if the request is directed
+      # from Cerner network
+      def ensure_request_is_from_cerner_network
+        logger.info "header 'Cerner-Trusted-Traffic' missing from request" \
+          unless request.headers['Cerner-Trusted-Traffic'].present?
+        head 404 unless request.headers['Cerner-Trusted-Traffic'].present? && \
+                        request.headers['Cerner-Trusted-Traffic'] == 'cerner'
       end
 
       # Internal: Audits an event with the provided attributes.

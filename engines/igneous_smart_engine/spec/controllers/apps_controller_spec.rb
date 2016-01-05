@@ -10,32 +10,53 @@ describe Igneous::Smart::AppsController, type: :controller do
     FactoryGirl.reload
   end
 
-  describe 'GET index' do
-    it 'retrieves SMART apps and renders them' do
-      get :index, ehr_source_id: 'foo'
-      expect(response).to have_http_status(200)
-      expect(response).to render_template(:index)
+  context '#index' do
+    describe 'when the request is not from the Cerner internal network' do
+      it 'returns 404 if the Cerner-Trusted-Traffic header is not present' do
+        get :index, ehr_source_id: 'foo'
+
+        expect(response).to have_http_status(404)
+      end
+
+      it 'returns 404 if the traffic is from a trusted external source' do
+        request.headers['Cerner-Trusted-Traffic'] = 'not-cerner'
+        get :index, ehr_source_id: 'foo'
+
+        expect(response).to have_http_status(404)
+      end
     end
 
-    it 'retrieves SMART apps with context and renders them' do
-      get :index, ehr_source_id: 'foo', 'pat_personid' => '1', 'pat_pprcode' => '2', 'vis_encntrid' => '3',
-                  'usr_personid' => '4', 'usr_positioncd' => '5', 'dev_location' => '6',
-                  'APP_AppName' => '7'
-      expect(response).to have_http_status(200)
-      expect(response).to render_template(:index)
-    end
+    describe 'when the request is from the Cerner internal network' do
+      before(:each) do
+        request.headers['Cerner-Trusted-Traffic'] = 'cerner'
+      end
 
-    it 'retrieves SMART apps with context and renders them even if query params are in lower case' do
-      get :index, ehr_source_id: 'foo', 'pat_personid' => '1', 'pat_pprcode' => '2', 'vis_encntrid' => '3',
-                  'usr_personid' => '4', 'usr_positioncd' => '5', 'dev_location' => '6',
-                  'app_appname' => '7'
-      expect(response).to have_http_status(200)
-      expect(response).to render_template(:index)
+      it 'retrieves SMART apps and renders them' do
+        get :index, ehr_source_id: 'foo'
+        expect(response).to have_http_status(200)
+        expect(response).to render_template(:index)
+      end
+
+      it 'retrieves SMART apps with context and renders them' do
+        get :index, ehr_source_id: 'foo', 'pat_personid' => '1', 'pat_pprcode' => '2', 'vis_encntrid' => '3',
+                    'usr_personid' => '4', 'usr_positioncd' => '5', 'dev_location' => '6',
+                    'APP_AppName' => '7'
+        expect(response).to have_http_status(200)
+        expect(response).to render_template(:index)
+      end
+
+      it 'retrieves SMART apps with context and renders them even if query params are in lower case' do
+        get :index, ehr_source_id: 'foo', 'pat_personid' => '1', 'pat_pprcode' => '2', 'vis_encntrid' => '3',
+                    'usr_personid' => '4', 'usr_positioncd' => '5', 'dev_location' => '6',
+                    'app_appname' => '7'
+        expect(response).to have_http_status(200)
+        expect(response).to render_template(:index)
+      end
     end
   end
 
-  describe 'GET show' do
-    context 'when a SMART app can be found' do
+  context '#show' do
+    describe 'when a SMART app can be found' do
       it 'redirects to the SMART app launch URL' do
         FactoryGirl.create(:fhir_server_factory)
         FactoryGirl.create(:app_factory,
@@ -79,7 +100,7 @@ describe Igneous::Smart::AppsController, type: :controller do
       end
     end
 
-    context 'when a SMART app cannot be found' do
+    describe 'when a SMART app cannot be found' do
       it 'audits as minor_failure and returns 404' do
         expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
           .with(:smart_launch_app, :minor_failure, app_id: '666', error: 'Unknown Application')
@@ -89,7 +110,7 @@ describe Igneous::Smart::AppsController, type: :controller do
       end
     end
 
-    context 'when tenant id is not supplied' do
+    describe 'when tenant id is not supplied' do
       it 'renders html page' do
         get :show, id: '777'
         expect(response).to have_http_status(:ok)
@@ -98,43 +119,69 @@ describe Igneous::Smart::AppsController, type: :controller do
     end
   end
 
-  describe '#create' do
-    it 'raises ActionController::ParameterMissing if the params are invalid' do
-      expect do
-        post(:create, ehr_source_id: 'foo')
-      end.to raise_exception(ActionController::ParameterMissing)
+  context '#create' do
+    describe 'when the request is not from the Cerner internal network' do
+      it 'returns 404 if the Cerner-Trusted-Traffic header is not present' do
+        post(:create, ehr_source_id: 'foo',
+                      app: { name: :my_app, launch_url: 'https://example.com/', igneous_smart_fhir_server_id: 1,
+                             authorized: true })
+
+        expect(response).to have_http_status(404)
+      end
+
+      it 'returns 404 if the traffic is from a trusted external source' do
+        request.headers['Cerner-Trusted-Traffic'] = 'not-cerner'
+        post(:create, ehr_source_id: 'foo',
+                      app: { name: :my_app, launch_url: 'https://example.com/', igneous_smart_fhir_server_id: 1,
+                             authorized: true })
+
+        expect(response).to have_http_status(404)
+      end
     end
 
-    it 'raises an exception if create! raises an exception' do
-      allow(Igneous::Smart::App).to receive(:create!) { raise 'invalid model' }
+    describe 'when the request is from the Cerner internal network' do
+      before(:each) do
+        request.headers['Cerner-Trusted-Traffic'] = 'cerner'
+      end
 
-      expect do
-        post(:create, ehr_source_id: 'foo', app: { foo: :bar })
-      end.to raise_exception(RuntimeError, 'invalid model')
-    end
+      it 'raises ActionController::ParameterMissing if the params are invalid' do
+        expect do
+          post(:create, ehr_source_id: 'foo')
+        end.to raise_exception(ActionController::ParameterMissing)
+      end
 
-    it 'successfully creates a new App with a generated app_id' do
-      allow(SecureRandom).to receive(:uuid).and_return 'generated-app-id'
+      it 'raises an exception if create! raises an exception' do
+        allow(Igneous::Smart::App).to receive(:create!) { raise 'invalid model' }
 
-      post(:create, ehr_source_id: 'foo',
-                    app: { name: :my_app, launch_url: 'https://example.com/', igneous_smart_fhir_server_id: 1,
-                           authorized: true })
+        expect do
+          post(:create, ehr_source_id: 'foo', app: { foo: :bar })
+        end.to raise_exception(RuntimeError, 'invalid model')
+      end
 
-      app = Igneous::Smart::App.find_by app_id: 'generated-app-id'
-      expect(app.name).to eq 'my_app'
-      expect(response).to have_http_status(201)
-      expect(response.headers).to have_key('Location')
-    end
+      it 'successfully creates a new App with a generated app_id' do
+        allow(SecureRandom).to receive(:uuid).and_return 'generated-app-id'
 
-    it 'successfully creates a new App with the given app_id' do
-      post(:create, ehr_source_id: 'foo',
-                    app: { app_id: 'my-app-id', name: :my_app, launch_url: 'https://example.com/',
-                           igneous_smart_fhir_server_id: 1, authorized: true })
+        post(:create, ehr_source_id: 'foo',
+                      app: { name: :my_app, launch_url: 'https://example.com/', igneous_smart_fhir_server_id: 1,
+                             authorized: true })
 
-      app = Igneous::Smart::App.find_by app_id: 'my-app-id'
-      expect(app.name).to eq 'my_app'
-      expect(response).to have_http_status(201)
-      expect(response.headers).to have_key('Location')
+        app = Igneous::Smart::App.find_by app_id: 'generated-app-id'
+        expect(app.name).to eq 'my_app'
+        expect(response).to have_http_status(201)
+        expect(response.headers).to have_key('Location')
+      end
+
+      it 'successfully creates a new App with the given app_id' do
+        post(:create, ehr_source_id: 'foo',
+                      app: { app_id: 'my-app-id', name: :my_app, launch_url: 'https://example.com/',
+                             igneous_smart_fhir_server_id: 1, authorized: true })
+
+        app = Igneous::Smart::App.find_by app_id: 'my-app-id'
+        expect(app.name).to eq 'my_app'
+        expect(response).to have_http_status(201)
+        expect(response.headers).to have_key('Location')
+      end
+
     end
   end
 

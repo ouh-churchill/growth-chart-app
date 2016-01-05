@@ -4,6 +4,8 @@ module Igneous
   module Smart
     class AppValidatorController < Igneous::Smart::ApplicationController
 
+      skip_before_action :ensure_request_is_from_cerner_network
+
       def results
 
         if params['failureCount'].to_i > 0
