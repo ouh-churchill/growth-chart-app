@@ -37,10 +37,10 @@ module Igneous
           encounter: context_data['encounter'],
           patient: context_data['patient'],
           ppr: context_data['ppr'],
-          user: context_data['user'],
-          smart_style_url: asset_url('styles/smart-v1.json')
+          user: context_data['user']
         }.reject { |_k, v| v.nil? }
 
+        @response_context['params']['smart_style_url'] = asset_url('styles/smart-v1.json')
         @response_context['params']['need_patient_banner'] = false
 
         @response_context['ver'] = params['ver']

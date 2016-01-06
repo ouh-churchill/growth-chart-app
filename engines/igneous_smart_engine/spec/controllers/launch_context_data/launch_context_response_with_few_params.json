@@ -4,12 +4,12 @@
     "user": "6789",
     "tenant": "2c400054-42d8-4e74-87b7-80b5bd5fde9f",
     "username": "myusername",
+    "smart_style_url": "http://test.host/styles/smart-v1.json",
     "need_patient_banner": false
   },
   "claims": {
     "patient": "123",
-    "user": "6789",
-    "smart_style_url": "http://test.host/styles/smart-v1.json"
+    "user": "6789"
   },
   "ver": "1.0",
   "userfhirurl": "https://fhir.example.com/fhir/2c400054-42d8-4e74-87b7-80b5bd5fde9f/Practitioner/6789"
