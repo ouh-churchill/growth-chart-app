@@ -38,9 +38,10 @@ module Igneous
           patient: context_data['patient'],
           ppr: context_data['ppr'],
           user: context_data['user'],
-          smart_style_url: asset_url('styles/smart-v1.json'),
-          need_patient_banner: false
+          smart_style_url: asset_url('styles/smart-v1.json')
         }.reject { |_k, v| v.nil? }
+
+        @response_context['params']['need_patient_banner'] = false
 
         @response_context['ver'] = params['ver']
         @response_context['userfhirurl'] = user_fhir_url(context.app_id, context_data['user'].to_i.to_s, params['tnt'])

@@ -4,15 +4,15 @@
         "encounter": "456",
         "user": "12345",
         "tenant": "2c400054-42d8-4e74-87b7-80b5bd5fde9f",
-        "username": "test_username"
+        "username": "test_username",
+        "need_patient_banner": false
     },
     "claims": {
         "patient": "123",
         "encounter": "456",
         "ppr": "567",
         "user": "12345",
-        "smart_style_url": "http://test.host/styles/smart-v1.json",
-        "need_patient_banner": false
+        "smart_style_url": "http://test.host/styles/smart-v1.json"
     },
     "ver": "1.0",
     "userfhirurl": "https://fhir.devcernerpowerchart.com/fhir/2c400054-42d8-4e74-87b7-80b5bd5fde9f/Practitioner/12345"
