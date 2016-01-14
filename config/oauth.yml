@@ -1,6 +1,9 @@
 ---
 development:
-  oauth2_base_url: https://authorization.devcerner.com
-
+  oauth_key: 52da6595-0993-4705-bc6a-de511627bf24
+  oauth_secret: 1F3n5weNWtIWXOEUBHBEgG5dtDFeg3TC
+  oauth_access_token_url: https://api.devcernercare.com/oauth/access
 test:
-  oauth2_base_url: https://authorization.example.com
+  oauth_key: 52da6595-0993-4705-bc6a-de511627bf24
+  oauth_secret: 1F3n5weNWtIWXOEUBHBEgG5dtDFeg3TC
+  oauth_access_token_url: https://api.devcernercare.com/oauth/access

@@ -1,6 +1,6 @@
 require 'oauth'
 
-CERNER_CARE_OAUTH = YAML.load_file("#{Rails.root}/config/cerner_care_oauth.yml")[Rails.env].symbolize_keys
+CERNER_CARE_OAUTH = YAML.load_file("#{Rails.root}/config/oauth.yml")[Rails.env].symbolize_keys
 
 # Configure CernerCare OAuth Consumer
 oauth_key = CERNER_CARE_OAUTH[:oauth_key]

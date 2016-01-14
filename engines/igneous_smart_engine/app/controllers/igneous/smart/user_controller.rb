@@ -6,7 +6,7 @@ module Igneous
 
       skip_before_action :ensure_request_is_from_cerner_network
 
-      OAUTH2_BASE_URL = YAML.load_file("#{Rails.root}/config/oauth.yml")[Rails.env]['oauth2_base_url']
+      OAUTH2_BASE_URL = YAML.load_file("#{Rails.root}/config/oauth2.yml")[Rails.env]['oauth2_base_url']
 
       def preauth
         return head :bad_request if params[:context_id].blank?

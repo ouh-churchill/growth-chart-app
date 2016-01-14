@@ -48,10 +48,6 @@ Rails.application.configure do
   # when problems arise.
   config.log_level = :info
 
-  # Set the log location for igneous-smart_server.
-  # Changes here will affect the logrotate deployment specified in igneous_app_environments.
-  config.paths['log'] = ['/var/log/igneous-smart_server/production.log']
-
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
 
