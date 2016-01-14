@@ -102,9 +102,17 @@ GC.get_data = function() {
 
       function process(observationValues, toUnit, arr){
         observationValues && observationValues.forEach(function(v){
+          var value = null;
+          try {
+            value = toUnit(v.valueQuantity);
+          }
+          catch (err) {
+            console.log("Invalid unit code " + v.valueQuantity.code + " for value " + v.valueQuantity.value);
+            return;
+          }
           arr.push({
             agemos: months(v.appliesDateTime, patient.birthDate),
-            value: toUnit(v.valueQuantity)
+            value: value
           })
         });
       };
