@@ -70,9 +70,10 @@ def smart_app_validator_url
   SMART_SERVER.sub(/smart\z/, 'smart-app-validator/launch.html')
 end
 
-# add_fhir_servers(
+#add_fhir_servers(
 #   fhir_server('cerner',      "#{FHIR_SERVER}/may2015/@tenant_id@"),
 #   fhir_server('cerner_open', "#{FHIR_SERVER}/may2015/open/@tenant_id@")
+#    fhir_server('cerner_staging', 'https://fhir.stagingcernerpowerchart.com/dstu2/@tenant_id@')
 # )
 
 add_smart_apps(
@@ -122,5 +123,8 @@ add_smart_apps(
   # smart_app('f6f6d7c4-3272-4923-8b19-49b7128c0ebc', 'BCH BP Centiles App Test',        't', 1, 'http://localhost/bpcentiles/launch.html' ),
   # smart_app('48823dac-e7a0-4200-a284-2f8c2cf86955', 'Pionetechs FHIR Test',            't', 1, 'https://cernerfhir.azurewebsites.net/smart' ),
   # smart_app('2d10098b-d709-4197-a332-52c493e8e000', 'BCH Growth Chart App Test',        't', 1, 'http://localhost/growthchart/launch.html' ),
-  # smart_app('c0144077-3b73-4ad5-b6fc-63a022a12ead', 'HSP Bilirubin Chart',        't', 1, 'https://sandbox.hspconsortium.org/hsp-bilirubin-app/static/bilirubin-chart/launch.html' )
+  # smart_app('c0144077-3b73-4ad5-b6fc-63a022a12ead', 'HSP Bilirubin Chart',        't', 1, 'https://sandbox.hspconsortium.org/hsp-bilirubin-app/static/bilirubin-chart/launch.html' ),
+  # smart_app('3c15d3e3-0295-4de2-a90b-4ec6a54136db', 'Pediatric Drug Card (localhost)',        't', 1, 'http://localhost:8081/smartapp/apps/pediatric-drug-card/launch.html' ),
+  # smart_app('5a68eec4-188d-4e2a-9a34-db9c1268c27e', 'Pediatric Drug Card (verification)',        't', 1, 'https://webedgever.co.ihc.com/smartapp/apps/pediatric-drug-card/launch.html' )
+
 )
