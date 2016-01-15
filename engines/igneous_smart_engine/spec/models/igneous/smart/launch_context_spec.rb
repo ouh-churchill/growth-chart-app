@@ -16,7 +16,8 @@ describe Igneous::Smart::LaunchContext do
         'usr_positioncd' => '5',
         'dev_location'   => '6',
         'app_appname'    => '7',
-        'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
+        'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc',
+        'need_patient_banner' => 'true'
       }
 
       context_id = '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
@@ -33,6 +34,7 @@ describe Igneous::Smart::LaunchContext do
       expect(context.app_id).to eq app_id
       expect(context.smart_launch_url).to eq smart_launch_url
       expect(context.tenant).to eq params['ehr_source_id']
+      expect(context.need_patient_banner).to eq true
     end
 
     it 'accepts query parameters with lower case' do
@@ -45,7 +47,8 @@ describe Igneous::Smart::LaunchContext do
         'usr_positioncd' => '5',
         'dev_location'   => '6',
         'app_appname'    => '7',
-        'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
+        'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc',
+        'need_patient_banner' => 'false'
       }
 
       context_id = '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
@@ -62,6 +65,7 @@ describe Igneous::Smart::LaunchContext do
       expect(context.app_id).to eq app_id
       expect(context.smart_launch_url).to eq smart_launch_url
       expect(context.tenant).to eq params['ehr_source_id']
+      expect(context.need_patient_banner).to eq false
     end
 
     it 'constructs an empty SMART context when no params are present' do
@@ -77,6 +81,7 @@ describe Igneous::Smart::LaunchContext do
 
       context = Igneous::Smart::LaunchContext.find_by context_id: context_id
       expect(JSON.parse(context.data)).to be_empty
+      expect(context.need_patient_banner).to eq false
     end
 
     it 'constructs a complete SMART context when all params are present' do
@@ -89,7 +94,8 @@ describe Igneous::Smart::LaunchContext do
         'usr_positioncd' => '5',
         'dev_location'   => '6',
         'app_appname'    => '7',
-        'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
+        'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc',
+        'need_patient_banner' => 'false'
       }
 
       context_id = '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
@@ -102,6 +108,7 @@ describe Igneous::Smart::LaunchContext do
       expect(JSON.parse(context.data)).to include('patient' => '1', 'ppr' => '2', 'encounter' => '3',
                                                   'user' => '4', 'position' => '5', 'device_location' => '6',
                                                   'container_name' => '7')
+      expect(context.need_patient_banner).to eq false
     end
 
     it 'strips .00 added by PowerChart from all numeric parameter values' do
@@ -110,7 +117,8 @@ describe Igneous::Smart::LaunchContext do
         'vis_encntrid' => '2.00',
         'dev_location' => 'East Wing',
         'app_appname'  => 'Spec Test',
-        'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
+        'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc',
+        'need_patient_banner' => 'false'
       }
 
       context_id = '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
@@ -123,6 +131,7 @@ describe Igneous::Smart::LaunchContext do
       expect(JSON.parse(context.data)).to include('patient' => '1', 'encounter' => '2',
                                                   'device_location' => 'East Wing',
                                                   'container_name' => 'Spec Test')
+      expect(context.need_patient_banner).to eq false
     end
 
     it 'will not add key, value pair when value is not supplied or nil' do
@@ -132,7 +141,8 @@ describe Igneous::Smart::LaunchContext do
         'pat_pprcode' => nil,
         'dev_location' => nil,
         'app_appname'  => nil,
-        'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
+        'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc',
+        'need_patient_banner' => 'false'
       }
 
       context_id = '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
@@ -145,6 +155,7 @@ describe Igneous::Smart::LaunchContext do
       expect(JSON.parse(context.data)).to include('patient' => '1', 'encounter' => '2')
       expect(JSON.parse(context.data)).to_not include('ppr' => '0', 'device_location' => nil,
                                                       'container_name' => nil)
+      expect(context.need_patient_banner).to eq false
     end
   end
 end

@@ -49,7 +49,8 @@ module Igneous
                              data: smart_context.to_json,
                              app_id: app_id,
                              smart_launch_url: smart_launch_url,
-                             tenant: params['ehr_source_id'])
+                             tenant: params['ehr_source_id'],
+                             need_patient_banner: (params['need_patient_banner']) ? params['need_patient_banner'] : false)
       end
     end
   end

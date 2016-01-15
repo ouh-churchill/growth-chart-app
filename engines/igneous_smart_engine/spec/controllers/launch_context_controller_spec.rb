@@ -47,7 +47,8 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
                              context_id: '6e1b99f7-e05b-42d1-b304-d8180858ce8c',
                              data: data,
                              app_id: 'd193fa79-c165-4daa-a8fd-c187fba2af4d',
-                             smart_launch_url: 'http://example.com/smart/launch.html')
+                             smart_launch_url: 'http://example.com/smart/launch.html',
+                             need_patient_banner: true)
 
           FactoryGirl.create(:fhir_server_factory,
                              name: 'cerner',
@@ -257,7 +258,8 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
                              context_id: '6e1b99f7-e05b-42d1-b304-d8180858ce8d',
                              data: data,
                              app_id: 'd193fa79-c165-4daa-a8fd-c187fba2af4d',
-                             smart_launch_url: 'http://example.com/smart/launch.html')
+                             smart_launch_url: 'http://example.com/smart/launch.html',
+                             need_patient_banner: false)
 
           FactoryGirl.create(:fhir_server_factory,
                              name: 'cerner',

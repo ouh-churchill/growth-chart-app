@@ -41,7 +41,7 @@ module Igneous
         }.reject { |_k, v| v.nil? }
 
         @response_context['params']['smart_style_url'] = asset_url('styles/smart-v1.json')
-        @response_context['params']['need_patient_banner'] = false
+        @response_context['params']['need_patient_banner'] = context.need_patient_banner
 
         @response_context['ver'] = params['ver']
         @response_context['userfhirurl'] = user_fhir_url(context.app_id, context_data['user'].to_i.to_s, params['tnt'])
