@@ -1,7 +1,7 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.9.0
-    release_date: 2015-12-xx
+    release_date: 2016-1-20
     changes:
       - {author: ks016210, comment: Support smart_styles_url, issue: OPENSVC-1180, type: add}
       - {author: ks016210, comment: Support need_patient_banner, issue: OPENSVC-1181, type: add}
@@ -9,6 +9,7 @@ versions:
       - {author: ks016210, comment: Catch javascript error on unrecognized unit and support ounces unit of measure, issue: OPENSVC-1074, type: add}
       - {author: kk014173, comment: 'Update log location, rename oauth.yml file and move auditing.yml file to auditing/config.yml due to Chef 12 uplift', issue: OPENSVC-1155, type: add}
       - {author: ks016210, comment: 'Allow setting, storing, and returning need_patient_banner', issue: OPENSVC-1181, type: add}
+      - {author: ks016210, comment: 1.9.0 release review, issue: OPENSVC-1124, type: add}
   - version: 1.8.0
     release_date: 2015-12-02
     changes:
