@@ -191,13 +191,15 @@ var getOAuthConsumerKeyFailed = function () {
 /*jshint unused:false*/
 function retrieveTenantIdAndRedirect(urlWithTenantPlaceHolder) {
   var timeoutInterval = setTimeout(getOAuthConsumerKeyFailed, CERNER_SMART_LAUNCH.timeoutIntervalSec*1000);
+  
+  var username = getUsernameByPersonnelId();
   var consumerKey = getOAuthConsumerKey();
 
   if (consumerKey) {
     clearTimeout(timeoutInterval);
 
     var launchURL = urlWithTenantPlaceHolder.replace(':tenant_id', consumerKey);
-    window.location.href = launchURL;
+    window.location.href = launchURL + "&Username=" + username.toLowerCase();
   } else {
     getOAuthConsumerKeyFailed();
   }

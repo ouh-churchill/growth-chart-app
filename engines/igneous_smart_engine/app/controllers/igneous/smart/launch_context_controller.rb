@@ -144,7 +144,7 @@ module Igneous
       end
 
       def invalid_user?(user)
-        return false if user.eql?(params['sub'])
+        return false if user.casecmp(params['sub']) == 0
         @error_response['ver'] = params['ver']
         @error_response['error'] = 'urn:com:cerner:authorization:error:launch:mismatch-identity-subject'
         @error_response['id'] = SecureRandom.uuid
