@@ -8,7 +8,7 @@ module Igneous
 
       # Rubocop will generate a lint issue; however, this statement is perfectly fine.
       @@app_param_keys = %w(ehr_source_id id pat_personid pat_pprcode vis_encntrid \
-                            usr_personid usr_positioncd dev_location app_appname need_patient_banner)
+                            usr_personid usr_positioncd dev_location app_appname need_patient_banner username)
 
       def index
         render locals: {

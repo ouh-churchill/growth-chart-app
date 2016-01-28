@@ -60,6 +60,27 @@ function getMillenniumIntegratedAuthToken() {
 }
 
 /**
+ * Use XMLCclRequest to execute mp_exec_std_request having the target
+ * script 350920 - PHA_GET_USER_BY_ID.
+ */
+function getUsernameByPersonnelId() {
+  // Setup a synch request of mp_exec_std_request script
+  CERNER_SMART_LAUNCH.requestSync.open('GET','mp_exec_std_request', 0);
+
+  //Request user information with user id USR_PersonId
+  CERNER_SMART_LAUNCH.requestSync.send('~MINE~,~{"REQUESTIN":{"ID_LIST": [{"PERSON_ID":$USR_PersonId$}]}}~,350000,350920,350920');
+
+  if (CERNER_SMART_LAUNCH.requestSync.status === 200) {
+    var parsedJSON = JSON.parse(CERNER_SMART_LAUNCH.requestSync.responseText);
+
+    if (parsedJSON.RECORD_DATA.DATA_CNT === 1) {
+      return parsedJSON.RECORD_DATA.DATA[0].USERNAME;
+    }
+  }
+  return '';
+}
+
+/**
  * This function will submit the identity token to the
  * OAuth2 server for pre-authentication workflow.  This
  * will enable a seamless transition to the SMART app
