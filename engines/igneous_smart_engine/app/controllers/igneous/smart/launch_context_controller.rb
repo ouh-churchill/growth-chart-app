@@ -13,8 +13,6 @@ module Igneous
       # The Authorization server api version that is supported.
       AUTHZ_API_VERSION = '1.0'
 
-      USER_ROSTER_BASE_URL = YAML.load_file("#{Rails.root}/config/http.yml")[Rails.env]['user_roster']['base_url']
-
       # This will retrieve the launch context from the db matching the launch id that is passed by the OAuth server
       # Once the context is found, they will be formatted the way the OAuth server expects
       def resolve
@@ -24,13 +22,13 @@ module Igneous
         context = LaunchContext.find_by context_id: params['launch']
         context_data = JSON.parse(context.data) unless context.blank? || context.data.blank?
         context_data['tenant'] = params['tnt'] if context_data
-        user_id = context_data['user'] unless context_data.blank?
+        username = context.username unless context.blank?
 
         # Remove the ' / ' from aud before its validated if it exists.
         aud = (params['aud'].to_s[-1, 1].eql?'/') ? params['aud'].to_s.chop : params['aud']
 
-        return if invalid_request?(context, user_id, aud)
-        context_data['username'] = params['sub'] if context_data
+        return if invalid_request?(context, username, aud)
+        context_data['username'] = username if context_data
 
         @response_context['params'] = context_data.except('ppr')
         @response_context['claims'] = {
@@ -145,15 +143,14 @@ module Igneous
         true
       end
 
-      def invalid_user?(user_id)
-        personnel_id = find_user_id_by_username_and_tenant(params['sub'], params['tnt'])
-        return false if personnel_id.eql?(user_id.to_s)
+      def invalid_user?(username)
+        return false if username.casecmp(params['sub']) == 0
         @error_response['ver'] = params['ver']
         @error_response['error'] = 'urn:com:cerner:authorization:error:launch:mismatch-identity-subject'
         @error_response['id'] = SecureRandom.uuid
 
-        log_info("error_id = #{@error_response['id']}, subject '#{params['sub']}' with personnel id '#{personnel_id}'"\
-                          " is different from the id '#{user_id}' in the context")
+        log_info("error_id = #{@error_response['id']}, subject '#{params['sub']}' is different from the"\
+                          "  username '#{username}' in the context")
         true
       end
 
@@ -179,21 +176,6 @@ module Igneous
         end
 
         app.fhir_server.url.sub('@tenant_id@', tenant)
-      end
-
-      def find_user_id_by_username_and_tenant(username, tenant)
-        url = "#{USER_ROSTER_BASE_URL}/scim/v1/Realms/#{tenant}/Users?filter=userName eq \"#{username}\""
-
-        access_token = Igneous::Smart.cerner_care_oauth_consumer.get_access_token(nil)
-        response = access_token.get(url, 'Accept' => 'application/json')
-        json_response = JSON.parse(response.body)
-
-        if json_response['Resources'].blank?
-          log_info("user '#{username}' not found by calling the url '#{url}'")
-          return
-        end
-
-        json_response['Resources'].first['externalId']
       end
 
       def log_info(info)
