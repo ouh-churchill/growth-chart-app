@@ -189,7 +189,7 @@ var getOAuthConsumerKeyFailed = function () {
 * new URL.
 */
 /*jshint unused:false*/
-function retrieveTenantIdAndRedirect(urlWithTenantPlaceHolder) {
+function retrieveRequiredInfoAndRedirect(urlWithTenantPlaceHolder) {
   var timeoutInterval = setTimeout(getOAuthConsumerKeyFailed, CERNER_SMART_LAUNCH.timeoutIntervalSec*1000);
   
   var username = getUsernameByPersonnelId();

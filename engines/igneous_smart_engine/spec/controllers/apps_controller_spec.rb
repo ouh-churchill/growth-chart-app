@@ -65,7 +65,7 @@ describe Igneous::Smart::AppsController, type: :controller do
                            launch_url: 'http://smart.example5.com/',
                            authorized: false)
       
-        get :show, ehr_source_id: 'foo', id: 'app2', 'username' => 'test_username'
+        get :show, ehr_source_id: 'foo', id: 'app2', 'username': 'test_username'
         expect(response).to have_http_status(302)
         expect(response).to redirect_to('http://smart.example5.com/?fhirServiceUrl=http%3A%2F%2Ffhir.example.com&patientId=0')
       end
