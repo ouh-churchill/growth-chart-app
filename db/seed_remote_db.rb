@@ -70,10 +70,10 @@ def smart_app_validator_url
   SMART_SERVER.sub(/smart\z/, 'smart-app-validator/launch.html')
 end
 
-#add_fhir_servers(
+# add_fhir_servers(
 #   fhir_server('cerner',      "#{FHIR_SERVER}/may2015/@tenant_id@"),
-#   fhir_server('cerner_open', "#{FHIR_SERVER}/may2015/open/@tenant_id@")
-#    fhir_server('cerner_staging', 'https://fhir.stagingcernerpowerchart.com/dstu2/@tenant_id@')
+#   fhir_server('cerner_open', "#{FHIR_SERVER}/may2015/open/@tenant_id@"),
+#   fhir_server('cerner_staging', 'https://fhir.stagingcernerpowerchart.com/dstu2/@tenant_id@')
 # )
 
 add_smart_apps(
@@ -109,16 +109,16 @@ add_smart_apps(
   # smart_app('334afd39-6ad1-4b10-8081-f760a67c94b8', 'Cerner Direct Referrals (DEV)', 't', 1, 'http://dev.gwx.cerner.corp/toc/smart/launch' ),
   # smart_app('8afe32cd-5fdf-4eff-b19b-7c3fb3cdf49e', 'EnrG|Rheum',                    't', 1, 'https://demoapp.xghealth.com/EnrGRheum/Demo/SecurePointOfEntry/Index' ),
   # smart_app('59059b31-700e-411c-a9db-44e57105009a', 'EnrG|Rheum Questionnaire',      't', 1, 'https://demoapp.xghealth.com/RheumQuestionnaire/Demo/SecurePointOfEntry' ),
-  # smart_app('4d2a4dea-641f-4627-b1a2-32d53d4a294f', 'Pediatric Drug Card',           't', 1, 'https://webedgedev.co.ihc.com/smartapp/apps/pediatric-drug-card/launch.html' )
-  # smart_app('1bb4ba64-a2f5-4e8c-8e18-569acb5effe5', 'Eligible Argonaut Client',      't', 1, 'http://localhost:8000/fhir-app/index.html' ) #Note: Not launch URL, don't have SMART *yet*
+  # smart_app('4d2a4dea-641f-4627-b1a2-32d53d4a294f', 'Pediatric Drug Card',           't', 1, 'https://webedgedev.co.ihc.com/smartapp/apps/pediatric-drug-card/launch.html' ),
+  # smart_app('1bb4ba64-a2f5-4e8c-8e18-569acb5effe5', 'Eligible Argonaut Client',      't', 1, 'http://localhost:8000/fhir-app/index.html' ), #Note: Not launch URL, don't have SMART *yet*
   # smart_app('9c558021-c9af-41f6-a603-65826c43fe9e', 'UpToDate Search, SMART on FHIR Prototype',      't', 1, 'http://s5www.utdlab.com/prototype1/launch-new.html' ),
   # smart_app('da2106e1-d2da-4ac8-bbca-a5392c96411a', 'EnrG|Rheum (DEAC_MT)',                    't', 1, 'https://www.enrgrheum.xghealth.com/EnrGRheum/Billings/SecurePointOfEntry' ),
   # smart_app('6bb9dc25-615d-42a5-a288-4bfbdb56d9fd', 'EnrG|Rheum Questionnaire (DEAC_MT)',      't', 1, 'https://www.enrgrheum.xghealth.com/RheumQuestionnaire/Billings/SecurePointOfEntry' ),
-  # smart_app('c3c1fbc7-698a-4e83-adfa-553e285afab3', 'RxCheck (Localhost)',           't', 1, 'http://localhost:3000' )
+  # smart_app('c3c1fbc7-698a-4e83-adfa-553e285afab3', 'RxCheck (Localhost)',           't', 1, 'http://localhost:3000' ),
   # smart_app('47d041ba-4bbf-40d0-a305-5d9418ab592b', 'NEXTGEN HEALTHCARE',            't', 1, 'http://localhost/HieGatewayAdministrationFhirBranch/1/2/rhioconfig/RedirectOAuth2' ), #Not launch URL, not launch capable yet
   # smart_app('a4f64cc5-e30e-4bf0-a116-8d510f36b290', 'DHI Cardiac Risk',              't', 1, 'http://dig64au.vsp.sas.com/DHICardiacRisk' ),
   # smart_app('1187eeee-0343-457a-82c7-a28fd1dff70b', 'LLIT on FHIR',                  't', 1, 'http://pfz-133-smart-d.appno.net:8000/fhir-app/launch.html' ),
-  # smart_app('5bd4e540-d6cd-4dc8-9080-432532b0361e', 'MAEHC OAuth 2 Test',              't', 1, 'https://dev.qdc.maehc.org/FHIR/OAuth20Test.aspx' )
+  # smart_app('5bd4e540-d6cd-4dc8-9080-432532b0361e', 'MAEHC OAuth 2 Test',              't', 1, 'https://dev.qdc.maehc.org/FHIR/OAuth20Test.aspx' ),
   # smart_app('e26acd85-9394-4f95-9abc-07953d28de4b', 'HexCare',                         't', 1, 'https://hex.care' ),
   # smart_app('f6f6d7c4-3272-4923-8b19-49b7128c0ebc', 'BCH BP Centiles App Test',        't', 1, 'http://localhost/bpcentiles/launch.html' ),
   # smart_app('48823dac-e7a0-4200-a284-2f8c2cf86955', 'Pionetechs FHIR Test',            't', 1, 'https://cernerfhir.azurewebsites.net/smart' ),
@@ -126,5 +126,4 @@ add_smart_apps(
   # smart_app('c0144077-3b73-4ad5-b6fc-63a022a12ead', 'HSP Bilirubin Chart',        't', 1, 'https://sandbox.hspconsortium.org/hsp-bilirubin-app/static/bilirubin-chart/launch.html' ),
   # smart_app('3c15d3e3-0295-4de2-a90b-4ec6a54136db', 'Pediatric Drug Card (localhost)',        't', 1, 'http://localhost:8081/smartapp/apps/pediatric-drug-card/launch.html' ),
   # smart_app('5a68eec4-188d-4e2a-9a34-db9c1268c27e', 'Pediatric Drug Card (verification)',        't', 1, 'https://webedgever.co.ihc.com/smartapp/apps/pediatric-drug-card/launch.html' )
-
 )
