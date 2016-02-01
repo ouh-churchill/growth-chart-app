@@ -77,6 +77,8 @@ function getUsernameByPersonnelId() {
       if (parsedJSON.RECORD_DATA.DATA[0].USERNAME || 0 !== parsedJSON.RECORD_DATA.DATA[0].USERNAME.length) {
         return parsedJSON.RECORD_DATA.DATA[0].USERNAME;
       }
+    } else {
+      Canadarm.error('Unexpected results returned trying to obtain username', CERNER_SMART_LAUNCH.errorObj);
     }
   }
   return '';

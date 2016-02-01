@@ -65,7 +65,7 @@ describe Igneous::Smart::AppsController, type: :controller do
                            launch_url: 'http://smart.example5.com/',
                            authorized: false)
       
-        get :show, ehr_source_id: 'foo', id: 'app2', username: 'test_username'
+        get :show, ehr_source_id: 'foo', id: 'app2', Username: 'test_username'
         expect(response).to have_http_status(302)
         expect(response).to redirect_to('http://smart.example5.com/?fhirServiceUrl=http%3A%2F%2Ffhir.example.com&patientId=0')
       end
@@ -86,7 +86,7 @@ describe Igneous::Smart::AppsController, type: :controller do
       
         get :show, ehr_source_id: 'foo', id: 'app1', 'pat_personid' => '100.00', 'pat_pprcode' => '200.00',
                    'vis_encntrid' => '300.00', 'usr_personid' => '400.00', 'need_patient_banner' => 'true',
-                   'username' => 'test_username'
+                   'Username' => 'test_username'
       
         expect(response).to have_http_status(302)
         expect(response).to redirect_to('http://test.host/smart/user/preauth?context_id=11309546-4ef4-4dba-8f36-53ef3834d90e')
@@ -118,7 +118,7 @@ describe Igneous::Smart::AppsController, type: :controller do
       
         get :show, ehr_source_id: 'foo', id: 'app1', 'pat_personid' => '100.00', 'pat_pprcode' => '200.00',
             'vis_encntrid' => '300.00', 'usr_personid' => '400.00', 'need_patient_banner' => 'false',
-            'username' => 'test_username'
+            'Username' => 'test_username'
       
         expect(response).to have_http_status(302)
         expect(response).to redirect_to('http://test.host/smart/user/preauth?context_id=11309546-4ef4-4dba-8f36-53ef3834d90e')
@@ -149,7 +149,7 @@ describe Igneous::Smart::AppsController, type: :controller do
                                                                                    patient_id: '100', encounter_id: '300', app_id: 'app1')
       
         get :show, ehr_source_id: 'foo', id: 'app1', 'pat_personid' => '100.00', 'pat_pprcode' => '200.00',
-            'vis_encntrid' => '300.00', 'usr_personid' => '400.00', 'username' => 'test_username'
+            'vis_encntrid' => '300.00', 'usr_personid' => '400.00', 'Username' => 'test_username'
       
         expect(response).to have_http_status(302)
         expect(response).to redirect_to('http://test.host/smart/user/preauth?context_id=11309546-4ef4-4dba-8f36-53ef3834d90e')
@@ -171,7 +171,7 @@ describe Igneous::Smart::AppsController, type: :controller do
         expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
           .with(:smart_launch_app, :minor_failure, app_id: '666', error: 'Unknown Application')
 
-        get :show, ehr_source_id: 'foo', id: '666'
+        get :show, ehr_source_id: 'foo', id: '666', Username: 'test_username'
         expect(response).to have_http_status(404)
       end
     end

@@ -19,7 +19,7 @@ module Igneous
       end
 
       def show
-        if params['ehr_source_id'].blank? || params.['Username'].blank?
+        if params['ehr_source_id'].blank? || params['Username'].blank?
           render locals: {
             url_with_tenant_place_holder: "#{app_url(':tenant_id', params[:id])}?#{request.query_string}"
           }
