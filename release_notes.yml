@@ -4,6 +4,7 @@ versions:
     release_date: 2016-xx-xx
     changes:
       - {author: kk014173, comment: Upgrade to ruby-2.3.0, issue: OPENSVC-1182, type: add}
+      - {author: rk039267, comment: Upgrade to rails-4.5.2.1, issue: OPENSVC-1380, type: add}
   - version: 1.9.0
     release_date: 2016-1-20
     changes:
