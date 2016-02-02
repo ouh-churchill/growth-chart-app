@@ -203,7 +203,7 @@ function retrieveRequiredInfoAndRedirect(urlWithTenantPlaceHolder) {
     clearTimeout(timeoutInterval);
 
     var launchURL = urlWithTenantPlaceHolder.replace(':tenant_id', consumerKey);
-    window.location.href = launchURL + "&Username=" + username.toLowerCase();
+    window.location.href = launchURL + "&username=" + username.toLowerCase();
   } else {
     getOAuthConsumerKeyFailed();
   }

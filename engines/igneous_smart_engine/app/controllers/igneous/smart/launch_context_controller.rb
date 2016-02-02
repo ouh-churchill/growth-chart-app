@@ -143,14 +143,14 @@ module Igneous
         true
       end
 
-      def invalid_user?(user)
-        return false if user.casecmp(params['sub']) == 0
+      def invalid_user?(username)
+        return false if username.casecmp(params['sub']) == 0
         @error_response['ver'] = params['ver']
         @error_response['error'] = 'urn:com:cerner:authorization:error:launch:mismatch-identity-subject'
         @error_response['id'] = SecureRandom.uuid
 
         log_info("error_id = #{@error_response['id']}, subject '#{params['sub']}' is different from the"\
-                          "  username '#{user}' in the context")
+                          "  username '#{username}' in the context")
         true
       end
 
