@@ -78,7 +78,8 @@ function getUsernameByPersonnelId() {
         return parsedJSON.RECORD_DATA.DATA[0].USERNAME;
       }
     } else {
-      Canadarm.error('Unexpected results returned trying to obtain username', CERNER_SMART_LAUNCH.errorObj);
+      Canadarm.error('Called PHA_GET_USER_BY_ID to receive username of person_id ' + $USR_PersonId$ +
+        ', received unexpected count of ' + parsedJSON.RECORD_DATA.DATA_CNT + '. Expected 1.', CERNER_SMART_LAUNCH.errorObj);
     }
   }
   return '';
