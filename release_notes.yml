@@ -1,10 +1,11 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.10.0
-    release_date: 2016-xx-xx
+    release_date: 2016-2-3
     changes:
       - {author: kk014173, comment: Upgrade to ruby-2.3.0, issue: OPENSVC-1182, type: add}
       - {author: rk039267, comment: Upgrade to rails-4.5.2.1, issue: OPENSVC-1380, type: add}
+      - {author: ss025783, comment: 1.10.0 release review, issue: OPENSVC-1393, type: add}
   - version: 1.9.0
     release_date: 2016-1-20
     changes:
