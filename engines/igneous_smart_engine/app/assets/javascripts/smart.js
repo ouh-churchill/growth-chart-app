@@ -63,12 +63,12 @@ function getMillenniumIntegratedAuthToken() {
  * Use XMLCclRequest to execute mp_exec_std_request having the target
  * script 350920 - PHA_GET_USER_BY_ID.
  */
-function getUsernameByPersonnelId() {
+function getUsernameByPersonnelId(person_id) {
   // Setup a synch request of mp_exec_std_request script
   CERNER_SMART_LAUNCH.requestSync.open('GET','mp_exec_std_request', 0);
 
   //Request user information with user id USR_PersonId
-  CERNER_SMART_LAUNCH.requestSync.send('~MINE~,~{"REQUESTIN":{"ID_LIST": [{"PERSON_ID":$USR_PersonId$}]}}~,3202004,3202004,350920');
+  CERNER_SMART_LAUNCH.requestSync.send('~MINE~,~{"REQUESTIN":{"ID_LIST": [{"PERSON_ID":' + person_id + '}]}}~,350000,350920,350920');
 
   if (CERNER_SMART_LAUNCH.requestSync.status === 200) {
     var parsedJSON = JSON.parse(CERNER_SMART_LAUNCH.requestSync.responseText);
@@ -78,8 +78,8 @@ function getUsernameByPersonnelId() {
         return parsedJSON.RECORD_DATA.DATA[0].USERNAME;
       }
     } else {
-      Canadarm.error('Called PHA_GET_USER_BY_ID to receive username of person_id ' + $USR_PersonId$ +
-        ', received unexpected count of ' + parsedJSON.RECORD_DATA.DATA_CNT + '. Expected 1.', CERNER_SMART_LAUNCH.errorObj);
+      Canadarm.error('Called PHA_GET_USER_BY_ID to receive username of person_id ' + person_id +
+         ', received unexpected count of ' + parsedJSON.RECORD_DATA.DATA_CNT + '. Expected 1.', CERNER_SMART_LAUNCH.errorObj);
     }
   }
   return '';
@@ -181,31 +181,33 @@ function performPreauthentication(oauth2BaseUrl, launchUrl) {
 }
 
 /**
- * Unable to launch SMART app because tenant id could not be obtained.
+ * Unable to launch SMART app because tenant id or username could not be obtained.
  */
-var getOAuthConsumerKeyFailed = function () {
-  Canadarm.error('Unable to launch SMART app because tenant id could not be obtained.', CERNER_SMART_LAUNCH.errorObj);
+var getRequiredInfoFailed = function () {
+  Canadarm.error('Unable to launch SMART app because tenant id or username could not be obtained.', CERNER_SMART_LAUNCH.errorObj);
 };
 
 /**
 * Retrieve tenant id with getOAuthConsumerKey() call.
 * The tenant id is equivalent to oauth consumer key.
+* Retrieve username with getUsernameByPersonnelId
+* The user_person_id is the USR_PersonId from the query string.
 * Once that is done, we redirect the user to this
 * new URL.
 */
 /*jshint unused:false*/
-function retrieveRequiredInfoAndRedirect(urlWithTenantPlaceHolder) {
-  var timeoutInterval = setTimeout(getOAuthConsumerKeyFailed, CERNER_SMART_LAUNCH.timeoutIntervalSec*1000);
-  
-  var username = getUsernameByPersonnelId();
+function retrieveRequiredInfoAndRedirect(urlWithTenantPlaceHolder, user_person_id) {
+  var timeoutInterval = setTimeout(getRequiredInfoFailed, CERNER_SMART_LAUNCH.timeoutIntervalSec*1000);
+ 
+  var username = getUsernameByPersonnelId(user_person_id);
   var consumerKey = getOAuthConsumerKey();
 
-  if (consumerKey) {
+  if (consumerKey && username) {
     clearTimeout(timeoutInterval);
 
     var launchURL = urlWithTenantPlaceHolder.replace(':tenant_id', consumerKey);
     window.location.href = launchURL + "&username=" + username.toLowerCase();
   } else {
-    getOAuthConsumerKeyFailed();
+    getRequiredInfoFailed();
   }
 }
