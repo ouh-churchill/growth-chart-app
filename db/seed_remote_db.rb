@@ -125,5 +125,6 @@ add_smart_apps(
   # smart_app('2d10098b-d709-4197-a332-52c493e8e000', 'BCH Growth Chart App Test',        't', 1, 'http://localhost/growthchart/launch.html' ),
   # smart_app('c0144077-3b73-4ad5-b6fc-63a022a12ead', 'HSP Bilirubin Chart',        't', 1, 'https://sandbox.hspconsortium.org/hsp-bilirubin-app/static/bilirubin-chart/launch.html' ),
   # smart_app('3c15d3e3-0295-4de2-a90b-4ec6a54136db', 'Pediatric Drug Card (localhost)',        't', 1, 'http://localhost:8081/smartapp/apps/pediatric-drug-card/launch.html' ),
-  # smart_app('5a68eec4-188d-4e2a-9a34-db9c1268c27e', 'Pediatric Drug Card (verification)',        't', 1, 'https://webedgever.co.ihc.com/smartapp/apps/pediatric-drug-card/launch.html' )
+  # smart_app('5a68eec4-188d-4e2a-9a34-db9c1268c27e', 'Pediatric Drug Card (verification)',        't', 1, 'https://webedgever.co.ihc.com/smartapp/apps/pediatric-drug-card/launch.html' ),
+  # smart_app('6d115b4e-e91b-4741-ae76-c889f034c5c2', 'Meducation Demo',                 't', 1, 'https://fhir-dstu2.meducation.com/launch.html' )
 )
