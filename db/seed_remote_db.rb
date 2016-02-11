@@ -128,6 +128,8 @@ add_smart_apps(
   # smart_app('5a68eec4-188d-4e2a-9a34-db9c1268c27e', 'Pediatric Drug Card (verification)',        't', 1, 'https://webedgever.co.ihc.com/smartapp/apps/pediatric-drug-card/launch.html' ),
   # smart_app('6d115b4e-e91b-4741-ae76-c889f034c5c2', 'Meducation Demo',                 't', 1, 'https://fhir-dstu2.meducation.com/launch.html' ),
   # smart_app('93e62de8-2f2c-4168-968d-faffd26d76f9', 'Duke Pillbox',        't', 1, 'http://pillbox.medapptech.com/initapp/launch.html' ),
-  # smart_app('bd8f9750-4963-42c6-b433-d98cf7816241', 'ClinDat',                 't', 1, 'https://apps.medapptech.com:9004/fhir-app/launch.html' )
+  # smart_app('bd8f9750-4963-42c6-b433-d98cf7816241', 'ClinDat',                 't', 1, 'https://apps.medapptech.com:9004/fhir-app/launch.html' ),
+  # smart_app('56741517-8b1d-4eda-874d-528d6b9c4217', 'MyFamily',        't', 1, 'http://ccfmyfam.azurewebsites.net' ), #Note: Doesn't currently support SMART launch, url won't work
+  # smart_app('5d64bd5c-17b0-4887-812d-c97b3a47d070', 'TeamNotes',                 't', 1, 'https://fhirtest.salarinc.com/OAuth/Launch.aspx' )
 
 )
