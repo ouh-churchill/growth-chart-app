@@ -3,7 +3,7 @@ versions:
   - version: 1.11.0
     release_date: 2016-xx-xx
     changes:
-      - {author: xx, comment: xx, issue: OPENSVC-xxxx, type: add}
+      - {author: kk014173, comment: Set base URL for HTML documents so that AJAX calls can locate assets, issue: OPENSVC-1405, type: add}
   - version: 1.10.0
     release_date: 2016-2-3
     changes:

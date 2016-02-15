@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>SMART Apps</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta charset='utf-8'/>
+  <title>SMART Apps</title>
+  <base href="<%= "#{request.base_url}" %>">
   <%= csrf_meta_tags %>
   <%= stylesheet_link_tag 'smart_apps' %>
 </head>
@@ -10,7 +12,7 @@
   <ul>
   <% apps.each do |app| %>
     <li>
-      <a href=<%= "#{app_path(ehr_source_id, app.app_id)}?#{query_string}" %>>
+      <a href="<%= "#{app_path(ehr_source_id, app.app_id)}?#{query_string}" %>">
         <p class='app_name'><%= app.name %></p>
       </a>
     </li>
