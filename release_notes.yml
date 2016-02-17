@@ -1,10 +1,11 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.11.0
-    release_date: 2016-xx-xx
+    release_date: 2016-02-17
     changes:
       - {author: ss025783, comment: Added Smart App Validator 2.0 supporting DSTU2 FHIR Client version, issue: OPENSVC-1463, type: add}
       - {author: kk014173, comment: Set base URL for HTML documents so that AJAX calls can locate assets, issue: OPENSVC-1405, type: add}
+      - {author: kk014173, comment: 1.11.0 release review, issue: OPENSVC-1596, type: add}
   - version: 1.10.0
     release_date: 2016-2-3
     changes:
