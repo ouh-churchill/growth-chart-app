@@ -75,19 +75,21 @@ def smart_app_validator_url_dstu2
 end
 
 # add_fhir_servers(
-#   fhir_server('cerner_dstu2',      "#{FHIR_SERVER}/dstu2/@tenant_id@"),
-#   fhir_server('cerner',      "#{FHIR_SERVER}/may2015/@tenant_id@"),
-#   fhir_server('cerner_open', "#{FHIR_SERVER}/may2015/open/@tenant_id@"),
-#   fhir_server('cerner_staging', 'https://fhir.stagingcernerpowerchart.com/dstu2/@tenant_id@')
+#   fhir_server('cerner',            "#{FHIR_SERVER}/may2015/@tenant_id@"),
+#   fhir_server('cerner_open',       "#{FHIR_SERVER}/may2015/open/@tenant_id@"),
+#   fhir_server('cerner_dstu2',      "#{FHIR_SERVER}/dstu2/@tenant_id@")
+#   fhir_server('cerner_dstu2_open', "#{FHIR_SERVER}/dstu2/open/@tenant_id@")
+#   fhir_server('cerner_staging',    'https://fhir.stagingcernerpowerchart.com/dstu2/@tenant_id@')
 # )
 
 add_smart_apps(
   # smart_app('bf7d70ce-56a9-4096-bc36-d91dfff00854', 'EnrG|Rheum (local dev)',        't', 1, 'http://localhost:4271/PointOfEntry'),
   # smart_app('d63f966e-db03-4f4f-9d17-8c604a7b4dd1', 'EnrG|Rheum (local dev No Auth)','f', 2, 'http://localhost:4271/PointOfEntry'),
   # smart_app('3175a80b-47b7-471b-aba5-d09349ae7526', 'Cardiac Risk',                  't', 1, 'https://fhir.smarthealthit.org/apps/cardiac-risk/launch.html'),
-  # smart_app('2dda2e15-9990-4045-b449-00de236b194b', 'BP Percentiles',                't', 1, 'https://fhir.smarthealthit.org/apps/bp-centiles/launch.html'),
+  # smart_app('9f204c1f-4910-42a6-832e-6ed0e06800f4', 'BP Percentiles',                '4', 4, 'https://fhir-dstu2.smarthealthit.org/apps/bp-centiles/launch.html')
   # smart_app('194099bd-080c-48ae-9f0e-5cb1bf559c2a', 'Pediatric Growth Chart',        't', 1, 'https://fhir.smarthealthit.org/apps/growth-chart/launch.html'),
   # smart_app('6bc278b5-c10d-47de-bd19-e3641df492e6', 'Bilirubin Chart',               't', 1, 'http://hspc.isalusconsulting.com/demo/apps/bilirubin-chart/launch.html'),
+  # smart_app('f2eeeb99-41b8-4f70-b6ad-7976fa8a17d5', 'HSPC Bilirubin Chart',               't', 3, 'https://sandbox.hspconsortium.org/hspc-bilirubin-app/static/bilirubin-chart/launch.html')
   # smart_app('428ae1fb-e9ca-4897-8794-206856254c29', 'Charts',                        't', 1, 'org.chip.ios.charts://'),
   # smart_app('df5dd157-c16a-4f9c-b5aa-d87478e9a6d1', 'Crimson Care Management',       't', 1, 'https://fhirdemo.advisory.com/launcher/launch.html'),
   # smart_app('3b9a8fce-a667-40e0-a94a-4aebe4ea1ac1', 'Healthwise',                    't', 1, 'https://smart.healthwise.net/initialize'),
@@ -100,6 +102,7 @@ add_smart_apps(
   # smart_app('f1ce5e11-ad41-4b57-9afd-ef79f5aeba3b', 'EnrG|Rheum Questionnaire (local dev)', 't', 1, 'http://localhost:4272/SecurePointOfEntry'),
   # smart_app('2dd93cdf-d9cc-4f42-81c7-cc21f86319ea', 'MAEHC',                         't', 1, 'https://dev.qdc.maehc.org/fhir'),
   # smart_app('7a259ec0-4afa-40cc-970e-bef0bfcdb581', 'PRP (Premier Inc)',             't', 1, 'http://localhost:8080/fhir-app/PRPHome.html'),
+  # smart_app('303bb2fc-d3b9-48a8-a1ca-af50e10dd277', 'PRP (Premier Inc) DSTU 2',             't', 1, 'http://localhost:8080/fhir-app/PRPHome.html')
   # smart_app('b45fc6ec-4c77-4d97-a5a1-8c1709c29804', 'InterSystems',                  't', 1, 'https://argonaut.intersystems.com/resp/csp/sys/oauth2/OAuth2.Response.cls' ),
   # smart_app('03d6e496-4005-4827-a6c1-5bdc4d78a6a5', 'Ascend',                        't', 1, 'https://insight.ascendhit.com/Home/Launch' ),
   # smart_app('d7ab7c44-e5eb-4bb3-856a-168a051688b4', 'EnrG|Rheum Test',               't', 1, 'https://xg-demoapps1v.xg.local/EnrGRheum/Test/SecurePointOfEntry/Index' ),
@@ -137,5 +140,6 @@ add_smart_apps(
   # smart_app('bd8f9750-4963-42c6-b433-d98cf7816241', 'ClinDat',                 't', 1, 'https://apps.medapptech.com:9004/fhir-app/launch.html' ),
   # smart_app('56741517-8b1d-4eda-874d-528d6b9c4217', 'MyFamily',        't', 1, 'http://ccfmyfam.azurewebsites.net' ), #Note: Doesn't currently support SMART launch, url won't work
   # smart_app('5d64bd5c-17b0-4887-812d-c97b3a47d070', 'TeamNotes',                 't', 1, 'https://fhirtest.salarinc.com/OAuth/Launch.aspx' )
-
+    smart_app('bd30e373-b7f0-4e2e-a27f-fafaf84d82cc', 'Premier App',                 't', 4, 'http://localhost:8080/fhir-app/PRPHome.html'),
+    smart_app('03ed376f-f507-4855-9e73-72a3f2ca5076', 'Premier App Sample',          't', 4, 'http://localhost:8080/fhir-app/PRPHome.html')
 )
