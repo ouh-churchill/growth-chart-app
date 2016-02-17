@@ -1,0 +1,28 @@
+.sectionHeader {
+  font-family: Helvetica;
+  font-size: 18px;
+  color: #1C1F21; }
+
+#headerContainer {
+  width: 100%;
+  text-align: justify;
+  height: 80px;
+  position: relative; }
+  #headerContainer #title {
+    float: left;
+    font-size: 200%;
+    height: inherit;
+    font-family: Helvetica;
+    font-size: 14px;
+    color: #1C1F21; }
+  #headerContainer #info {
+    float: right;
+    height: inherit;
+    vertical-align: middle; }
+
+.borderLine {
+  height: 1px;
+  background: #aaa;
+  position: relative; }
+
+/*# sourceMappingURL=style.css.map */

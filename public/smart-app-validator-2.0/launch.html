@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <title>SMART App Validator</title>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel='stylesheet' type='text/css' href='style.css'>
+    <script src='../fhir-client-dstu2/fhir-client.min.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js'></script>
+    <script src='https://code.jquery.com/jquery-migrate-1.2.1.min.js'></script>
+    <script src='./js/app_validator.js'></script>
+  </head>
+  <body>
+    <div id='headerContainer'>
+      <div id='title'><h3>SMART App Validator</h3></div>
+    </div>
+    <div class='borderLine'></div>
+    <div id='AuthorizationServer'><p> Authorization (OAuth2):</p></div>
+
+    <script>
+      AppValidator.authorize();
+    </script>
+  </body>
+</html>

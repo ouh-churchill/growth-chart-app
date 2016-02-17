@@ -70,6 +70,10 @@ def smart_app_validator_url
   SMART_SERVER.sub(/smart\z/, 'smart-app-validator/launch.html')
 end
 
+def smart_app_validator_url_dstu2
+  SMART_SERVER.sub(/smart\z/, 'smart-app-validator-2.0/launch.html')
+end
+
 # add_fhir_servers(
 #   fhir_server('cerner',            "#{FHIR_SERVER}/may2015/@tenant_id@"),
 #   fhir_server('cerner_open',       "#{FHIR_SERVER}/may2015/open/@tenant_id@"),
@@ -105,6 +109,7 @@ add_smart_apps(
   # smart_app('e4fac650-757e-4127-9607-492e0c92f082', 'EnrG|Rheum Questionnaire Test', 't', 1, 'https://xg-demoapps1v.xg.local/RheumQuestionnaire/Test/SecurePointOfEntry' ),
   # smart_app('a8307594-a60b-4d03-9d2a-cf2fc3e61d96', 'Cerner Direct Referrals (Localhost)', 't', 1, 'http://localhost:8080/gwx-toc-webapp/smart/launch' ),
   # smart_app('2122ef84-ab35-4c7a-88a8-db0a192b5136', 'Cerner SMART App Validator',    't', 1, smart_app_validator_url ),
+  # smart_app('0a0e0a81-3eba-4142-8da6-3d48fd3d9286', 'Cerner SMART App Validator DSTU2',    't', 4, smart_app_validator_url_dstu2 )
   # smart_app('1b7bce27-c1d3-4f36-8bad-6e64b649363d', 'RxCheck',                       't', 1, 'https://www.rxcheck.com/fhir/launch' ),
   # smart_app('8ebb0d60-ae59-411c-86dc-9103b71557f4', 'FHIR Client Tool (Avinash Shanbhag from ONC)', 't', 1, 'http://localhost:8080/avifhircliient' ),
   # smart_app('efb76056-47bc-40f9-a818-20e38da82841', 'HealtheIntent Test App', 't', 1, 'http://localhost:3000/smart/launch' ),
