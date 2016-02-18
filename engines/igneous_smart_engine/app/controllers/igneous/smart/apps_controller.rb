@@ -8,7 +8,7 @@ module Igneous
 
       # Rubocop will generate a lint issue; however, this statement is perfectly fine.
       @@app_param_keys = %w(ehr_source_id id pat_personid pat_pprcode vis_encntrid \
-                            usr_personid usr_positioncd dev_location app_appname need_patient_banner username)
+                            usr_personid usr_positioncd dev_location app_appname need_patient_banner)
 
       def index
         render locals: {
@@ -19,11 +19,9 @@ module Igneous
       end
 
       def show
-        lowercase_params = lowercase_app_params(params)
-        if params['ehr_source_id'].blank? || lowercase_params['username'].blank?
+        if params['ehr_source_id'].blank?
           render locals: {
-            url_with_tenant_place_holder: "#{app_url(':tenant_id', params[:id])}?#{request.query_string}",
-            user_person_id: lowercase_params['usr_personid']
+            url_with_tenant_place_holder: "#{app_url(':tenant_id', params[:id])}?#{request.query_string}"
           }
           return
         end
@@ -37,8 +35,8 @@ module Igneous
         end
 
         launch_context = LaunchContext.new
-        smart_launch_url = app.smart_launch_url(lowercase_params, launch_context.context_id)
-        context = launch_context.context(lowercase_params, app.app_id, smart_launch_url)
+        smart_launch_url = app.smart_launch_url(lowercase_app_params(params), launch_context.context_id)
+        context = launch_context.context(lowercase_app_params(params), app.app_id, smart_launch_url)
 
         context_data = JSON.parse(context.data)
 
