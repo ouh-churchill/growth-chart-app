@@ -3,7 +3,7 @@
     "patient": "123",
     "user": "6789",
     "tenant": "2c400054-42d8-4e74-87b7-80b5bd5fde9f",
-    "username": "test_username",
+    "username": "myusername",
     "smart_style_url": "http://test.host/styles/smart-v1.json",
     "need_patient_banner": false
   },
