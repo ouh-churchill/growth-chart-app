@@ -1,9 +1,10 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.11.1
-    release_date: 2016-02-18
+    release_date: 2016-02-19
     changes:
       - {author: ss025783, comment: Revert of remove user roster dependency change (checked in with OPENSVC-926) and added migration script for username column to accept null values., issue: OPENSVC-1621, type: add}
+      - {author: kk014173, comment: 1.11.1 release review, issue: OPENSVC-1631, type: add}
   - version: 1.11.0
     release_date: 2016-02-17
     changes:
