@@ -3,7 +3,7 @@ versions:
   - version: 1.11.1
     release_date: 2016-02-18
     changes:
-      - {author: xx, comment: xx, issue: OPENSVC-xxxx, type: add}
+      - {author: ss025783, comment: Revert of remove user roster dependency change (checked in with OPENSVC-926) and added migration script for username column to accept null values., issue: OPENSVC-1621, type: add}
   - version: 1.11.0
     release_date: 2016-02-17
     changes:
