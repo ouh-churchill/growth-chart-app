@@ -13,7 +13,7 @@ module Igneous
       def index
         render locals: {
           ehr_source_id: params['ehr_source_id'],
-          apps: App.all,
+          apps: authorized_apps_for_tenant,
           query_string: request.query_string
         }
       end
@@ -64,6 +64,18 @@ module Igneous
       end
 
       private
+
+      def authorized_apps_for_tenant
+        bundles = IonCerberusClient.bundles.where(tenant_key: params['ehr_source_id'])
+        smart_app_bundle = bundles.find { |bundle| bundle.name.eql? 'SMART apps'}
+
+        # Return all the apps if there is no SMART apps bundle in the application access, DEVENG is
+        # not configured for application access
+        return App.all if !smart_app_bundle
+
+        bundled_apps = smart_app_bundle.applications
+        App.all.select {|app| bundled_apps.include? app.app_id }
+      end
 
       def app_params
         params.require(:app).permit(:app_id, :name, :launch_url, :igneous_smart_fhir_server_id, :authorized)

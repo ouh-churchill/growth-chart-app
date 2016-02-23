@@ -1,4 +1,6 @@
 require 'securerandom'
+require 'json'
+require 'open-uri'
 
 module Igneous
   module Smart
@@ -54,6 +56,28 @@ module Igneous
         end
 
         build_launch_url("fhirServiceUrl=#{build_fhir_url(params)}", "patientId=#{patient_id}")
+      end
+
+      # Public: Returns the hash of the JSON file - This method is for HIIMS, remove it when it is unnecessary
+      #
+      # Returns the hash of the metadata json
+      def app_metadata_hash
+        JSON.load(open("http://koushic88.github.io/#{app_id}/metadata.json"))
+      rescue
+        {'app_tagline' => '', 'app_company' => ''}
+      end
+
+      # Public: Returns the url of app screenshot - This method is for HIIMS, remove it when it is unnecessary
+      #
+      # Returns the url of app screenshot
+      def app_screenshot_url
+        screenshot_url = "http://koushic88.github.io/#{app_id}/screenshot.png"
+        open(screenshot_url)
+
+        screenshot_url
+      rescue
+        # return default image if the screenshot is not available for the app
+        'http://koushic88.github.io/default.jpg'
       end
 
       private :build_launch_url, :build_fhir_url
