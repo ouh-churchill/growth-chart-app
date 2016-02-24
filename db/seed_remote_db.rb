@@ -139,7 +139,8 @@ add_smart_apps(
   # smart_app('93e62de8-2f2c-4168-968d-faffd26d76f9', 'Duke Pillbox',        't', 1, 'http://pillbox.medapptech.com/initapp/launch.html' ),
   # smart_app('bd8f9750-4963-42c6-b433-d98cf7816241', 'ClinDat',                 't', 1, 'https://apps.medapptech.com/fhir-app/launch.html' ),
   # smart_app('56741517-8b1d-4eda-874d-528d6b9c4217', 'MyFamily',        't', 1, 'http://ccfmyfam.azurewebsites.net' ), #Note: Doesn't currently support SMART launch, url won't work
-  # smart_app('5d64bd5c-17b0-4887-812d-c97b3a47d070', 'TeamNotes',                 't', 1, 'https://fhirtest.salarinc.com/OAuth/Launch.aspx' )
-    smart_app('bd30e373-b7f0-4e2e-a27f-fafaf84d82cc', 'Premier App',                 't', 4, 'http://localhost:8080/fhir-app/PRPHome.html'),
-    smart_app('03ed376f-f507-4855-9e73-72a3f2ca5076', 'Premier App Sample',          't', 4, 'http://localhost:8080/fhir-app/PRPHome.html')
+  # smart_app('5d64bd5c-17b0-4887-812d-c97b3a47d070', 'TeamNotes',                 't', 1, 'https://fhirtest.salarinc.com/OAuth/Launch.aspx' ),
+  #  smart_app('bd30e373-b7f0-4e2e-a27f-fafaf84d82cc', 'Premier App',                 't', 4, 'http://localhost:8080/fhir-app/PRPHome.html'),
+  #  smart_app('03ed376f-f507-4855-9e73-72a3f2ca5076', 'Premier App Sample',          't', 4, 'http://localhost:8080/fhir-app/PRPHome.html'),
+  # smart_app('15eca7cf-7d58-4bfa-b0ed-5e66f143ceb5', 'medicity',                 't', 4, 'https://medicity-fhir.x.healthagen.com')
 )
