@@ -1,9 +1,10 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.12.0
-    release_date: 2016-02-xx
+    release_date: 2016-02-24
     changes:
       - {author: kt026311, comment: Implement HTML view of available SMART apps filtered by tenant for HIMSS, issue: OPENSVC-1296, type: add}
+      - {author: kt026311, comment: 1.12.0 release review, issue: OPENSVC-1657, type: add}
   - version: 1.11.1
     release_date: 2016-02-19
     changes:
