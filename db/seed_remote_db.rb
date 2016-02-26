@@ -142,5 +142,6 @@ add_smart_apps(
   # smart_app('5d64bd5c-17b0-4887-812d-c97b3a47d070', 'TeamNotes',                 't', 1, 'https://fhirtest.salarinc.com/OAuth/Launch.aspx' ),
   #  smart_app('bd30e373-b7f0-4e2e-a27f-fafaf84d82cc', 'Premier App',                 't', 4, 'http://localhost:8080/fhir-app/PRPHome.html'),
   #  smart_app('03ed376f-f507-4855-9e73-72a3f2ca5076', 'Premier App Sample',          't', 4, 'http://localhost:8080/fhir-app/PRPHome.html'),
-  # smart_app('15eca7cf-7d58-4bfa-b0ed-5e66f143ceb5', 'medicity',                 't', 4, 'https://medicity-fhir.x.healthagen.com')
+  # smart_app('15eca7cf-7d58-4bfa-b0ed-5e66f143ceb5', 'medicity',                 't', 4, 'https://medicity-fhir.x.healthagen.com'),
+  # smart_app('d461dfb8-45bd-4291-80c6-091741c3dd79', 'Bespoke Argonaut Test Client',                 't', 4, 'https://www.getpostman.com/oauth2/callback') #Can't actually launch via SMART
 )
