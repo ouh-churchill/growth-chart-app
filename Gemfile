@@ -25,7 +25,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
 gem 'spring',        group: :development
 
-gem 'rack-cors', '~> 0.3', require: 'rack/cors'
+gem 'rack-cors', '~> 0.4', require: 'rack/cors'
 gem 'yui-compressor', '0.12.0' # using exact version since different version creates different css compressed file
 gem 'sprockets', '~> 2.11.0' # Require to create gzipped assets
 gem 'libv8', '~> 3.16.14.11' # Since 3.16.14.9 got yanked, we had to restrict to point to the latest one

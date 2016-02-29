@@ -36,6 +36,24 @@ module IgneousSmartServer
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
 
+    # Add CORS support - we accept any origin, and don't allow credentials to be sent (cookies)
+    # see: http://www.html5rocks.com/en/tutorials/cors/#toc-adding-cors-support-to-the-server
+    config.middleware.insert_before 0, 'Rack::Cors', logger: (-> { Rails.logger }) do
+      allow do
+        origins '*'
+        resource '*',
+                 credentials: false,
+                 headers: :any,
+                 methods: [:get, :options, :head],
+                 max_age: 0,
+                 expose: ['ETag', 'Content-Location', 'Location', 'X-Request-Id']
+
+      end
+
+      # Define another allow block here for POST when we move the App Validator to a CDN
+      # so that we can lock down the origins.
+    end
+
     # Swap Rails::Rack::Logger with Igneous::Smart::Logger to inject additional information
     # in the log. The actual implementation will not be altered as super will be called to execute the logic in
     # Rails::Rack::Logger after the additional logging information is injected.
