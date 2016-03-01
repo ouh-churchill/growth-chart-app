@@ -83,6 +83,7 @@ end
 # )
 
 add_smart_apps(
+  # smart_app('ddffda5f-3cdc-4efc-bf98-0b1e58a56537', 'Pediatric Growth Chart App DSTU2', 't', 4, 'https://smart.devcernerpowerchart.com/growth-chart-app-2.0/launch.html'),
   # smart_app('bf7d70ce-56a9-4096-bc36-d91dfff00854', 'EnrG|Rheum (local dev)',        't', 1, 'http://localhost:4271/PointOfEntry'),
   # smart_app('d63f966e-db03-4f4f-9d17-8c604a7b4dd1', 'EnrG|Rheum (local dev No Auth)','f', 2, 'http://localhost:4271/PointOfEntry'),
   # smart_app('3175a80b-47b7-471b-aba5-d09349ae7526', 'Cardiac Risk',                  't', 1, 'https://fhir.smarthealthit.org/apps/cardiac-risk/launch.html'),
@@ -140,8 +141,8 @@ add_smart_apps(
   # smart_app('bd8f9750-4963-42c6-b433-d98cf7816241', 'ClinDat',                 't', 1, 'https://apps.medapptech.com/fhir-app/launch.html' ),
   # smart_app('56741517-8b1d-4eda-874d-528d6b9c4217', 'MyFamily',        't', 1, 'http://ccfmyfam.azurewebsites.net' ), #Note: Doesn't currently support SMART launch, url won't work
   # smart_app('5d64bd5c-17b0-4887-812d-c97b3a47d070', 'TeamNotes',                 't', 1, 'https://fhirtest.salarinc.com/OAuth/Launch.aspx' ),
-  #  smart_app('bd30e373-b7f0-4e2e-a27f-fafaf84d82cc', 'Premier App',                 't', 4, 'http://localhost:8080/fhir-app/PRPHome.html'),
-  #  smart_app('03ed376f-f507-4855-9e73-72a3f2ca5076', 'Premier App Sample',          't', 4, 'http://localhost:8080/fhir-app/PRPHome.html'),
+  # smart_app('bd30e373-b7f0-4e2e-a27f-fafaf84d82cc', 'Premier App',                 't', 4, 'http://localhost:8080/fhir-app/PRPHome.html'),
+  # smart_app('03ed376f-f507-4855-9e73-72a3f2ca5076', 'Premier App Sample',          't', 4, 'http://localhost:8080/fhir-app/PRPHome.html'),
   # smart_app('15eca7cf-7d58-4bfa-b0ed-5e66f143ceb5', 'medicity',                 't', 4, 'https://medicity-fhir.x.healthagen.com'),
   # smart_app('d461dfb8-45bd-4291-80c6-091741c3dd79', 'Bespoke Argonaut Test Client',                 't', 4, 'https://www.getpostman.com/oauth2/callback') #Can't actually launch via SMART
 )
