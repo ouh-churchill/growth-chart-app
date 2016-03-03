@@ -5,6 +5,7 @@ versions:
     changes:
       - {author: ss025783, comment: Added growth-chart-app-2.0 with DSTU2 final update for fhir-client, issue: OPENSVC-1464, type: add}
       - {author: kk014173, comment: Enable CORS for AJAX requests, issue: OPENSVC-1407, type: add}
+      - {author: kk014173, comment: Audit invalid user attempt when resolving launch context, issue: OPENSVC-1480, type: add}
   - version: 1.12.0
     release_date: 2016-02-24
     changes:

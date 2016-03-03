@@ -54,7 +54,7 @@ module Igneous
 
       def invalid_request?(context, user, aud)
         if invalid_version? || invalid_launch_id?(context) || invalid_url?(context.app_id, aud) ||
-           invalid_tenant?(context.tenant)
+           invalid_tenant?(context.tenant) || invalid_user?(user)
           audit_smart_event(:smart_launch_context_resolve, :minor_failure, tenant: params['tnt'],
                                                                            launch_context_id: params['launch'],
                                                                            error: @error_response['error'])
@@ -66,11 +66,6 @@ module Igneous
           audit_smart_event(:smart_launch_context_resolve, :minor_failure, tenant: params['tnt'],
                                                                            error: @error_response['error'])
           render status: :internal_server_error, json: @error_response.to_json
-          return true
-        end
-
-        if invalid_user?(user)
-          render status: :bad_request, json: @error_response.to_json
           return true
         end
 

@@ -49,9 +49,9 @@ describe Igneous::Smart::AppsController, type: :controller do
 
       it 'retrieves SMART apps with context and renders them even if query params are in lower case' do
         allow(controller).to receive(:authorized_apps_for_tenant).and_return '2342'
-        get :index, ehr_source_id: 'foo', 'pat_personid' => '1', 'pat_pprcode' => '2', 'vis_encntrid' => '3',
-                    'usr_personid' => '4', 'usr_positioncd' => '5', 'dev_location' => '6',
-                    'app_appname' => '7'
+        get :index, ehr_source_id: 'foo', 'pat_personid' => '1', 'pat_pprcode' => '2',
+                    'vis_encntrid' => '3', 'usr_personid' => '4', 'usr_positioncd' => '5',
+                    'dev_location' => '6', 'app_appname' => '7'
         expect(response).to have_http_status(200)
         expect(response).to render_template(:index)
       end
@@ -73,7 +73,8 @@ describe Igneous::Smart::AppsController, type: :controller do
         expect(response).to redirect_to('http://smart.example5.com/?fhirServiceUrl=http%3A%2F%2Ffhir.example.com&patientId=0')
       end
 
-      it 'audits as success, create launch context and redirect to preauthenticate the user with displaying patient banner' do
+      it 'audits as success, create launch context and redirect to '\
+          'preauthenticate the user with displaying patient banner' do
         FactoryGirl.create(:fhir_server_factory)
         FactoryGirl.create(:app_factory,
                            app_id: 'app1',
@@ -104,7 +105,8 @@ describe Igneous::Smart::AppsController, type: :controller do
         expect(context.need_patient_banner).to eq true
       end
 
-      it 'audits as success, create launch context and redirect to preauthenticate the user without displaying patient banner' do
+      it 'audits as success, create launch context and redirect to '\
+          'preauthenticate the user without displaying patient banner' do
         FactoryGirl.create(:fhir_server_factory)
         FactoryGirl.create(:app_factory,
                            app_id: 'app1',
@@ -115,11 +117,16 @@ describe Igneous::Smart::AppsController, type: :controller do
         allow(SecureRandom).to receive(:uuid).and_return '11309546-4ef4-4dba-8f36-53ef3834d90e'
 
         expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
-                                                                             .with(:smart_launch_app, :success, tenant: 'foo', user_id: '400',
-                                                                                   patient_id: '100', encounter_id: '300', app_id: 'app1')
+          .with(:smart_launch_app,
+                :success,
+                tenant: 'foo',
+                user_id: '400',
+                patient_id: '100',
+                encounter_id: '300',
+                app_id: 'app1')
 
         get :show, ehr_source_id: 'foo', id: 'app1', 'pat_personid' => '100.00', 'pat_pprcode' => '200.00',
-            'vis_encntrid' => '300.00', 'usr_personid' => '400.00', 'need_patient_banner' => 'false'
+                   'vis_encntrid' => '300.00', 'usr_personid' => '400.00', 'need_patient_banner' => 'false'
 
         expect(response).to have_http_status(302)
         expect(response).to redirect_to('http://test.host/smart/user/preauth?context_id=11309546-4ef4-4dba-8f36-53ef3834d90e')
@@ -135,7 +142,8 @@ describe Igneous::Smart::AppsController, type: :controller do
         expect(context.need_patient_banner).to eq false
       end
 
-      it 'audits as success, create launch context and redirect to preauthenticate the user without giving the need_patient_banner' do
+      it 'audits as success, create launch context and redirect to '\
+          'preauthenticate the user without giving the need_patient_banner' do
         FactoryGirl.create(:fhir_server_factory)
         FactoryGirl.create(:app_factory,
                            app_id: 'app1',
@@ -146,11 +154,16 @@ describe Igneous::Smart::AppsController, type: :controller do
         allow(SecureRandom).to receive(:uuid).and_return '11309546-4ef4-4dba-8f36-53ef3834d90e'
 
         expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
-                                                                             .with(:smart_launch_app, :success, tenant: 'foo', user_id: '400',
-                                                                                   patient_id: '100', encounter_id: '300', app_id: 'app1')
+          .with(:smart_launch_app,
+                :success,
+                tenant: 'foo',
+                user_id: '400',
+                patient_id: '100',
+                encounter_id: '300',
+                app_id: 'app1')
 
         get :show, ehr_source_id: 'foo', id: 'app1', 'pat_personid' => '100.00', 'pat_pprcode' => '200.00',
-            'vis_encntrid' => '300.00', 'usr_personid' => '400.00'
+                   'vis_encntrid' => '300.00', 'usr_personid' => '400.00'
 
         expect(response).to have_http_status(302)
         expect(response).to redirect_to('http://test.host/smart/user/preauth?context_id=11309546-4ef4-4dba-8f36-53ef3834d90e')

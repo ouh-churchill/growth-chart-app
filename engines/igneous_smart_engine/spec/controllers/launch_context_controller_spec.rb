@@ -184,6 +184,12 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
         it 'returns failure when the user is invalid' do
           allow(controller).to receive(:find_user_id_by_username_and_tenant).and_return '2342'
 
+          expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
+            .with(:smart_launch_context_resolve, :minor_failure,
+                  tenant: '2c400054-42d8-4e74-87b7-80b5bd5fde9f',
+                  launch_context_id: '6e1b99f7-e05b-42d1-b304-d8180858ce8c',
+                  error: 'urn:com:cerner:authorization:error:launch:mismatch-identity-subject')
+
           post(:resolve, format: 'json', aud: 'https://fhir.devcernerpowerchart.com/fhir/'\
                                           '2c400054-42d8-4e74-87b7-80b5bd5fde9f',
                          launch: '6e1b99f7-e05b-42d1-b304-d8180858ce8c',
@@ -196,6 +202,22 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
           parsed_response_body = JSON.parse(response.body)
           expect(parsed_response_body['error']).to eql 'urn:com:cerner:authorization:error:launch'\
                                                    ':mismatch-identity-subject'
+        end
+
+        it 'returns success when the user is valid' do
+          allow(controller).to receive(:find_user_id_by_username_and_tenant).with('test-user', '2c400054'\
+                                       '-42d8-4e74-87b7-80b5bd5fde9f').and_return '12345'
+
+          post(:resolve, format: 'json', aud: 'https://fhir.devcernerpowerchart.com/fhir/'\
+                                          '2c400054-42d8-4e74-87b7-80b5bd5fde9f',
+                         launch: '6e1b99f7-e05b-42d1-b304-d8180858ce8c',
+                         sub: 'test-user',
+                         ver: '1.0',
+                         tnt: '2c400054-42d8-4e74-87b7-80b5bd5fde9f')
+          expect(response.content_type).to eq 'application/json'
+          expect(response).to have_http_status(:ok)
+          parsed_response_body = JSON.parse(response.body)
+          expect(parsed_response_body['error']).to be_nil
         end
 
         it 'returns failure when resource server is unknown' do
@@ -234,6 +256,7 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
 
         it 'returns failure when there is an unspecified error' do
           allow(controller).to receive(:find_user_id_by_username_and_tenant).and_return '2342'
+          allow(controller).to receive(:invalid_user?).and_return false
 
           allow_any_instance_of(Igneous::Smart::LaunchContext).to receive(:valid?).and_return false
           post(:resolve, format: 'json', aud: 'https://fhir.devcernerpowerchart.com/fhir/'\

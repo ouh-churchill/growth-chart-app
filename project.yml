@@ -43,5 +43,7 @@ philter:
                  'public/**/lib/fhir-client.js',
                  'public/cardiac-risk-app/**/*',
                  'public/growth-chart-app/**/*',
-                 'public/fhir-client/*']
+                 'public/fhir-client/*',
+                 'public/fhir-client-dstu2/fhir-client.js',
+                 'public/fhir-client-dstu2/fhir-client.min.js']
     globals: ['XMLCclRequest', 'Canadarm', 'FHIR']

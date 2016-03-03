@@ -45,12 +45,13 @@ module Igneous
         add_context.call('device_location', 'dev_location', false)
         add_context.call('container_name',  'app_appname', false)
 
+        banner = (params['need_patient_banner']) ? params['need_patient_banner'] : false
         LaunchContext.create(context_id: self.context_id,
                              data: smart_context.to_json,
                              app_id: app_id,
                              smart_launch_url: smart_launch_url,
                              tenant: params['ehr_source_id'],
-                             need_patient_banner: (params['need_patient_banner']) ? params['need_patient_banner'] : false)
+                             need_patient_banner: banner)
       end
     end
   end
