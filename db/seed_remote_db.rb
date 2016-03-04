@@ -146,5 +146,8 @@ add_smart_apps(
   # smart_app('15eca7cf-7d58-4bfa-b0ed-5e66f143ceb5', 'medicity',                 't', 4, 'https://medicity-fhir.x.healthagen.com'),
   # smart_app('d461dfb8-45bd-4291-80c6-091741c3dd79', 'Bespoke Argonaut Test Client',                 't', 4, 'https://www.getpostman.com/oauth2/callback'), #Can't actually launch via SMART
   # smart_app('50367cff-9ab2-458a-905f-19ccb96c476a', 'Diagnotes Development',                 't', 1, 'https://dn-marlon.ngrok.io/smart/launch'),
-  # smart_app('6a35fdd3-8ffe-43ad-b87e-6897232b1660', 'Edifecs FHIR',                 't', 4, 'http://fhir.collablynk.com/application/oauth/callback/cerner') #Not a SMART app yet
+  # smart_app('6a35fdd3-8ffe-43ad-b87e-6897232b1660', 'Edifecs FHIR',                 't', 4, 'http://fhir.collablynk.com/application/oauth/callback/cerner'), #Not a SMART app yet
+  # smart_app('f58c446c-2df5-4e89-8c4a-acda83ed8291', 'TriVox',           't', 4, 'https://bch.trivoxhealth.com/v1/smart/launch.html'),
+  # smart_app('8b8c17a2-92ec-4f80-ad12-f502ab878634', 'BCH Growth Chart', 't', 4, 'https://smartprd1.tch.harvard.edu/growthchart/launch.html'),
+  # smart_app('202b1cdb-452f-4224-b102-7be87a9ba10b', 'BCH BP Centiles',  't', 4, 'https://smartprd1.tch.harvard.edu/bpcentiles/launch.html')
 )
