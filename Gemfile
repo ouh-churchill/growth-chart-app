@@ -44,7 +44,6 @@ group :cerner, :default do
   gem 'canadarm_ruby', '~> 1.0',   source: 'http://repo.release.cerner.corp/main/rubygems/'
   gem 'igneous-smart', '1.0.0',    path:   'engines/igneous_smart_engine'
   gem 'ion_profiler_engine', '~> 1.8', source: 'http://repo.release.cerner.corp/main/rubygems/'
-  gem 'ion_cerberus_client', '~> 1.1', source: 'http://repo.release.cerner.corp/main/rubygems/'
 end
 
 group :development do

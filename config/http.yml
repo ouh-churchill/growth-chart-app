@@ -2,15 +2,9 @@
 development:
   user_roster:
     base_url: https://user-roster.api.devcernercentral.com
-  cerberus:
-    base_url: http://ipcerberuspxy01.northamerica.cerner.net
 production:
   user_roster:
     base_url: https://user-roster.api.devcernercentral.com
-  cerberus:
-    base_url: http://sandboxcerberus.cernerasp.com
 test:
   user_roster:
     base_url: http://user-roster.example.com
-  cerberus:
-    base_url: http://sandboxcerberus.cernerasp.com

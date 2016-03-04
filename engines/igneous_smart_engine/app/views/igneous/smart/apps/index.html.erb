@@ -9,17 +9,12 @@
   <%= stylesheet_link_tag 'smart_apps' %>
 </head>
 <body>
-<ul class="apps">
+<ul>
   <% apps.each do |app| %>
       <li>
-        <div class="img_desc">
-          <a href="<%= "#{app_path(ehr_source_id, app.app_id)}?#{query_string}" %>">
-            <%= image_tag app.app_screenshot_url %>
-            <span class='app_description'><span><%= app.app_metadata_hash['app_tagline'] %></span></span>
-          </a>
-        </div>
-        <p class='app_name'> <%= app.name %></p>
-        <p class='app_name'><%= app.app_metadata_hash['app_company'] %></p>
+        <a href="<%= "#{app_path(ehr_source_id, app.app_id)}?#{query_string}" %>">
+          <p class='app_name'><%= app.name %></p>
+        </a>
       </li>
   <% end %>
 </ul>

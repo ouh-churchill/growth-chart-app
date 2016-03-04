@@ -32,14 +32,12 @@ describe Igneous::Smart::AppsController, type: :controller do
       end
 
       it 'retrieves SMART apps and renders them' do
-        allow(controller).to receive(:authorized_apps_for_tenant).and_return '2342'
         get :index, ehr_source_id: 'foo'
         expect(response).to have_http_status(200)
         expect(response).to render_template(:index)
       end
 
       it 'retrieves SMART apps with context and renders them' do
-        allow(controller).to receive(:authorized_apps_for_tenant).and_return '2342'
         get :index, ehr_source_id: 'foo', 'pat_personid' => '1', 'pat_pprcode' => '2', 'vis_encntrid' => '3',
                     'usr_personid' => '4', 'usr_positioncd' => '5', 'dev_location' => '6',
                     'APP_AppName' => '7'
@@ -48,7 +46,6 @@ describe Igneous::Smart::AppsController, type: :controller do
       end
 
       it 'retrieves SMART apps with context and renders them even if query params are in lower case' do
-        allow(controller).to receive(:authorized_apps_for_tenant).and_return '2342'
         get :index, ehr_source_id: 'foo', 'pat_personid' => '1', 'pat_pprcode' => '2',
                     'vis_encntrid' => '3', 'usr_personid' => '4', 'usr_positioncd' => '5',
                     'dev_location' => '6', 'app_appname' => '7'
