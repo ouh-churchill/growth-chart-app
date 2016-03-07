@@ -83,6 +83,7 @@ end
 # )
 
 add_smart_apps(
+  # smart_app('4ae44710-dc6e-4c52-82ef-877106846cab', 'Cardiac Risk App DSTU2', 't', 4, 'https://smart.devcernerpowerchart.com/cardiac-risk-app-2.0/launch.html'),
   # smart_app('ddffda5f-3cdc-4efc-bf98-0b1e58a56537', 'Pediatric Growth Chart App DSTU2', 't', 4, 'https://smart.devcernerpowerchart.com/growth-chart-app-2.0/launch.html'),
   # smart_app('bf7d70ce-56a9-4096-bc36-d91dfff00854', 'EnrG|Rheum (local dev)',        't', 1, 'http://localhost:4271/PointOfEntry'),
   # smart_app('d63f966e-db03-4f4f-9d17-8c604a7b4dd1', 'EnrG|Rheum (local dev No Auth)','f', 2, 'http://localhost:4271/PointOfEntry'),
