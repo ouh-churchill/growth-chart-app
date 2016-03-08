@@ -8,7 +8,6 @@ versions:
       - {author: kk014173, comment: Audit invalid user attempt when resolving launch context, issue: OPENSVC-1480, type: add}
       - {author: kt026311, comment: Remove the Apps listing code added for HIMSS, issue: OPENSVC-1629, type: update}
       - {author: ss025783, comment: Added cardiac-risk-app-2.0 with DSTU2 Final update for fhir-client, issue: OPENSVC-1462, type: add}
-      - {author: ss025783, comment: Added cardiac-risk-app new design using fhir-client from May2015 ballot., issue: OPENSVC-1733, type: add}
   - version: 1.12.0
     release_date: 2016-02-24
     changes:
