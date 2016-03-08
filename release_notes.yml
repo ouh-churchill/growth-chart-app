@@ -1,7 +1,7 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.13.0
-    release_date: 2016-xx-xx
+    release_date: 2016-03-09
     changes:
       - {author: kk014173, comment: Enable CORS for AJAX requests, issue: OPENSVC-1407, type: add}
       - {author: ss025783, comment: Added growth-chart-app-2.0 with DSTU2 final update for fhir-client, issue: OPENSVC-1464, type: add}
