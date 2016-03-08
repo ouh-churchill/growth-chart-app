@@ -1,8 +1,12 @@
 ## Cardiac Risk App (Forked)
 
-This is a forked version of the original Cardiac Risk App located at [https://github.com/smart-on-fhir/cardiac-risk-app](https://github.com/smart-on-fhir/cardiac-risk-app).
+This is a forked version of the original Cardiac Risk App located at https://github.com/smart-on-fhir/cardiac-risk-app.
 
-The `master` branch and `dstu2-wip` branches are the same as what are on the origin @ [https://github.com/smart-on-fhir/cardiac-risk-app](https://github.com/smart-on-fhir/cardiac-risk-app). The `dstu2-wip` branch forked from this SHA `251f28a2a3f86e0d66209ac843d0dae0fbc23ea7`.  The `master` branch forked from this SHA `40c9602fca31bfe422a030882db6155db76a6a2c`.  The `master-cerner` branch was branched from `dstu2-wip` branch and contains changes needed to run the app.
+The master branch is always in sync with the OSS version. Currently pointing to : https://github.cerner.com/Igneous/cardiac-risk-app/commit/474fe12393be2e557bb7da41e65f67b388c32337 .
+The cerner/May2015 branch is in sync with the fhir-client.js file for version May2015 currently at :https://github.cerner.com/Igneous/cardiac-risk-app/commit/a0740faa1805ac1d5a5b6d79ba54526af6aedfa9 .
+The cerner/dstu2 branch is in sync with the fhir-client.js file for version DSTU2 final currently at : https://github.cerner.com/Igneous/cardiac-risk-app/commit/3f1b9648209ffeb0143e34cd581c4122345fa954 .
+
+
 
 ## Changes
 

@@ -1,0 +1,703 @@
+
+var sinonSandboxController;
+beforeEach(function () {
+  sinonSandboxController = sinon.sandbox.create();
+});
+
+afterEach(function () {
+  sinonSandboxController.restore();
+});
+
+
+describe ('CardiacRiskController', function() {
+
+  describe ('updatePatientDemographicsBanner', function() {
+    it ('sets the UI elements with correct values when male', function() {
+      CardiacRisk.patientInfo = setPatientInfo('male',59,0.5,160,100,60,undefined,false,false);
+      CardiacRisk.patientInfo.dateOfBirth = new Date(2016,5,22);
+
+      var patientName = document.createElement('span');
+      patientName.id = 'patientName';
+      patientName.innerHTML = 'Blank';
+      document.body.appendChild(patientName);
+
+      var patientAge = document.createElement('span');
+      patientAge.id = 'patientAge';
+      patientAge.innerHTML = 'Blank';
+      document.body.appendChild(patientAge);
+
+      var patientGender = document.createElement('span');
+      patientGender.id = 'patientGender';
+      patientGender.innerHTML = 'Blank';
+      document.body.appendChild(patientGender);
+
+      var patientDOB = document.createElement('span');
+      patientDOB.id = 'patientDOB';
+      patientDOB.innerHTML = 'Blank';
+      document.body.appendChild(patientDOB);
+
+      updatePatientDemographicsBanner();
+
+      var updatedPatientName = document.getElementById('patientName');
+      var updatedPatientAge = document.getElementById('patientAge');
+      var updatedPatientGender = document.getElementById('patientGender');
+      var updatedPatientDOB = document.getElementById('patientDOB');
+
+      expect(updatedPatientName.innerHTML).to.equal('John Doe');
+      expect(updatedPatientAge.innerHTML).to.equal('59yrs');
+      expect(updatedPatientGender.innerHTML).to.equal('M');
+      expect(updatedPatientDOB.innerHTML).to.equal('5/22/2016');
+
+    });
+
+    it ('sets the UI elements with correct values when female', function() {
+      CardiacRisk.patientInfo = setPatientInfo('female',59,0.5,160,100,60,undefined,false,false);
+      CardiacRisk.patientInfo.dateOfBirth = new Date(2016,5,22);
+
+      var patientName = document.createElement('span');
+      patientName.id = 'patientName';
+      patientName.innerHTML = 'Blank';
+      document.body.appendChild(patientName);
+
+      var patientAge = document.createElement('span');
+      patientAge.id = 'patientAge';
+      patientAge.innerHTML = 'Blank';
+      document.body.appendChild(patientAge);
+
+      var patientGender = document.createElement('span');
+      patientGender.id = 'patientGender';
+      patientGender.innerHTML = 'Blank';
+      document.body.appendChild(patientGender);
+
+      var patientDOB = document.createElement('span');
+      patientDOB.id = 'patientDOB';
+      patientDOB.innerHTML = 'Blank';
+      document.body.appendChild(patientDOB);
+
+      updatePatientDemographicsBanner();
+
+      var updatedPatientName = document.getElementById('patientName');
+      var updatedPatientAge = document.getElementById('patientAge');
+      var updatedPatientGender = document.getElementById('patientGender');
+      var updatedPatientDOB = document.getElementById('patientDOB');
+
+      expect(updatedPatientName.innerHTML).to.equal('John Doe');
+      expect(updatedPatientAge.innerHTML).to.equal('59yrs');
+      expect(updatedPatientGender.innerHTML).to.equal('F');
+      expect(updatedPatientDOB.innerHTML).to.equal('5/22/2016');
+
+    });
+  });
+
+  describe ('updatePatientActions', function() {
+    it ('sets up the patient data correctly', function () {
+
+      var patientActions = {};
+      patientActions.dietHeader = "diet header";
+      patientActions.diet = "diet";
+      patientActions.doctorHeader = "doctorHeader";
+      patientActions.doctor = "doctor";
+      patientActions.retesting = "retesting";
+
+      var mock = sinonSandboxController.mock(CardiacRisk);
+      mock.expects("computePatientActions").returns(patientActions);
+
+      updatePatientActions();
+
+      mock.verify();
+    });
+
+    it('should set text for ui elements', function(){
+
+      var contentDietExerciseHeader = document.createElement('header');
+      contentDietExerciseHeader.id = 'contentDietExerciseHeader';
+      contentDietExerciseHeader.innerHTML = 'Blank';
+      document.body.appendChild(contentDietExerciseHeader);
+
+      var contentDietExercise = document.createElement('p');
+      contentDietExercise.id = 'contentDietExercise';
+      contentDietExercise.innerHTML = 'Blank';
+      document.body.appendChild(contentDietExercise);
+
+      var contentDoctorHeader = document.createElement('header');
+      contentDoctorHeader.id = 'contentDoctorHeader';
+      contentDoctorHeader.innerHTML = 'Blank';
+      document.body.appendChild(contentDoctorHeader);
+
+      var contentDoctor = document.createElement('p');
+      contentDoctor.id = 'contentDoctor';
+      contentDoctor.innerHTML = 'Blank';
+      document.body.appendChild(contentDoctor);
+
+      var contentRetesting = document.createElement('p');
+      contentRetesting.id = 'contentRetesting';
+      contentRetesting.innerHTML = 'Blank';
+      document.body.appendChild(contentRetesting);
+
+      expect(contentDietExerciseHeader.innerHTML).to.equal('Blank');
+      expect(contentDietExercise.innerHTML).to.equal('Blank');
+      expect(contentDoctorHeader.innerHTML).to.equal('Blank');
+      expect(contentDoctor.innerHTML).to.equal('Blank');
+      expect(contentRetesting.innerHTML).to.equal('Blank');
+
+      var patientActions = {};
+      patientActions.dietHeader = "diet header";
+      patientActions.diet = "diet";
+      patientActions.doctorHeader = "doctorHeader";
+      patientActions.doctor = "doctor";
+      patientActions.retesting = "retesting";
+
+      var mock = sinonSandboxController.mock(CardiacRisk);
+      mock.expects("computePatientActions").returns(patientActions);
+
+      updatePatientActions();
+
+      var updatedContentDietExerciseHeader = document.getElementById('contentDietExerciseHeader');
+      var updatedContentDietExercise = document.getElementById('contentDietExercise');
+      var updatedContentDoctorHeader = document.getElementById('contentDoctorHeader');
+      var updatedContentDoctor = document.getElementById('contentDoctor');
+      var updatedContentRetesting = document.getElementById('contentRetesting');
+
+      expect(updatedContentDietExerciseHeader.innerHTML).to.equal('diet header');
+      expect(updatedContentDietExercise.innerHTML).to.equal('diet');
+      expect(updatedContentDoctorHeader.innerHTML).to.equal('doctorHeader');
+      expect(updatedContentDoctor.innerHTML).to.equal('doctor');
+      expect(updatedContentRetesting.innerHTML).to.equal('retesting');
+
+      mock.verify();
+
+    });
+  });
+
+  describe('checkForIncompleteState', function(){
+    it('sets UI elements for invalid sbp', function(){
+      CardiacRisk.patientInfo = setPatientInfo('male',59,0.5,160,100,60,undefined,false,false);
+
+      var resultsInfo = document.createElement('div');
+      resultsInfo.id = 'resultsInfo';
+      resultsInfo.className = 'contentHidden';
+      document.body.appendChild(resultsInfo);
+
+      var resultsSliders = document.createElement('div');
+      resultsSliders.id = 'resultsSliders';
+      resultsSliders.className = 'contentHidden';
+      document.body.appendChild(resultsSliders);
+
+      var riskBar = document.createElement('div');
+      riskBar.id = 'riskBar';
+      riskBar.className = 'contentHidden';
+      document.body.appendChild(riskBar);
+
+      var riskMessage = document.createElement('span');
+      riskMessage.id = 'riskMessage';
+      riskMessage.innerHTML = 'Blank';
+      document.body.appendChild(riskMessage);
+
+      var riskDescriptionText = document.createElement('span');
+      riskDescriptionText.id = 'riskDescriptionText';
+      riskDescriptionText.innerHTML = 'Blank';
+      document.body.appendChild(riskDescriptionText);
+
+      var riskDescriptionValue = document.createElement('span');
+      riskDescriptionValue.id = 'riskDescriptionValue';
+      riskDescriptionValue.innerHTML = 'Blank';
+      document.body.appendChild(riskDescriptionValue);
+
+      var containerPatientActions = document.createElement('div');
+      containerPatientActions.id = 'containerPatientActions';
+      containerPatientActions.className = 'abc';
+      document.body.appendChild(containerPatientActions);
+
+      var whatIfContainer = document.createElement('div');
+      whatIfContainer.id = 'whatIfContainer';
+      whatIfContainer.className = 'abc';
+      document.body.appendChild(whatIfContainer);
+
+      var horizontalRule = document.createElement('hr');
+      horizontalRule.id = 'horizontalRule';
+      horizontalRule.className = 'abc';
+      document.body.appendChild(horizontalRule);
+
+      checkForIncompleteState();
+
+      var updatedResultsInfo = document.getElementById('resultsInfo');
+      expect(updatedResultsInfo.className).to.be.equal('');
+      var updatedResultsSliders = document.getElementById('resultsSliders');
+      expect(updatedResultsSliders.className).to.be.equal('');
+      var updatedRiskBar = document.getElementById('riskBar');
+      expect(updatedRiskBar.className).to.be.equal('riskBarIncomplete');
+      var updatedRiskMessage = document.getElementById('riskMessage');
+      expect(updatedRiskMessage.innerHTML).to.be.equal('Incomplete');
+      var updatedRiskDescriptionText = document.getElementById('riskDescriptionText');
+      expect(updatedRiskDescriptionText.innerHTML).to.be.equal('Related factors must be completed in order to calculate your cardiac risk score.');
+      var updatedRiskDescriptionValue = document.getElementById('riskDescriptionValue');
+      expect(updatedRiskDescriptionValue.innerHTML).to.be.equal('');
+
+      var udpatedContainerPatientActions = document.getElementById('containerPatientActions');
+      expect(udpatedContainerPatientActions.className).to.be.equal('contentHiddenVisibility');
+      var updatedWhatIfContainer = document.getElementById('whatIfContainer');
+      expect(updatedWhatIfContainer.className).to.be.equal('contentHidden');
+      var updatedHorizontalRule = document.getElementById('horizontalRule');
+      expect(updatedHorizontalRule.className).to.be.equal('contentHidden');
+
+    });
+
+    it('sets UI elements for valid sbp', function() {
+      CardiacRisk.patientInfo = setPatientInfo('male',59,0.5,160,100,60,119,false,false);
+
+      var sbpInput = document.createElement('INPUT');
+      sbpInput.id = 'sbpInput';
+      sbpInput.setAttribute('type', 'text');
+      document.body.appendChild(sbpInput);
+
+      checkForIncompleteState();
+
+      var updatedSbpInput = document.getElementById('sbpInput');
+      expect(updatedSbpInput.value).to.be.equal('119');
+    });
+  });
+
+  describe('validData',function(){
+    it('updates UI elements with error text', function(){
+
+      var pageError = document.createElement('div');
+      pageError.id = 'pageError';
+      pageError.className = 'abc';
+      document.body.appendChild(pageError);
+
+      var pageContent = document.createElement('div');
+      pageContent.id = 'pageContent';
+      pageContent.className = 'abc';
+      document.body.appendChild(pageContent);
+
+      var pageErrorLabel = document.createElement('label');
+      pageErrorLabel.id = 'pageErrorLabel';
+      pageErrorLabel.innerHTML = 'abc';
+      document.body.appendChild(pageErrorLabel);
+
+      var mock = sinonSandboxController.mock(CardiacRisk);
+      mock.expects('validateModelForErrors').once().returns('This is the error text');
+
+      var response = validData();
+
+      expect(response).to.be.equal(false);
+      var updatedPageError = document.getElementById('pageError');
+      expect(updatedPageError.className).to.be.equal('contentErrorLayout');
+      var updatedPageContent = document.getElementById('pageContent');
+      expect(updatedPageContent.className).to.be.equal('contentHidden');
+      var updatedPageErrorLabel = document.getElementById('pageErrorLabel');
+      expect(updatedPageErrorLabel.innerHTML).to.be.equal('This is the error text');
+      mock.verify();
+
+    });
+
+    it('returns true if error text is not available', function(){
+      var mock = sinonSandboxController.mock(CardiacRisk);
+      mock.expects('validateModelForErrors').once().returns('');
+
+      var response = validData();
+
+      expect(response).to.be.equal(true);
+      mock.verify();
+    });
+
+  });
+
+  describe('processError',function(){
+    it('updates UI elements for the given errorText', function(){
+      var pageLoading = document.createElement('div');
+      pageLoading.id = 'pageLoading';
+      pageLoading.className = 'abc';
+      document.body.appendChild(pageLoading);
+
+      var pageError = document.createElement('div');
+      pageError.id = 'pageError';
+      pageError.className = 'abc';
+      document.body.appendChild(pageError);
+
+      var pageContent = document.createElement('div');
+      pageContent.id = 'pageContent';
+      pageContent.className = 'abc';
+      document.body.appendChild(pageContent);
+
+      var pageErrorLabel = document.createElement('label');
+      pageErrorLabel.id = 'pageErrorLabel';
+      pageErrorLabel.innerHTML = 'abc';
+      document.body.appendChild(pageErrorLabel);
+
+      processError('This is the error text');
+
+      var updatedPageLoading = document.getElementById('pageLoading');
+      expect(updatedPageLoading.className).to.be.equal('contentHidden');
+      var updatedPageError = document.getElementById('pageError');
+      expect(updatedPageError.className).to.be.equal('contentErrorLayout');
+      var updatedPageContent = document.getElementById('pageContent');
+      expect(updatedPageContent.className).to.be.equal('contentHidden');
+      var updatedPageErrorLabel = document.getElementById('pageErrorLabel');
+      expect(updatedPageErrorLabel.innerHTML).to.be.equal('This is the error text');
+
+    });
+  });
+
+  describe('updateUI', function(){
+    it('updates UI elements and invokes other functions', function(){
+
+      var containerPatientActions = document.createElement('div');
+      containerPatientActions.id = 'containerPatientActions';
+      containerPatientActions.className = 'abc';
+      document.body.appendChild(containerPatientActions);
+
+      var whatIfContainer = document.createElement('div');
+      whatIfContainer.id = 'whatIfContainer';
+      whatIfContainer.className = 'abc';
+      document.body.appendChild(whatIfContainer);
+
+      var horizontalRule = document.createElement('hr');
+      horizontalRule.id = 'horizontalRule';
+      horizontalRule.className = 'abc';
+      document.body.appendChild(horizontalRule);
+
+      updateUI();
+
+      var udpatedContainerPatientActions = document.getElementById('containerPatientActions');
+      expect(udpatedContainerPatientActions.className).to.be.equal('patientActions');
+      var updatedWhatIfContainer = document.getElementById('whatIfContainer');
+      expect(updatedWhatIfContainer.className).to.be.equal('whatIfContainerLayout');
+      var updatedHorizontalRule = document.getElementById('horizontalRule');
+      expect(updatedHorizontalRule.className).to.be.equal('hrStyle');
+
+    });
+  });
+
+  describe('onSBPInput', function(){
+    it('updates value for systolic blood pressure on the UI', function(){
+      CardiacRisk.patientInfo = setPatientInfo('male',59,0.5,160,100,60,119,false,false);
+
+      var sbpInput = document.createElement('INPUT');
+      sbpInput.id = 'sbpInput';
+      sbpInput.setAttribute('type', 'text');
+      sbpInput.value = '444';
+      document.body.appendChild(sbpInput);
+
+      expect(sbpInput.value).to.be.equal('444');
+
+      onSBPInput();
+
+      var updatedSbpInput = document.getElementById('sbpInput');
+      expect(updatedSbpInput.value).to.be.equal('119');
+
+
+    });
+  });
+
+  //describe('onSmokerInput', function(){
+  //  it('updates UI elements if the smmoker value is undefined', function(){
+  //    CardiacRisk.patientInfo = setPatientInfo('male',59,0.5,160,100,60,119,undefined,undefined);
+  //
+  //    var legendSmokerError = document.createElement('span');
+  //    legendSmokerError.id = 'legendSmokerError';
+  //    legendSmokerError.className = 'relatedFactorsErrors';
+  //    document.body.appendChild(legendSmokerError);
+  //
+  //    var asteriskSmoker = document.createElement('span');
+  //    asteriskSmoker.id = 'asteriskSmoker';
+  //    asteriskSmoker.className = 'abc';
+  //    document.body.appendChild(asteriskSmoker);
+  //
+  //    var smokerInput = document.createElement('INPUT');
+  //    smokerInput.setAttribute('type', 'radio');
+  //    smokerInput.change(onSmokerInput());
+  //    document.body.appendChild(smokerInput);
+  //
+  //    smokerInput.attr('checked', true).trigger('change');
+  //
+  //    var udpatedLegendSmokerError = document.getElementById('legendSmokerError');
+  //    expect(udpatedLegendSmokerError.className).to.be.equal('relatedFactorsErrorsHidden');
+  //    var updatedAsteriskSmoker = document.getElementById('asteriskSmoker');
+  //    expect(updatedAsteriskSmoker.className).to.be.equal('contentHidden');
+  //
+  //  });
+  //});
+
+
+  describe ('updateUICardiacRiskScore', function() {
+    beforeEach(function () {
+
+      var riskBar = document.createElement('div');
+      riskBar.id = 'riskBar';
+      riskBar.className = 'abc';
+      document.body.appendChild(riskBar);
+
+      var riskMessage = document.createElement('span');
+      riskMessage.id = 'riskMessage';
+      riskMessage.innerHTML = 'abc';
+      document.body.appendChild(riskMessage);
+
+      var riskDescriptionText = document.createElement('span');
+      riskDescriptionText.id = 'riskDescriptionText';
+      riskDescriptionText.innerHTML = 'abc';
+      document.body.appendChild(riskDescriptionText);
+
+      var riskDescriptionValue = document.createElement('span');
+      riskDescriptionValue.id = 'riskDescriptionValue';
+      riskDescriptionValue.innerHTML = 'abc';
+      document.body.appendChild(riskDescriptionValue);
+
+    });
+
+    it ('updates correctly for score of low risk and UI updates', function() {
+
+      CardiacRisk.patientInfo = {};
+
+      var mock = sinonSandboxController.mock(CardiacRisk);
+      mock.expects("computeRRS").returns(4);
+
+      updateUICardiacRiskScore();
+
+      var updatedRiskBar = document.getElementById('riskBar');
+      expect(updatedRiskBar.className).to.be.equal('riskBarLowRisk');
+      var updatedRiskMessage = document.getElementById('riskMessage');
+      expect(updatedRiskMessage.innerHTML).to.be.equal('Low Risk');
+      var updatedRiskDescriptionText = document.getElementById('riskDescriptionText');
+      expect(updatedRiskDescriptionText.innerHTML).to.be.equal('Your chance of having a heart attack, stroke, or other ' +
+      'heart disease event at some point in the next 10 years is ');
+      var updatedRiskDescriptionValue = document.getElementById('riskDescriptionValue');
+      expect(updatedRiskDescriptionValue.innerHTML).to.be.equal('4%');
+
+      mock.verify();
+    });
+
+    it ('updates correctly for score of low to moderate risk and UI updates', function() {
+
+      CardiacRisk.patientInfo = {};
+
+      var mock = sinonSandboxController.mock(CardiacRisk);
+      mock.expects("computeRRS").returns(5);
+
+      updateUICardiacRiskScore();
+
+      var updatedRiskBar = document.getElementById('riskBar');
+      expect(updatedRiskBar.className).to.be.equal('riskBarLowModerateRisk');
+      var updatedRiskMessage = document.getElementById('riskMessage');
+      expect(updatedRiskMessage.innerHTML).to.be.equal('Low-Moderate Risk');
+      var updatedRiskDescriptionText = document.getElementById('riskDescriptionText');
+      expect(updatedRiskDescriptionText.innerHTML).to.be.equal('Your chance of having a heart attack, stroke, or other ' +
+      'heart disease event at some point in the next 10 years is ');
+      var updatedRiskDescriptionValue = document.getElementById('riskDescriptionValue');
+      expect(updatedRiskDescriptionValue.innerHTML).to.be.equal('5%');
+
+      mock.verify();
+    });
+
+    it ('updates correctly for score of moderate risk and UI updates', function() {
+
+      CardiacRisk.patientInfo = {};
+
+      var mock = sinonSandboxController.mock(CardiacRisk);
+      mock.expects("computeRRS").returns(10);
+
+      updateUICardiacRiskScore();
+
+      var updatedRiskBar = document.getElementById('riskBar');
+      expect(updatedRiskBar.className).to.be.equal('riskBarModerateRisk');
+      var updatedRiskMessage = document.getElementById('riskMessage');
+      expect(updatedRiskMessage.innerHTML).to.be.equal('Moderate Risk');
+      var updatedRiskDescriptionText = document.getElementById('riskDescriptionText');
+      expect(updatedRiskDescriptionText.innerHTML).to.be.equal('Your chance of having a heart attack, stroke, or other ' +
+      'heart disease event at some point in the next 10 years is ');
+      var updatedRiskDescriptionValue = document.getElementById('riskDescriptionValue');
+      expect(updatedRiskDescriptionValue.innerHTML).to.be.equal('10%');
+
+      mock.verify();
+    });
+
+    it ('updates correctly for score of high risk and UI updates', function() {
+
+      CardiacRisk.patientInfo = {};
+
+      var mock = sinonSandboxController.mock(CardiacRisk);
+      mock.expects("computeRRS").returns(20);
+
+      updateUICardiacRiskScore();
+
+      var updatedRiskBar = document.getElementById('riskBar');
+      expect(updatedRiskBar.className).to.be.equal('riskBarHighRisk');
+      var updatedRiskMessage = document.getElementById('riskMessage');
+      expect(updatedRiskMessage.innerHTML).to.be.equal('High Risk');
+      var updatedRiskDescriptionText = document.getElementById('riskDescriptionText');
+      expect(updatedRiskDescriptionText.innerHTML).to.be.equal('Your chance of having a heart attack, stroke, or other ' +
+      'heart disease event at some point in the next 10 years is ');
+      var updatedRiskDescriptionValue = document.getElementById('riskDescriptionValue');
+      expect(updatedRiskDescriptionValue.innerHTML).to.be.equal('20%');
+
+      mock.verify();
+    });
+
+  });
+
+  describe ('updateUIWhatIfSystolicBloodPressure', function() {
+    it ('updates the blood pressure UI correctly when undefined response', function () {
+
+      var whatIfSBP = document.createElement('div');
+      whatIfSBP.id = 'whatIfSBP';
+      whatIfSBP.className = 'abc';
+      document.body.appendChild(whatIfSBP);
+
+      var mock = sinonSandboxController.mock(CardiacRisk);
+      mock.expects("computeWhatIfSBP").returns(undefined);
+
+      updateUIWhatIfSystolicBloodPressure();
+
+      var updatedWhatIfSBP = document.getElementById('whatIfSBP');
+      expect(updatedWhatIfSBP.className).to.be.equal('abc contentHidden');
+      mock.verify();
+    });
+
+    it ('updates the blood pressure UI correctly when defined response', function () {
+
+      var whatIfSBP = document.createElement('div');
+      whatIfSBP.id = 'whatIfSBP';
+      whatIfSBP.className = 'abc contentHidden';
+      document.body.appendChild(whatIfSBP);
+      var whatIfSBPValue = document.createElement('span');
+      whatIfSBPValue.id = 'whatIfSBPValue';
+      whatIfSBPValue.innerHTML = 'abc';
+      document.body.appendChild(whatIfSBPValue);
+      var whatIfSBPValueText = document.createElement('span');
+      whatIfSBPValueText.id = 'whatIfSBPValueText';
+      whatIfSBPValueText.innerHTML= 'abc';
+      document.body.appendChild(whatIfSBPValueText);
+
+      var whatIfSBPResponse = {};
+      whatIfSBPResponse.valueText = '119 mm/Hg';
+      whatIfSBPResponse.value = '5%';
+
+      var mock = sinonSandboxController.mock(CardiacRisk);
+      mock.expects("computeWhatIfSBP").returns(whatIfSBPResponse);
+
+      updateUIWhatIfSystolicBloodPressure();
+
+      var updatedWhatIfSBP = document.getElementById('whatIfSBP');
+      expect(updatedWhatIfSBP.className).to.be.equal('abc');
+      var updatedWhatIfSBPValue = document.getElementById('whatIfSBPValue');
+      expect(updatedWhatIfSBPValue.innerHTML).to.be.equal('5%');
+      var updatedWhatIfSBPValueText = document.getElementById('whatIfSBPValueText');
+      expect(updatedWhatIfSBPValueText.innerHTML).to.be.equal('119 mm/Hg');
+
+      mock.verify();
+    });
+  });
+
+  describe ('updateUIWhatIfNotSmoker', function() {
+    it('updates correctly is patient is a smoker', function () {
+
+      CardiacRisk.patientInfo = setPatientInfo('male',59,0.5,160,100,60,119,true,false);
+
+      var whatIfNotSmoker = document.createElement('div');
+      whatIfNotSmoker.id = 'whatIfNotSmoker';
+      whatIfNotSmoker.className = 'abc contentHidden';
+      document.body.appendChild(whatIfNotSmoker);
+
+      var whatIfNoSmokerValue = document.createElement('span');
+      whatIfNoSmokerValue.id = 'whatIfNoSmokerValue';
+      whatIfNoSmokerValue.innerHTML = 'abc';
+      document.body.appendChild(whatIfNoSmokerValue);
+
+      var whatIfNotSmokerResponse = {};
+      whatIfNotSmokerResponse.value = "whatIfNotSmoker";
+
+      var mock = sinonSandboxController.mock(CardiacRisk);
+      mock.expects("computeWhatIfNotSmoker").returns(5);
+      mock.expects("buildWhatIfNotSmoker").once().withExactArgs(5).returns(whatIfNotSmokerResponse);
+
+      updateUIWhatIfNotSmoker();
+
+      var updatedWhatIfNotSmoker = document.getElementById('whatIfNotSmoker');
+      expect(updatedWhatIfNotSmoker.className).to.be.equal('abc');
+      var updatedWhatIfNoSmokerValue = document.getElementById('whatIfNoSmokerValue');
+      expect(updatedWhatIfNoSmokerValue.innerHTML).to.be.equal('whatIfNotSmoker');
+
+      mock.verify();
+    });
+
+    it('updates correctly is patient is not a smoker', function () {
+
+      CardiacRisk.patientInfo = setPatientInfo('male',59,0.5,160,100,60,119,false,false);
+
+      var whatIfNotSmoker = document.createElement('div');
+      whatIfNotSmoker.id = 'whatIfNotSmoker';
+      whatIfNotSmoker.className = 'abc';
+      document.body.appendChild(whatIfNotSmoker);
+
+      var whatIfNotSmokerResponse = {};
+      whatIfNotSmokerResponse.value = "whatIfNotSmoker";
+
+      var mock = sinonSandboxController.mock(CardiacRisk);
+      mock.expects("computeWhatIfNotSmoker").never();
+      mock.expects("buildWhatIfNotSmoker").never();
+
+      updateUIWhatIfNotSmoker();
+
+      var updatedWhatIfNotSmoker = document.getElementById('whatIfNotSmoker');
+      expect(updatedWhatIfNotSmoker.className).to.be.equal('abc contentHidden');
+
+      mock.verify();
+    });
+  });
+
+  describe ('updateUIWhatIfOptimalValues', function() {
+    it ('updates the optimal values correctly', function () {
+
+      var whatIfOptimalValue = document.createElement('span');
+      whatIfOptimalValue.id = 'whatIfOptimalValue';
+      whatIfOptimalValue.className = 'abc contentHidden';
+      document.body.appendChild(whatIfOptimalValue);
+
+      var whatIfOptimalValueText = document.createElement('span');
+      whatIfOptimalValueText.id = 'whatIfOptimalValueText';
+      whatIfOptimalValueText.innerHTML = 'abc';
+      document.body.appendChild(whatIfOptimalValueText);
+
+      var whatIfOptimalResponse = {};
+      whatIfOptimalResponse.value = '5%';
+      whatIfOptimalResponse.valueText = 'value test text';
+
+      var mock = sinonSandboxController.mock(CardiacRisk);
+      mock.expects("computeWhatIfOptimal").once().returns(5);
+      mock.expects("buildWhatIfOptimalValues").once().withExactArgs(5).returns(whatIfOptimalResponse);
+
+      updateUIWhatIfOptimalValues();
+
+      var updatedWhatIfOptimalValue = document.getElementById('whatIfOptimalValue');
+      expect(updatedWhatIfOptimalValue.innerHTML).to.be.equal('5%');
+      var updatedWhatIfOptimalValueText = document.getElementById('whatIfOptimalValueText');
+      expect(updatedWhatIfOptimalValueText.innerHTML).to.be.equal('value test text');
+
+      mock.verify();
+    });
+  });
+
+  describe('adjustRelatedFactorsSize', function(){
+    it('updates the UI element when invoked.', function(){
+
+      var containerPatientActions = document.createElement('div');
+      containerPatientActions.id = 'containerPatientActions';
+      document.body.appendChild(containerPatientActions);
+
+      document.getElementById('containerPatientActions').style.width = '99px';
+
+      var containerPatientDetails = document.createElement('div');
+      containerPatientDetails.id = 'containerPatientDetails';
+      document.body.appendChild(containerPatientDetails);
+
+      CardiacRisk.patientInfo = setPatientInfo('male',59,0.5,160,100,60,119,false,false);
+
+      adjustRelatedFactorsSize();
+
+      var updatedContainerPatientDetails = document.getElementById('containerPatientDetails');
+      expect(updatedContainerPatientDetails.style.width).to.be.equal('99px');
+
+    });
+  });
+
+});
