@@ -152,4 +152,5 @@ add_smart_apps(
   # smart_app('8b8c17a2-92ec-4f80-ad12-f502ab878634', 'BCH Growth Chart', 't', 4, 'https://smartprd1.tch.harvard.edu/growthchart/launch.html'),
   # smart_app('202b1cdb-452f-4224-b102-7be87a9ba10b', 'BCH BP Centiles',  't', 4, 'https://smartprd1.tch.harvard.edu/bpcentiles/launch.html'),
   # smart_app('c51e0393-005b-4009-8265-00622c3ff9f5', 'CareRX HUB', 't', 4, 'http://carerx.info/IOT'),
+  # smart_app('3710b5f7-d6c7-4792-ae19-f22d85dfd42f', 'OpenHRE',  't', 4, 'http://smart.openhre.org:8126/smart/launch.html')
 )
