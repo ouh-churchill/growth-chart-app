@@ -65,7 +65,7 @@ describe Igneous::Smart::AppsController, type: :controller do
                            launch_url: 'http://smart.example5.com/',
                            authorized: false)
 
-        get :show, ehr_source_id: 'foo', id: 'app2'
+        get :show, ehr_source_id: 'foo', id: 'app2', username: 'test_username'
         expect(response).to have_http_status(302)
         expect(response).to redirect_to('http://smart.example5.com/?fhirServiceUrl=http%3A%2F%2Ffhir.example.com&patientId=0')
       end
@@ -86,7 +86,8 @@ describe Igneous::Smart::AppsController, type: :controller do
                                              patient_id: '100', encounter_id: '300', app_id: 'app1')
 
         get :show, ehr_source_id: 'foo', id: 'app1', 'pat_personid' => '100.00', 'pat_pprcode' => '200.00',
-                   'vis_encntrid' => '300.00', 'usr_personid' => '400.00', 'need_patient_banner' => 'true'
+                   'vis_encntrid' => '300.00', 'usr_personid' => '400.00', 'need_patient_banner' => 'true',
+                   'username' => 'test_username'
 
         expect(response).to have_http_status(302)
         expect(response).to redirect_to('http://test.host/smart/user/preauth?context_id=11309546-4ef4-4dba-8f36-53ef3834d90e')
@@ -123,7 +124,8 @@ describe Igneous::Smart::AppsController, type: :controller do
                 app_id: 'app1')
 
         get :show, ehr_source_id: 'foo', id: 'app1', 'pat_personid' => '100.00', 'pat_pprcode' => '200.00',
-                   'vis_encntrid' => '300.00', 'usr_personid' => '400.00', 'need_patient_banner' => 'false'
+                   'vis_encntrid' => '300.00', 'usr_personid' => '400.00', 'need_patient_banner' => 'false',
+                   'username' => 'test_username'
 
         expect(response).to have_http_status(302)
         expect(response).to redirect_to('http://test.host/smart/user/preauth?context_id=11309546-4ef4-4dba-8f36-53ef3834d90e')
@@ -160,7 +162,7 @@ describe Igneous::Smart::AppsController, type: :controller do
                 app_id: 'app1')
 
         get :show, ehr_source_id: 'foo', id: 'app1', 'pat_personid' => '100.00', 'pat_pprcode' => '200.00',
-                   'vis_encntrid' => '300.00', 'usr_personid' => '400.00'
+                   'vis_encntrid' => '300.00', 'usr_personid' => '400.00', 'username' => 'test_username'
 
         expect(response).to have_http_status(302)
         expect(response).to redirect_to('http://test.host/smart/user/preauth?context_id=11309546-4ef4-4dba-8f36-53ef3834d90e')
@@ -182,7 +184,7 @@ describe Igneous::Smart::AppsController, type: :controller do
         expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
           .with(:smart_launch_app, :minor_failure, app_id: '666', error: 'Unknown Application')
 
-        get :show, ehr_source_id: 'foo', id: '666'
+        get :show, ehr_source_id: 'foo', id: '666', username: 'test_username'
         expect(response).to have_http_status(404)
       end
     end
@@ -292,4 +294,70 @@ describe Igneous::Smart::AppsController, type: :controller do
     end
   end
 
+  describe '#audit_smart_launch_app_success' do
+    it 'audits success and reject any nil key' do
+
+      params = {
+        'PAT_PersonId'   => '1',
+        'PAT_PPRCode'    => '2',
+        'VIS_EncntrId'   => '3',
+        'USR_PersonId'   => '4',
+        'USR_PositionCd' => '5',
+        'DEV_Location'   => '6',
+        'APP_AppName'    => '7',
+        'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc',
+        'id' => 'a3f7b4ef-a793-48a3-8a0b-5729b0ed57a6',
+        'test' => 'test'
+      }
+
+      context_data = {
+        'user' => '400',
+        'patient' => '100',
+        'encounter' => '300'
+      }
+      expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
+        .with(:smart_launch_app,
+              :success,
+              tenant: '46134c2c-7412-4d53-b09e-e8ced4c73dbc',
+              user_id: '400',
+              patient_id: '100',
+              encounter_id: '300',
+              app_id: 'a3f7b4ef-a793-48a3-8a0b-5729b0ed57a6')
+
+      controller.send(:audit_smart_launch_app_success, params, context_data)
+    end
+
+    it 'audits success for all expected keys' do
+
+      params = {
+        'PAT_PersonId'   => '1',
+        'PAT_PPRCode'    => '2',
+        'VIS_EncntrId'   => '3',
+        'USR_PersonId'   => '4',
+        'USR_PositionCd' => '5',
+        'DEV_Location'   => '6',
+        'APP_AppName'    => '7',
+        'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc',
+        'id' => 'a3f7b4ef-a793-48a3-8a0b-5729b0ed57a6'
+      }
+
+      context_data = {
+        'user' => '400',
+        'patient' => '100',
+        'encounter' => '300',
+        'container_name' => 'test_container_name'
+      }
+      expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
+        .with(:smart_launch_app,
+              :success,
+              tenant: '46134c2c-7412-4d53-b09e-e8ced4c73dbc',
+              user_id: '400',
+              patient_id: '100',
+              encounter_id: '300',
+              container_name: 'test_container_name',
+              app_id: 'a3f7b4ef-a793-48a3-8a0b-5729b0ed57a6')
+
+      controller.send(:audit_smart_launch_app_success, params, context_data)
+    end
+  end
 end

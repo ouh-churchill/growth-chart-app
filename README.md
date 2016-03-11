@@ -11,6 +11,10 @@ igneous-smart provides both a registry and launcher for [SMART on FHIR applicati
 
     rake
 
+## Setting header in the browser (for local development)
+
+    Cerner-Trusted-Traffic : 'cerner'
+
 ## Listing SMART Applications
 
 Callers can get a listing of all available SMART applications with the following route:
@@ -22,7 +26,7 @@ See below for the support context parameters. You must provide context parameter
 ### Example
 
 ```
-GET https://smart.cernerpowerchart.com/smart/nya9mWd9vqI_z1LcF5uLfCwewAGCVrY1/apps?PAT_PersonId=123&VIS_EncntrId=456
+GET https://smart.cernerpowerchart.com/smart/nya9mWd9vqI_z1LcF5uLfCwewAGCVrY1/apps?PAT_PersonId=123&VIS_EncntrId=456&username=ab01234
 ```
 
 ```
@@ -46,7 +50,7 @@ See below for the support context parameters.
 These types of SMART apps can be launched without OAuth 2. As such, the patient id in context is passed directly to the SMART app on launch via a query parameter.
 
 ```
-GET https://smart.cernerpowerchart.com/smart/nya9mWd9vqI_z1LcF5uLfCwewAGCVrY1/apps/1?PAT_PersonId=123
+GET https://smart.cernerpowerchart.com/smart/nya9mWd9vqI_z1LcF5uLfCwewAGCVrY1/apps/1?PAT_PersonId=123&username=ab01234
 ```
 
 ```
@@ -59,7 +63,7 @@ Location: http://hspc.isalusconsulting.com/demo/apps/bilirubin-chart/launch.html
 This is the official SMART on FHIR application launch workflow. Context information is passed on launch via an opaque identifier that will ultimately be exchanged at the end of the OAuth 2 workflow for the actual context information.
 
 ```
-GET https://smart.cernerpowerchart.com/smart/nya9mWd9vqI_z1LcF5uLfCwewAGCVrY1/apps/1?PAT_PersonId=123&VIS_EncntrId=456
+GET https://smart.cernerpowerchart.com/smart/nya9mWd9vqI_z1LcF5uLfCwewAGCVrY1/apps/1?PAT_PersonId=123&VIS_EncntrId=456&username=ab01234
 ```
 
 ```
@@ -81,7 +85,7 @@ Request raw data:
 ```json
 { "aud" : "https://fhir.devcernerpowerchart.com/dstu2/2c400054-42d8-4e74-87b7-80b5bd5fde9f",
   "launch" : "6176e752-94b5-499b-bcd7-68e85e3708ed",
-  "sub" : "100",
+  "sub" : "ab01234",
   "ver" : "1.0",
   "tnt" : "2c400054-42d8-4e74-87b7-80b5bd5fde9f"
 }
@@ -145,6 +149,12 @@ Response:
 ```
 Status: 204
 ```
+## Required Context Parameter
+
+Name           | Description
+-------------- | -----------
+username       | The username of the clinician (user) launching the SMART app  
+
 ## Supported Context Parameters
 
 These context parameters are the [same available within the MPages framework](https://wiki.ucern.com/display/public/1101discernHP/Context+Variables+Available+using+Discern+Explorer).

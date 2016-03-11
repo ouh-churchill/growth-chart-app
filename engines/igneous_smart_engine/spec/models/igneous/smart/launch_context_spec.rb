@@ -17,7 +17,8 @@ describe Igneous::Smart::LaunchContext do
         'dev_location'   => '6',
         'app_appname'    => '7',
         'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc',
-        'need_patient_banner' => 'true'
+        'need_patient_banner' => 'true',
+        'username' => 'test_username'
       }
 
       context_id = '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
@@ -48,7 +49,8 @@ describe Igneous::Smart::LaunchContext do
         'dev_location'   => '6',
         'app_appname'    => '7',
         'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc',
-        'need_patient_banner' => 'false'
+        'need_patient_banner' => 'false',
+        'username' => 'test_username'
       }
 
       context_id = '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
@@ -95,7 +97,8 @@ describe Igneous::Smart::LaunchContext do
         'dev_location'   => '6',
         'app_appname'    => '7',
         'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc',
-        'need_patient_banner' => 'false'
+        'need_patient_banner' => 'false',
+        'username' => 'test_username'
       }
 
       context_id = '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
@@ -118,7 +121,8 @@ describe Igneous::Smart::LaunchContext do
         'dev_location' => 'East Wing',
         'app_appname'  => 'Spec Test',
         'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc',
-        'need_patient_banner' => 'false'
+        'need_patient_banner' => 'false',
+        'username' => 'test_username'
       }
 
       context_id = '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
@@ -142,7 +146,8 @@ describe Igneous::Smart::LaunchContext do
         'dev_location' => nil,
         'app_appname'  => nil,
         'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc',
-        'need_patient_banner' => 'false'
+        'need_patient_banner' => 'false',
+        'username' => 'test_username'
       }
 
       context_id = '46134c2c-7412-4d53-b09e-e8ced4c73dbc'

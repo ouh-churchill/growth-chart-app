@@ -48,7 +48,8 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
                              data: data,
                              app_id: 'd193fa79-c165-4daa-a8fd-c187fba2af4d',
                              smart_launch_url: 'http://example.com/smart/launch.html',
-                             need_patient_banner: true)
+                             need_patient_banner: true,
+                             username: 'test_username')
 
           FactoryGirl.create(:fhir_server_factory,
                              name: 'cerner',
@@ -72,7 +73,6 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
             launch_context_id: '6e1b99f7-e05b-42d1-b304-d8180858ce8c'
           }
 
-          allow(controller).to receive(:find_user_id_by_username_and_tenant).and_return '12345'
           expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
             .with(:smart_launch_context_resolve, :success, audit_hash)
 
@@ -101,7 +101,6 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
             launch_context_id: '6e1b99f7-e05b-42d1-b304-d8180858ce8c'
           }
 
-          allow(controller).to receive(:find_user_id_by_username_and_tenant).and_return '12345'
           expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
             .with(:smart_launch_context_resolve, :success, audit_hash)
 
@@ -182,8 +181,6 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
         end
 
         it 'returns failure when the user is invalid' do
-          allow(controller).to receive(:find_user_id_by_username_and_tenant).and_return '2342'
-
           expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
             .with(:smart_launch_context_resolve, :minor_failure,
                   tenant: '2c400054-42d8-4e74-87b7-80b5bd5fde9f',
@@ -205,13 +202,10 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
         end
 
         it 'returns success when the user is valid' do
-          allow(controller).to receive(:find_user_id_by_username_and_tenant).with('test-user', '2c400054'\
-                                       '-42d8-4e74-87b7-80b5bd5fde9f').and_return '12345'
-
           post(:resolve, format: 'json', aud: 'https://fhir.devcernerpowerchart.com/fhir/'\
                                           '2c400054-42d8-4e74-87b7-80b5bd5fde9f',
                          launch: '6e1b99f7-e05b-42d1-b304-d8180858ce8c',
-                         sub: 'test-user',
+                         sub: 'test_username',
                          ver: '1.0',
                          tnt: '2c400054-42d8-4e74-87b7-80b5bd5fde9f')
           expect(response.content_type).to eq 'application/json'
@@ -221,8 +215,6 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
         end
 
         it 'returns failure when resource server is unknown' do
-          allow(controller).to receive(:find_user_id_by_username_and_tenant).and_return '2342'
-
           post(:resolve, format: 'json', aud: 'https://fhir.example.com/fhir/'\
                                           '2c400054-42d8-4e74-87b7-80b5bd5fde9f',
                          launch: '6e1b99f7-e05b-42d1-b304-d8180858ce8c',
@@ -238,8 +230,6 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
         end
 
         it 'returns failure when the tenant is invalid' do
-          allow(controller).to receive(:find_user_id_by_username_and_tenant).and_return '2342'
-
           post(:resolve, format: 'json', aud: 'https://fhir.devcernerpowerchart.com/fhir/'\
                                           '2c400054-42d8-4e74-87b7-80b5bd5fde45',
                          launch: '6e1b99f7-e05b-42d1-b304-d8180858ce8c',
@@ -255,7 +245,6 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
         end
 
         it 'returns failure when there is an unspecified error' do
-          allow(controller).to receive(:find_user_id_by_username_and_tenant).and_return '2342'
           allow(controller).to receive(:invalid_user?).and_return false
 
           allow_any_instance_of(Igneous::Smart::LaunchContext).to receive(:valid?).and_return false
@@ -282,7 +271,8 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
                              data: data,
                              app_id: 'd193fa79-c165-4daa-a8fd-c187fba2af4d',
                              smart_launch_url: 'http://example.com/smart/launch.html',
-                             need_patient_banner: false)
+                             need_patient_banner: false,
+                             username: 'test_username')
 
           FactoryGirl.create(:fhir_server_factory,
                              name: 'cerner',
@@ -295,10 +285,9 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
                              igneous_smart_fhir_server_id: 1,
                              authorized: true)
 
-          allow(controller).to receive(:find_user_id_by_username_and_tenant).and_return '6789'
           post(:resolve, format: 'json', aud: 'https://fhir.example.com/fhir/2c400054-42d8-4e74-87b7-80b5bd5fde9f',
                          launch: '6e1b99f7-e05b-42d1-b304-d8180858ce8d',
-                         sub: 'myusername',
+                         sub: 'test_username',
                          ver: '1.0',
                          tnt: '2c400054-42d8-4e74-87b7-80b5bd5fde9f')
 
@@ -309,39 +298,6 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
           expect(JSON.parse(response.body)).to eql response_in_json
         end
       end
-    end
-  end
-
-  describe '#find_user_id_by_username' do
-
-    before(:each) do
-      @fake_response = Net::HTTPResponse.new('1.0', '200', 'Success')
-      mock_consumer = double(OAuth::Consumer)
-      access_token = double('access token')
-      allow(mock_consumer).to receive(:get_access_token).and_return access_token
-      allow(OAuth::Consumer).to receive(:new).and_return(mock_consumer)
-      allow(Igneous::Smart).to receive(:cerner_care_oauth_consumer).and_return(mock_consumer)
-      allow(access_token).to receive(:get).and_return @fake_response
-    end
-
-    it 'returns user id given username' do
-      body = {'Resources' => [{'id': '5bf02e61-09fe-49c3-8ca8-05084c30ca23', 'externalId': '1900022',
-                               'displayName': 'Test, Name', 'userName': 'username0134'}]}
-      allow(@fake_response).to receive(:body).and_return(body.to_json)
-      expect(controller.send(:find_user_id_by_username_and_tenant, 'username0134', nil)).to eq '1900022'
-    end
-
-    it 'returns nil when username is not found' do
-      body = {'Resources': []}
-      allow(@fake_response).to receive(:body).and_return(body.to_json)
-      expect(controller).to receive(:log_info)
-      expect(controller.send(:find_user_id_by_username_and_tenant, 'username0134', nil)).to eq nil
-    end
-
-    it 'returns nil when Resources not returned' do
-      body = {}
-      allow(@fake_response).to receive(:body).and_return(body.to_json)
-      expect(controller.send(:find_user_id_by_username_and_tenant, 'username0134', nil)).to eq nil
     end
   end
 

@@ -43,6 +43,8 @@ philter:
                  'public/**/lib/fhir-client.js',
                  'public/cardiac-risk-app/**/*',
                  'public/growth-chart-app/**/*',
+                 'public/cardiac-risk-app-2.0/**/*',
+                 'public/growth-chart-app-2.0/**/*',
                  'public/fhir-client/*',
                  'public/fhir-client-dstu2/fhir-client.js',
                  'public/fhir-client-dstu2/fhir-client.min.js']

@@ -32,6 +32,7 @@ def post(uri, data)
   request.body = data
   request['Content-Type'] = 'application/json'
   request['Accept'] = 'application/json'
+  request['cerner-trusted-traffic'] = 'cerner'
 
   response = http.request(request)
   if %w(201 204).include? response.code
@@ -77,8 +78,8 @@ end
 # add_fhir_servers(
 #   fhir_server('cerner',            "#{FHIR_SERVER}/may2015/@tenant_id@"),
 #   fhir_server('cerner_open',       "#{FHIR_SERVER}/may2015/open/@tenant_id@"),
-#   fhir_server('cerner_dstu2',      "#{FHIR_SERVER}/dstu2/@tenant_id@")
-#   fhir_server('cerner_dstu2_open', "#{FHIR_SERVER}/dstu2/open/@tenant_id@")
+#   fhir_server('cerner_dstu2',      "#{FHIR_SERVER}/dstu2/@tenant_id@"),
+#   fhir_server('cerner_dstu2_open', "#{FHIR_SERVER}/dstu2/open/@tenant_id@"),
 #   fhir_server('cerner_staging',    'https://fhir.stagingcernerpowerchart.com/dstu2/@tenant_id@')
 # )
 

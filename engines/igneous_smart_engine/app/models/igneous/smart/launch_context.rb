@@ -51,7 +51,8 @@ module Igneous
                              app_id: app_id,
                              smart_launch_url: smart_launch_url,
                              tenant: params['ehr_source_id'],
-                             need_patient_banner: banner)
+                             need_patient_banner: banner,
+                             username: (params['username']) ? params['username'] : '')
       end
     end
   end

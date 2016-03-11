@@ -8,6 +8,6 @@
 <%= canadarm_logging_tag %>
 <%= javascript_include_tag "igneous-smart.min" %>
 </head>
-<body onload="retrieveTenantIdAndRedirect('<%= url_with_tenant_place_holder %>')">
+<body onload="retrieveRequiredInfoAndRedirect('<%= url_with_tenant_place_holder %>', <%= user_person_id %>)">
 </body>
 </html>
