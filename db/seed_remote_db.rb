@@ -156,4 +156,6 @@ add_smart_apps(
   # smart_app('3710b5f7-d6c7-4792-ae19-f22d85dfd42f', 'OpenHRE',  't', 4, 'http://smart.openhre.org:8126/smart/launch.html'),
   # smart_app('7ff78148-82f9-4a68-ba4f-194089d7d083', 'My eHealth',  't', 4, 'smartapp://callback'),
   # smart_app('e2868099-eab9-4c4c-97da-4ca414b24933', 'VigiLanz SMARTDemo',  't', 4, 'https://www.vigilanzportal.com/FHIRClient/Launch/SMARTLaunch')
+  # smart_app('37c8edca-8ad5-40fa-b396-d2efe6c2c9a0', 'VigiLanz SMARTDemo Dev',  't', 4, 'http://localhost:8000/fhir-app/Launch/SMARTLaunch')
+
 )
