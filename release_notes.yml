@@ -4,6 +4,7 @@ versions:
     release_date: 2016-xx-xx
     changes:
       - {author: kk014173, comment: Remove Dependency on User Roster Service, issue: OPENSVC-926, type: add}
+      - {author: ss025783, comment: Uplift to Rails 4.2.6, issue: OPENSVC-1720, type: add}
   - version: 1.13.0
     release_date: 2016-03-09
     changes:
