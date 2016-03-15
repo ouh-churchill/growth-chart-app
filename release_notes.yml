@@ -1,10 +1,11 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.14.0
-    release_date: 2016-xx-xx
+    release_date: 2016-03-15
     changes:
       - {author: kk014173, comment: Remove Dependency on User Roster Service, issue: OPENSVC-926, type: add}
       - {author: ss025783, comment: Uplift to Rails 4.2.6, issue: OPENSVC-1720, type: add}
+      - {author: kk014173, comment: 1.14.0 release review, issue: OPENSVC-1873, type: add}
   - version: 1.13.0
     release_date: 2016-03-09
     changes:
