@@ -1,9 +1,9 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.15.0
-    release_date: 2016-xx-xx
+    release_date: 2016-03-23
     changes:
-      - {author: xx, comment: xx, issue: OPENSVC-xxxx, type: add}
+      - {author: ss025783, comment: Cardiac Risk App new design, issue: OPENSVC-526, type: add}
   - version: 1.14.0
     release_date: 2016-03-15
     changes:
