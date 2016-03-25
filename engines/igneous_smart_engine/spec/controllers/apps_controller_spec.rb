@@ -189,11 +189,26 @@ describe Igneous::Smart::AppsController, type: :controller do
       end
     end
 
-    describe 'when tenant id is not supplied' do
+    describe 'when tenant id or username is not supplied' do
       it 'renders html page' do
         get :show, id: '777'
         expect(response).to have_http_status(:ok)
         expect(response).to render_template(:show)
+      end
+    end
+
+    describe 'when tenant id is supplied and username is not supplied' do
+      it 'renders html page' do
+        get :show, id: '777', ehr_source_id: 'foo'
+        expect(response).to have_http_status(:ok)
+        expect(response).to render_template(:show)
+      end
+    end
+
+    describe 'when tenant id and usernme are supplied' do
+      it 'will not render html page' do
+        get :show, id: '777', ehr_source_id: 'foo', username: 'test_username'
+        expect(response).to_not render_template(:show)
       end
     end
   end

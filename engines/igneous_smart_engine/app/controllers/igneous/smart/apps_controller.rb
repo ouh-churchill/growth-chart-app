@@ -20,9 +20,15 @@ module Igneous
 
       def show
         lowercase_params = lowercase_app_params(params)
-        if params['ehr_source_id'].blank? || lowercase_params['username'].blank?
+        if params['ehr_source_id'].blank?
           render locals: {
             url_with_tenant_place_holder: "#{app_url(':tenant_id', params[:id])}?#{request.query_string}",
+            user_person_id: lowercase_params['usr_personid']
+          }
+          return
+        elsif lowercase_params['username'].blank?
+          render locals: {
+            url_with_tenant_place_holder: "#{app_url(params['ehr_source_id'], params[:id])}?#{request.query_string}",
             user_person_id: lowercase_params['usr_personid']
           }
           return

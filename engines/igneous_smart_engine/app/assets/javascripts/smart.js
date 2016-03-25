@@ -5,6 +5,7 @@ CERNER_SMART_LAUNCH.launchURL = '';
 CERNER_SMART_LAUNCH.preauthTimeoutVar = null;
 CERNER_SMART_LAUNCH.timeoutIntervalSec = 10; // 10 seconds
 CERNER_SMART_LAUNCH.errorObj = new Error();
+CERNER_SMART_LAUNCH.launchId = '';
 
 // Initialize XMLCclRequest
 CERNER_SMART_LAUNCH.requestSync = new XMLCclRequest();
@@ -37,7 +38,15 @@ function getOAuthConsumerKey() {
 
     if (parsedJSON.RECORD_DATA.STATUS.SUCCESS_IND === 1) {
       return parsedJSON.RECORD_DATA.OAUTH_RESPONSE.OAUTH_CONSUMER_KEY.valueOf();
+    } else {
+      Canadarm.error('The response of StartOAuthSession.User (99999115) returned a failure ' +
+         'with the following error_code: ' + parsedJSON.RECORD_DATA.STATUS.ERROR_CODE +
+         '.', CERNER_SMART_LAUNCH.errorObj);
     }
+  } else {
+    Canadarm.error('Called StartOAuthSession.User (99999115) to retrieve OAuth consumer key' +
+         ', but failed due to the response status is not 200. The response status is: ' +
+         CERNER_SMART_LAUNCH.requestSync.status + '.', CERNER_SMART_LAUNCH.errorObj);
   }
   return '';
 }
@@ -62,7 +71,15 @@ function getMillenniumIntegratedAuthToken() {
 
     if (parsedJSON.RECORD_DATA.STATUS.SUCCESS_IND === 1) {
       return parsedJSON.RECORD_DATA.IDENTITY_TOKEN.valueOf();
+    } else {
+      Canadarm.error('The response of GenerateSingleUseIdentityToken (99999124) returned a failure ' +
+         'with the following error_code: ' + parsedJSON.RECORD_DATA.STATUS.ERROR_CODE +
+         '.', CERNER_SMART_LAUNCH.errorObj);
     }
+  } else {
+    Canadarm.error('Called GenerateSingleUseIdentityToken (99999124) to retrieve integrated auth token' +
+         ', but failed due to the response status is not 200. The response status is: ' +
+         CERNER_SMART_LAUNCH.requestSync.status + '.', CERNER_SMART_LAUNCH.errorObj);
   }
   return '';
 }
@@ -110,27 +127,59 @@ function getUsernameByPersonnelId(personnel_id) {
 }
 
 /**
+* Get the value of paramStr in query parameter based on the urlStr.
+* urlStr - the URL with query param
+* paramStr - the value of the parameter to search
+* 
+* return value for paramStr or empty string if paramStr not found.
+*/
+function parseQueryParamByStr(urlStr, paramStr) {
+  var urlStrLowerCase = urlStr.toLowerCase();
+  var indexOfParamStr = urlStrLowerCase.indexOf(paramStr);
+  
+  if (indexOfParamStr === -1) {
+    return '';
+  }
+  
+  var beginParam = urlStrLowerCase.substring(indexOfParamStr, urlStrLowerCase.length);
+  var keyValuePairArr = beginParam.split('&');
+  var keyValueArr = [];
+  for (var i = 0; i < keyValuePairArr.length; i++) {
+    var tempKeyValArr = keyValuePairArr[i].split('=');
+    if (tempKeyValArr[0] && tempKeyValArr[1]) {
+      keyValueArr[tempKeyValArr[0].valueOf()] = tempKeyValArr[1].valueOf();
+    }
+  }
+
+  return keyValueArr[paramStr];
+}
+
+/**
  * This function will submit the identity token to the
  * OAuth2 server for pre-authentication workflow.  This
  * will enable a seamless transition to the SMART app
  * without having the user signing in again.
  */
 function submitToken(token) {
-
+  
   if (!CERNER_SMART_LAUNCH.oauth2BaseURL) {
     // In case when the OAuth2 base URL is not
     // configured correctly, take the user to the
     // app's launch URL.  The user will be asked
     // to sign into the domain first before proceeding
     // to the SMART app.
-    Canadarm.warn('OAuth2 base URL is not set.', CERNER_SMART_LAUNCH.errorObj);
+    Canadarm.warn('OAuth2 base URL is not set. Launch Id: ' +
+                  CERNER_SMART_LAUNCH.launchId, CERNER_SMART_LAUNCH.errorObj);
     window.location.href = CERNER_SMART_LAUNCH.launchURL;
   }
 
   // This invokes an API provided by the authorization server, which directs
   // the user agent to its own endpoint that can signal completion of the
   // pre-authentication workflow.
-  document.getElementById('loader').src = CERNER_SMART_LAUNCH.oauth2BaseURL + '/preauth/?token=' + encodeURI(token);
+  var encodedToken = encodeURI(token);
+  Canadarm.info('Calling preauth endpoint with token: ' + encodedToken +
+                ' and Launch Id: ' + CERNER_SMART_LAUNCH.launchId, CERNER_SMART_LAUNCH.errorObj);
+  document.getElementById('loader').src = CERNER_SMART_LAUNCH.oauth2BaseURL + '/preauth/?token=' + encodedToken;
   return false;
 }
 
@@ -140,24 +189,31 @@ function submitToken(token) {
 function receiveMessage(event) {
   // Clear the timeout
   clearTimeout(CERNER_SMART_LAUNCH.preauthTimeoutVar);
-
+  
   // Only handle message from the expected origin domain.
   if (CERNER_SMART_LAUNCH.oauth2BaseURL.indexOf(event.origin) === -1) {
     Canadarm.warn('The OAuth2 base URLs do not match. Expected: ' + CERNER_SMART_LAUNCH.oauth2BaseURL +
-                  ' but got: ' + event.origin, CERNER_SMART_LAUNCH.errorObj);
+                  ' but got: ' + event.origin + ' Launch Id: ' +
+                  CERNER_SMART_LAUNCH.launchId, CERNER_SMART_LAUNCH.errorObj);
     window.location.href = CERNER_SMART_LAUNCH.launchURL;
     return;
   }
 
   // Successfully pre-authenticated
   if (event.data === 'com.cerner.authorization:notification:preauthentication-complete') {
-    Canadarm.info('Preauthentication completed. Navigating to: ' +
-                   CERNER_SMART_LAUNCH.launchURL, CERNER_SMART_LAUNCH.errorObj);
+    Canadarm.info('Preauthentication completed. Launch Id: ' + CERNER_SMART_LAUNCH.launchId +
+                  '. Navigating to: ' +
+                  CERNER_SMART_LAUNCH.launchURL, CERNER_SMART_LAUNCH.errorObj);
   } else if (event.data.substring(0, event.data.lastIndexOf(':')) ===
             ('com.cerner.authorization:notification:preauthentication-failure:error')) {
-    Canadarm.warn('Pre-authentication completed with failure: ' + event.data, CERNER_SMART_LAUNCH.errorObj);
+    Canadarm.warn('Pre-authentication completed with failure: ' + event.data +
+                  '. Launch Id: ' + CERNER_SMART_LAUNCH.launchId, CERNER_SMART_LAUNCH.errorObj);
     // The user would need to log into the domain.
     // After logging in, the user will be redirected to the SMART app.
+  } else {
+    Canadarm.warn('Pre-authentication failed because event.data is not in the expected list. ' +
+                  'The event.data passed in is: ' + event.data + '. Launch Id: ' +
+                  CERNER_SMART_LAUNCH.launchId, CERNER_SMART_LAUNCH.errorObj);
   }
 
   window.location.href = CERNER_SMART_LAUNCH.launchURL;
@@ -172,7 +228,7 @@ window.addEventListener('message', receiveMessage, false);
  */
 var preAuthFailed = function () {
   Canadarm.warn('Pre-authentication was not completed after ' + CERNER_SMART_LAUNCH.timeoutIntervalSec +
-                ' seconds of waiting.', CERNER_SMART_LAUNCH.errorObj);
+                ' seconds of waiting. Launch Id: ' + CERNER_SMART_LAUNCH.launchId, CERNER_SMART_LAUNCH.errorObj);
   // The user would need to log into the domain.
   // After logging in, the user will be redirected to the SMART app.
   window.location.href = CERNER_SMART_LAUNCH.launchURL;
@@ -191,12 +247,15 @@ function performPreauthentication(oauth2BaseUrl, launchUrl) {
 
   CERNER_SMART_LAUNCH.oauth2BaseURL = oauth2BaseUrl;
   CERNER_SMART_LAUNCH.launchURL = launchUrl;
+  CERNER_SMART_LAUNCH.launchId = parseQueryParamByStr(launchUrl, 'launch');
 
   // If this page is not executing in PowerChart,
   // redirect the user to the login page.
 
   if (!isRunningInPowerChart()) {
     window.location.href = CERNER_SMART_LAUNCH.launchURL;
+    Canadarm.info('The application is being launched outside of PowerChart. ' +
+                  'No preauth needed. Launch Id: ' + CERNER_SMART_LAUNCH.launchId, CERNER_SMART_LAUNCH.errorObj);
     return;
   }
 
@@ -206,7 +265,8 @@ function performPreauthentication(oauth2BaseUrl, launchUrl) {
     submitToken(token);
     CERNER_SMART_LAUNCH.preauthTimeoutVar = setTimeout(preAuthFailed, CERNER_SMART_LAUNCH.timeoutIntervalSec*1000);
   } else {
-    Canadarm.warn('Unable to retrieve Millennium Integrated Auth Token.', CERNER_SMART_LAUNCH.errorObj);
+    Canadarm.warn('Unable to retrieve Millennium Integrated Auth Token. Launch Id: ' +
+                  CERNER_SMART_LAUNCH.launchId, CERNER_SMART_LAUNCH.errorObj);
     // The user would need to log into the domain.
     // After logging in, the user will be redirected to the SMART App.
     window.location.href = CERNER_SMART_LAUNCH.launchURL;
@@ -231,17 +291,48 @@ var getRequiredInfoFailed = function () {
 */
 /*jshint unused:false*/
 function retrieveRequiredInfoAndRedirect(urlWithTenantPlaceHolder, user_person_id) {
-  var timeoutInterval = setTimeout(getRequiredInfoFailed, CERNER_SMART_LAUNCH.timeoutIntervalSec*1000);
+  
+  if (isRunningInPowerChart()) {
+    var timeoutInterval = setTimeout(getRequiredInfoFailed, CERNER_SMART_LAUNCH.timeoutIntervalSec*1000);
 
-  var username = getUsernameByPersonnelId(user_person_id);
-  var consumerKey = getOAuthConsumerKey();
+    var username = getUsernameByPersonnelId(user_person_id);
+    var consumerKey = getOAuthConsumerKey();
 
-  if (consumerKey && username) {
-    clearTimeout(timeoutInterval);
+    if (consumerKey && username) {
+      clearTimeout(timeoutInterval);
 
-    var launchURL = urlWithTenantPlaceHolder.replace(':tenant_id', consumerKey);
-    window.location.href = launchURL + '&username=' + username
+      var launchURL = urlWithTenantPlaceHolder.replace(':tenant_id', consumerKey);
+      window.location.href = launchURL + '&username=' + username;
+    } else {
+      clearTimeout(timeoutInterval);
+
+      if (!username) {
+        Canadarm.error('Unable to launch SMART app because username could not be obtained.',
+                       CERNER_SMART_LAUNCH.errorObj);
+      }
+
+      if (!consumerKey) {
+        Canadarm.error('Unable to launch SMART app because tenant id could not be obtained.',
+                       CERNER_SMART_LAUNCH.errorObj);
+      }
+    }
   } else {
-    getRequiredInfoFailed();
+    var missingTenantId = '';
+    var missingUsername = '';
+
+    if (urlWithTenantPlaceHolder.indexOf(':tenant_id') !== -1) {
+      missingTenantId = 'The tenant ID is required to launch the app.';
+      Canadarm.error(missingTenantId, CERNER_SMART_LAUNCH.errorObj);
+      missingTenantId += '<br>';
+    }
+    
+    var usernameParamVal = parseQueryParamByStr(urlWithTenantPlaceHolder, 'username');
+    if (!usernameParamVal) {
+      missingUsername = 'The username query parameter is required to launch the app.';
+      Canadarm.error(missingUsername, CERNER_SMART_LAUNCH.errorObj);
+      missingUsername += '<br>';
+    }
+
+    document.getElementById('error-message').innerHTML = '<p>' + missingTenantId + missingUsername + '</p>';
   }
 }
