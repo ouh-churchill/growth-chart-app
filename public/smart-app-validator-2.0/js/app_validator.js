@@ -120,7 +120,7 @@
 
       function getResources() {
         var resources = ['Conformance', 'Patient', 'Encounter', 'AllergyIntolerance', 'Condition', 'DiagnosticReport',
-          'Immunization', 'Observation', 'MedicationOrder', 'DocumentReference'];
+          'Immunization', 'Observation', 'MedicationOrder', 'DocumentReference', 'MedicationStatement'];
 
         var deferreds = [];
 
@@ -145,12 +145,16 @@
             additionalParam = 'status=active&_count=20';
           }
 
+          var priorDate = new Date();
+          var monthsToDeduct = 6;
+          priorDate.setMonth(priorDate.getMonth() - monthsToDeduct);
+
+          if ( resource === 'MedicationStatement') {
+            additionalParam = 'status=completed&_count=10&effectivedate=ge' + priorDate.toISOString();
+          }
+
           if (resource === 'Observation') {
             var currentDate = new Date();
-
-            var priorDate = new Date();
-            var monthsToDeduct = 6;
-            priorDate.setMonth(priorDate.getMonth() - monthsToDeduct);
 
             additionalParam = 'code=http://loinc.org|30522-7,http://loinc.org|14647-2,http://loinc.org|2093-3,' +
                 'http://loinc.org|2085-9,http://loinc.org|8480-6,http://loinc.org|3141-9,http://loinc.org|8302-2,' +
@@ -291,7 +295,7 @@
       'scope':  'launch online_access profile openid ' +
                 'patient/Encounter.read patient/Patient.read patient/Observation.read patient/Immunization.read ' +
                 'patient/AllergyIntolerance.read patient/Condition.read patient/DiagnosticReport.read ' +
-                'patient/MedicationOrder.read '
+                'patient/MedicationOrder.read patient/MedicationStatement.read '
     }, function() {
       document.getElementById('AuthorizationServer').innerHTML = '<p> &cross; Authorization (OAuth2): ' +
       'Failed to discover the authorization URL.</p>';

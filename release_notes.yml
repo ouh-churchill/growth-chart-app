@@ -6,6 +6,7 @@ versions:
       - {author: zp035497, comment: Fixed defect in Growth Chart App to remove any unnecessary contingent messages in parental view, issue: OPENSVC-1356, type: add}
       - {author: zp035497, comment: Fixed defect in Growth Chart App to use patient length/stature to display length data, issue: OPENSVC-1267, type: add}
       - {author: kk014173, comment: Enhance Canadarm logging, issue: OPENSVC-1622, type: add}
+      - {author: kt026311, comment: Include MedicationStatement resource in SMART App Validator, issue: OPENSVC-1440, type: add}
   - version: 1.15.0
     release_date: 2016-03-23
     changes:
