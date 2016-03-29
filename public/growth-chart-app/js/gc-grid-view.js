@@ -178,7 +178,7 @@ XDate, setTimeout, getDataSet*/
             case "length":
             case "stature":
             case "lengthandstature":
-                return GC.DATA_SETS[ds + "_STATURE"] || GC.DATA_SETS[ds + "_LENGTH"];
+                return GC.DATA_SETS[ds + "_STATURE"];
             case "weight":
                 return GC.DATA_SETS[ds + "_WEIGHT"];
             case "headc":

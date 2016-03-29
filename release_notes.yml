@@ -3,7 +3,6 @@ versions:
   - version: 1.16.0
     release_date: 2016-xx-xx
     changes:
-      - {author: zp035497, comment: Fixed defect in Growth Chart App to use patient length/stature to display length data, issue: OPENSVC-1267, type: add}
       - {author: kk014173, comment: Enhance Canadarm logging, issue: OPENSVC-1622, type: add}
       - {author: kt026311, comment: Include MedicationStatement resource in SMART App Validator, issue: OPENSVC-1440, type: add}
       - {author: dk016918, comment: Introduce a default implementation of the tenant key for timber logging, issue: OPENSVC-1849, type: add}
