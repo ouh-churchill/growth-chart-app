@@ -976,7 +976,7 @@
                 dataSet = GC.DATA_SETS.CDC_WEIGHT,
                 weightPctNow,
                 weightPctPrev,
-                bmi, healthyWeightMin, healthyWeightMax, weightPctDiff;
+                bmi, healthyWeightMin, healthyWeightMax, D;
             
             out.name = PATIENT.name;
             
@@ -1029,44 +1029,30 @@
                     lastWeightEntry.agemos
                 );
                 
-                weightPctDiff = weightPctNow - weightPctPrev;
-
+                D = weightPctNow - weightPctPrev;
+                
                 if (weightPctNow < 5) {
                     out.state = WEIGHT_STATES.UNDERWEIGHT;
-                    if (weightPctDiff < -1) {
-                        out.stateGoingTo = WEIGHT_TRENDS.MORE_UNDERWEIGHT;
-                    } else if (weightPctDiff == 0) {
-                        out.stateGoingTo = WEIGHT_TRENDS.NONE;
-                    } else {
-                        out.stateGoingTo = WEIGHT_TRENDS.IMPROVING;
-                    }
+                    out.stateGoingTo = D < -1 ? 
+                        WEIGHT_TRENDS.MORE_UNDERWEIGHT : 
+                        WEIGHT_TRENDS.IMPROVING;
                 } else if (weightPctNow <= 85) {
                     out.state = WEIGHT_STATES.HEALTHY;
-                    if (weightPctDiff < -1 && weightPctNow <= 10) {
-                        out.stateGoingTo = WEIGHT_TRENDS.RISK_FOR_UNDERWEIGHT;
-                    } else if (weightPctDiff > -1 && weightPctNow > 80) {
-                        out.stateGoingTo = WEIGHT_TRENDS.RISK_FOR_OVERWEIGHT;
-                    } else {
-                        out.stateGoingTo = WEIGHT_TRENDS.NONE;
-                    }
+                    out.stateGoingTo = D < -1 && weightPctNow <= 10 ? 
+                        WEIGHT_TRENDS.RISK_FOR_UNDERWEIGHT : 
+                        D > -1 && weightPctNow > 80 ? 
+                            WEIGHT_TRENDS.RISK_FOR_OVERWEIGHT :
+                            WEIGHT_TRENDS.NONE;
                 } else if ( weightPctNow <= 95) {
                     out.state = WEIGHT_STATES.OVERWEIGHT;
-                    if (weightPctDiff < -1) {
-                        out.stateGoingTo = WEIGHT_TRENDS.IMPROVING;
-                    } else if (weightPctDiff == 0) {
-                        out.stateGoingTo = WEIGHT_TRENDS.NONE;
-                    } else {
-                        out.stateGoingTo = WEIGHT_TRENDS.RISK_FOR_OBESE;
-                    }
+                    out.stateGoingTo = D < -1 ? 
+                        WEIGHT_TRENDS.IMPROVING : 
+                        WEIGHT_TRENDS.RISK_FOR_OBESE;
                 } else {
                     out.state = WEIGHT_STATES.OBESE;
-                    if (weightPctDiff < -1) {
-                        out.stateGoingTo = WEIGHT_TRENDS.IMPROVING;
-                    } else if (weightPctDiff == 0) {
-                        out.stateGoingTo = WEIGHT_TRENDS.NONE;
-                    } else {
-                        out.stateGoingTo = WEIGHT_TRENDS.MORE_OBESE;
-                    }
+                    out.stateGoingTo = D < -1 ? 
+                        WEIGHT_TRENDS.IMPROVING : 
+                        WEIGHT_TRENDS.MORE_OBESE;
                 }
                 
                 out.lastWeight       = lastWeightEntry.weight;
