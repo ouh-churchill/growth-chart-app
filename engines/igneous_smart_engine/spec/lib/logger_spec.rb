@@ -24,6 +24,7 @@ describe Igneous::Smart::Logger do
       expect(Timber::Diagnostics).to receive(:contexts).at_least(1).and_return(returned_context)
 
       request_mock = ActionDispatch::Request.new(env)
+      expect(request_mock).to receive(:params).at_least(1).and_return({})
       env['PATH_INFO'] = '/smart/closed-ehr-source-id/Resource/'
 
       expect(returned_context).to receive(:[]=).with(:correlation_id, request_mock.uuid)
@@ -63,6 +64,7 @@ describe Igneous::Smart::Logger do
       expect(Timber::Diagnostics).to receive(:contexts).at_least(1).and_return(returned_context)
 
       request_mock = ActionDispatch::Request.new({})
+      expect(request_mock).to receive(:params).at_least(1).and_return({})
 
       expect(returned_context).to receive(:[]=).with(:correlation_id, nil)
       expect(returned_context).to receive(:delete).with(:correlation_id)
@@ -74,6 +76,7 @@ describe Igneous::Smart::Logger do
     it 'deletes correlation_id and tenant_key from timber' do
 
       request_mock = ActionDispatch::Request.new(env)
+      expect(request_mock).to receive(:params).at_least(1).and_return({})
       env['PATH_INFO'] = '/smart/closed-ehr-source-id/Resource/'
 
       @logger.call_app(request_mock, env)
@@ -86,6 +89,7 @@ describe Igneous::Smart::Logger do
     it 'deletes correlation_id  from timber' do
 
       request_mock = ActionDispatch::Request.new({})
+      expect(request_mock).to receive(:params).at_least(1).and_return({})
 
       @logger.call_app(request_mock, env)
 
