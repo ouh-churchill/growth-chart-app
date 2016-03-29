@@ -39,7 +39,7 @@ end
 group :cerner, :default do
   gem 'basset-client', '~> 1.10',   source: 'http://repo.release.cerner.corp/main/rubygems/', require: 'basset/client/rails'
   gem 'timber',        '~> 1.7.0', source: 'http://repo.release.cerner.corp/main/rubygems/'
-  gem 'ion_common',    '~> 3.10',   source: 'http://repo.release.cerner.corp/main/rubygems/'
+  gem 'ion_common',    '3.9.0',   source: 'http://repo.release.cerner.corp/main/rubygems/'
   gem 'hi-checkup',    '~> 1.7',   source: 'http://repo.release.cerner.corp/main/rubygems/'
   gem 'canadarm_ruby', '~> 1.0',   source: 'http://repo.release.cerner.corp/main/rubygems/'
   gem 'igneous-smart', '1.0.0',    path:   'engines/igneous_smart_engine'

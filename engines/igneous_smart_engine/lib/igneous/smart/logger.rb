@@ -10,11 +10,18 @@ module Igneous
       def call_app(request, _env)
         Timber::Diagnostics.contexts[:correlation_id] = request.uuid
 
-        Timber::Diagnostics.contexts[:tenant_key] = request.params['tenant'] unless request.params['tenant'].blank?
+        if request.params['tenant'].present?
+          Timber::Diagnostics.contexts[:tenant_key] = request.params['tenant']
+        else
+          # The path info looks like /smart/{tenant-key}/{resource}/
+          %r{^/smart/(?<ehr_source_id>[\w-]+)/}.match(_env['PATH_INFO']) { |match|
+            Timber::Diagnostics.contexts[:tenant_key] = match[:ehr_source_id]
+          }
+        end
 
         ret = super
         Timber::Diagnostics.contexts.delete(:correlation_id)
-        Timber::Diagnostics.contexts.delete(:tenant_key) unless request.params['tenant'].blank?
+        Timber::Diagnostics.contexts.delete(:tenant_key)
 
         ret
       end

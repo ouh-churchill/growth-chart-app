@@ -104,7 +104,7 @@ GEM
     http_accept_language (1.0.2)
     httpclient (2.6.0.1)
     i18n (0.7.0)
-    ion_common (3.10.0)
+    ion_common (3.9.0)
       activesupport (~> 4.1)
       basset-client (~> 1.5)
       gc_stats (~> 1.0)
@@ -309,7 +309,7 @@ DEPENDENCIES
   factory_girl_rails (~> 4.0)
   hi-checkup (~> 1.7)!
   igneous-smart (= 1.0.0)!
-  ion_common (~> 3.10)!
+  ion_common (= 3.9.0)!
   ion_profiler_engine (~> 1.8)!
   jbuilder (~> 2.0)
   jquery-rails (~> 4.0)
