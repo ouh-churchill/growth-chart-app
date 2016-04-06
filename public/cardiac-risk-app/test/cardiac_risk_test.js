@@ -303,7 +303,7 @@ describe ('CardiacRisk', function() {
         expect(CardiacRisk.getCholesterolValue(cholesterol)).to.equal(parseFloat(238) / 0.026);
       });
 
-      it ('when the cholesterol is in mmol/L when getValidDataPointFromObservations is mocked', function() {
+      it ('when the cholesterol is in mmol/L when getFirstValidDataPointValueFromObservations is mocked', function() {
         var cholesterol = [{
           "valueQuantity" : {
             units: 'mmol/L',
@@ -314,7 +314,7 @@ describe ('CardiacRisk', function() {
         }];
 
         var mock = sinonSandbox.mock(CardiacRisk);
-        mock.expects('getValidDataPointFromObservations').once().withExactArgs(cholesterol, CardiacRisk.supportedCholesterolUnits).returns(cholesterol[0]);
+        mock.expects('getFirstValidDataPointValueFromObservations').once().withArgs(cholesterol).returns(parseFloat(cholesterol[0].valueQuantity.value)/0.026);
         var response = CardiacRisk.getCholesterolValue(cholesterol);
         expect(response).to.equal(parseFloat(238) / 0.026);
         mock.verify();
@@ -380,7 +380,7 @@ describe ('CardiacRisk', function() {
         expect(CardiacRisk.getHSCRPValue(hscrp)).to.equal(3.8);
       });
 
-      it ('when the hscrp is in mmol/L when getValidDataPointFromObservations is mocked', function() {
+      it ('when the hscrp is in mmol/L when getFirstValidDataPointValueFromObservations is mocked', function() {
         var hscrp = [{
           "valueQuantity" : {
             units: 'mmol/L',
@@ -391,7 +391,7 @@ describe ('CardiacRisk', function() {
         }];
 
         var mock = sinonSandbox.mock(CardiacRisk);
-        mock.expects('getValidDataPointFromObservations').once().withExactArgs(hscrp,CardiacRisk.supportedHSCRPUnits).returns(hscrp[0]);
+        mock.expects('getFirstValidDataPointValueFromObservations').once().withArgs(hscrp).returns(parseFloat(hscrp[0].valueQuantity.value)/0.10);
         var response = CardiacRisk.getHSCRPValue(hscrp);
         expect(response).to.equal(parseFloat(0.38) / 0.10);
         mock.verify();
@@ -459,7 +459,7 @@ describe ('CardiacRisk', function() {
         expect(CardiacRisk.getSystolicBloodPressureValue(sbp)).to.equal(undefined);
       });
 
-      it('when SBP is an invalid value in mmHg when getValidDataPointFromObservations is mocked', function(){
+      it('when SBP is an invalid value in mmHg when getFirstValidDataPointValueFromObservations is mocked', function(){
         var sbp = [{
           "valueQuantity" : {
             "value": 106,
@@ -470,7 +470,7 @@ describe ('CardiacRisk', function() {
         }];
 
         var mock = sinonSandbox.mock(CardiacRisk);
-        mock.expects('getValidDataPointFromObservations').once().withExactArgs(sbp,CardiacRisk.supportedSysBPUnits).returns(sbp[0]);
+        mock.expects('getFirstValidDataPointValueFromObservations').once().withArgs(sbp).returns(parseFloat(sbp[0].valueQuantity.value));
         var response = CardiacRisk.getSystolicBloodPressureValue(sbp);
         expect(response).to.equal(106);
         mock.verify();
@@ -485,12 +485,12 @@ describe ('CardiacRisk', function() {
     });
   });
 
-  describe ('getValidDataPointFromObservations', function() {
+  describe ('getFirstValidDataPointValueFromObservations', function() {
     it ('checks if sorting was invoked and supported units being blank',function (){
       var mockCardiacRisk = sinonSandbox.mock(CardiacRisk);
       mockCardiacRisk.expects('sortObservationsByAppliesTimeStamp').once().withExactArgs([]).returns([]);
 
-      CardiacRisk.getValidDataPointFromObservations([],[]);
+      CardiacRisk.getFirstValidDataPointValueFromObservations([],function () {});
 
       mockCardiacRisk.verify();
     });
@@ -529,10 +529,18 @@ describe ('CardiacRisk', function() {
       var mockCardiacRisk = sinonSandbox.mock(CardiacRisk);
       mockCardiacRisk.expects('sortObservationsByAppliesTimeStamp').once().withExactArgs(observations).returns(observations);
 
-      var dataPoint = CardiacRisk.getValidDataPointFromObservations(observations,['mmHg']);
+      var dataPointValue = CardiacRisk.getFirstValidDataPointValueFromObservations(observations,function (dataPoint) {
+        if (dataPoint.valueQuantity.units === 'mmHg') {
+          return parseFloat(dataPoint.valueQuantity.value);
+        }
+        else
+        {
+          return undefined;
+        }
+      });
 
       expect(CardiacRisk.hasObservationWithUnsupportedUnits).to.equal(true);
-      expect(dataPoint).to.equal(observations[1]);
+      expect(dataPointValue).to.equal(parseFloat(observations[1].valueQuantity.value));
       mockCardiacRisk.verify();
     });
 
@@ -570,10 +578,18 @@ describe ('CardiacRisk', function() {
       var mockCardiacRisk = sinonSandbox.mock(CardiacRisk);
       mockCardiacRisk.expects('sortObservationsByAppliesTimeStamp').once().withExactArgs(observations).returns(observations);
 
-      var dataPoint = CardiacRisk.getValidDataPointFromObservations(observations,['mmHg']);
+      var dataPointValue = CardiacRisk.getFirstValidDataPointValueFromObservations(observations,function (dataPoint) {
+        if (dataPoint.valueQuantity.units === 'mmHg') {
+          return parseFloat(dataPoint.valueQuantity.value);
+        }
+        else
+        {
+          return undefined;
+        }
+      });
 
       expect(CardiacRisk.hasObservationWithUnsupportedUnits).to.equal(false);
-      expect(dataPoint).to.equal(undefined);
+      expect(dataPointValue).to.equal(undefined);
       mockCardiacRisk.verify();
     });
 
@@ -596,7 +612,7 @@ describe ('CardiacRisk', function() {
       var mockCardiacRisk = sinonSandbox.mock(CardiacRisk);
       mockCardiacRisk.expects('sortObservationsByAppliesTimeStamp').once().withExactArgs(observations).returns(observations);
 
-      var dataPoint = CardiacRisk.getValidDataPointFromObservations(observations,['mmHg']);
+      var dataPoint = CardiacRisk.getFirstValidDataPointValueFromObservations(observations,function () {});
 
       expect(CardiacRisk.hasObservationWithUnsupportedUnits).to.equal(false);
       expect(dataPoint).to.equal(undefined);
@@ -633,7 +649,7 @@ describe ('CardiacRisk', function() {
       var mockCardiacRisk = sinonSandbox.mock(CardiacRisk);
       mockCardiacRisk.expects('sortObservationsByAppliesTimeStamp').once().withExactArgs(observations).returns(observations);
 
-      var dataPoint = CardiacRisk.getValidDataPointFromObservations(observations,['mmHg']);
+      var dataPoint = CardiacRisk.getFirstValidDataPointValueFromObservations(observations,function () {});
 
       expect(CardiacRisk.hasObservationWithUnsupportedUnits).to.equal(false);
       expect(dataPoint).to.equal(undefined);
@@ -671,7 +687,7 @@ describe ('CardiacRisk', function() {
       var mockCardiacRisk = sinonSandbox.mock(CardiacRisk);
       mockCardiacRisk.expects('sortObservationsByAppliesTimeStamp').once().withExactArgs(observations).returns(observations);
 
-      var dataPoint = CardiacRisk.getValidDataPointFromObservations(observations,['mmHg']);
+      var dataPoint = CardiacRisk.getFirstValidDataPointValueFromObservations(observations,function () {});
 
       expect(CardiacRisk.hasObservationWithUnsupportedUnits).to.equal(false);
       expect(dataPoint).to.equal(undefined);
@@ -712,10 +728,22 @@ describe ('CardiacRisk', function() {
       var mockCardiacRisk = sinonSandbox.mock(CardiacRisk);
       mockCardiacRisk.expects('sortObservationsByAppliesTimeStamp').once().withExactArgs(observations).returns(observations);
 
-      var dataPoint = CardiacRisk.getValidDataPointFromObservations(observations,['mg/dL']);
+      var dataPointValue = CardiacRisk.getFirstValidDataPointValueFromObservations(observations,function (dataPoint) {
+        if (dataPoint !== undefined) {
+          if (dataPoint.valueQuantity.units === 'mg/dL') {
+            return parseFloat(dataPoint.valueQuantity.value);
+          }
+          else if (dataPoint.valueQuantity.units === 'mmol/L') {
+            return parseFloat(dataPoint.valueQuantity.value) / 0.026;
+          }
+          else {
+            return undefined;
+          }
+        }
+      });
 
       expect(CardiacRisk.hasObservationWithUnsupportedUnits).to.equal(false);
-      expect(dataPoint).to.equal(observations[0]);
+      expect(dataPointValue).to.equal(observations[0].valueQuantity.value);
       mockCardiacRisk.verify();
     });
   });

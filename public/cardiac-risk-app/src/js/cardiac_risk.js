@@ -13,9 +13,6 @@
         rangeSliderThumbWhiteText: 'rangeSliderThumbStyleWhite',
         grayBarColor: 'colorGray'
     };
-    CardiacRisk.supportedCholesterolUnits = ['mg/dL', 'mmol/L'];
-    CardiacRisk.supportedHSCRPUnits = ['mg/L', 'mmol/L'];
-    CardiacRisk.supportedSysBPUnits = ['mmHg'];
 
     /**
      * Loads patient's FHIR data and updates the CardiacRisk data model.
@@ -192,79 +189,85 @@
     /**
      * Fetches current cholesterol into units of mg/dL
      * @method getCholesterolValue
-     * @param {object} cholesterol - Cholesterol array object with valueQuantity elements having units and value.
+     * @param {object} cholesterolObservations - Cholesterol array object with valueQuantity elements having units and value.
      */
-    var getCholesterolValue = function (cholesterol) {
-        var dataPoint = CardiacRisk.getValidDataPointFromObservations(cholesterol, CardiacRisk.supportedCholesterolUnits);
-        if (dataPoint !== undefined) {
+    var getCholesterolValue = function (cholesterolObservations) {
+        return CardiacRisk.getFirstValidDataPointValueFromObservations(cholesterolObservations, function (dataPoint) {
             if (dataPoint.valueQuantity.units === 'mg/dL') {
                 return parseFloat(dataPoint.valueQuantity.value);
             }
             else if (dataPoint.valueQuantity.units === 'mmol/L') {
                 return parseFloat(dataPoint.valueQuantity.value) / 0.026;
             }
-        }
-        return undefined;
+            else {
+                return undefined;
+            }
+        });
     };
     CardiacRisk.getCholesterolValue = getCholesterolValue;
 
     /**
      * Fetches current high sensitivity C-reactive protein into value in mg/L
      * @method getHSCRPValue
-     * @param {object} hscrp - hscrp array object with valueQuantity elements having units and value.
+     * @param {object} hsCRPObservations - hscrp array object with valueQuantity elements having units and value.
      */
     var getHSCRPValue = function (hsCRPObservations) {
-        var dataPoint = CardiacRisk.getValidDataPointFromObservations(hsCRPObservations, CardiacRisk.supportedHSCRPUnits);
-        if (dataPoint !== undefined) {
+        return CardiacRisk.getFirstValidDataPointValueFromObservations(hsCRPObservations, function (dataPoint) {
             if (dataPoint.valueQuantity.units === 'mg/L') {
                 return parseFloat(dataPoint.valueQuantity.value);
             }
             else if (dataPoint.valueQuantity.units === 'mmol/L') {
                 return parseFloat(dataPoint.valueQuantity.value) / 0.10;
             }
-        }
-        return undefined;
+            else {
+                return undefined;
+            }
+        });
     };
     CardiacRisk.getHSCRPValue = getHSCRPValue;
 
     /**
      * Fetches current Systolic Blood Pressure
      * @method getSystolicBloodPressureValue
-     * @param {object} sysBloodPressure - sysBloodPressure array object with valueQuantity elements having units and value.
+     * @param {object} sysBPObservations - sysBloodPressure array object with valueQuantity elements having units and value.
      */
     var getSystolicBloodPressureValue = function (sysBPObservations) {
-
-        var dataPoint = CardiacRisk.getValidDataPointFromObservations(sysBPObservations, CardiacRisk.supportedSysBPUnits);
-        if (dataPoint !== undefined) {
-            return parseFloat(dataPoint.valueQuantity.value);
-        }
-        return undefined;
+        return CardiacRisk.getFirstValidDataPointValueFromObservations(sysBPObservations, function (dataPoint) {
+            if (dataPoint.valueQuantity.units === 'mmHg') {
+                return parseFloat(dataPoint.valueQuantity.value);
+            }
+            else {
+                return undefined;
+            }
+        });
     };
     CardiacRisk.getSystolicBloodPressureValue = getSystolicBloodPressureValue;
 
     /**
-     * Fetches the most recent valid dataPoint from the observations .
+     * Fetches the most recent valid dataPointValue from the observations .
      * Validity criteria :
      * 1. status : 'final' or 'amended'
      * 2. availability of the valueQuantity field having value and units
      * 3. units are supported.
      * The method also sets a flag on the Cardiac Risk model about an observation with an unsupported unit.
      * @param observations : Array of observations to be used to find the valid dataPoint
-     * @param supportedUnits : Array of string representing units supported by the application.
-     * @returns dataPoint : Single observation which meets the criteria. If no dataPoint is valid then undefined is returned to fetch further more results.
+     * @param supportedUnitsCriteria : Criteria function supplied to be used for every dataPoint.
+     * @returns dataPointValue : Single observation value which meets the criteria. If no dataPointValue is valid then
+     * undefined is returned to fetch further more results.
      */
-    var getValidDataPointFromObservations = function (observations, supportedUnits) {
+    var getFirstValidDataPointValueFromObservations = function (observations, supportedUnitsCriteria) {
         var dataPoints = CardiacRisk.sortObservationsByAppliesTimeStamp(observations);
-
         for (var i = 0; i < dataPoints.length; i++) {
 
             if ((dataPoints[i].status === 'final' || dataPoints[i].status === 'amended') &&
                 dataPoints[i].hasOwnProperty('valueQuantity') && dataPoints[i].valueQuantity.value &&
                 dataPoints[i].valueQuantity.units) {
 
-                if (supportedUnits.indexOf(dataPoints[i].valueQuantity.units) != -1) {
-                    return dataPoints[i];
+                var dataPointValue = supportedUnitsCriteria(dataPoints[i]);
+                if (dataPointValue !== undefined) {
+                    return dataPointValue;
                 }
+
                 // We set this flag here to process later ( once all pages have been scanned for a valid dataPoint),
                 // to convey to the user about unsupported units.
                 CardiacRisk.hasObservationWithUnsupportedUnits = true;
@@ -272,7 +275,7 @@
         }
         return undefined;
     };
-    CardiacRisk.getValidDataPointFromObservations = getValidDataPointFromObservations;
+    CardiacRisk.getFirstValidDataPointValueFromObservations = getFirstValidDataPointValueFromObservations;
 
     /**
      * Method to calculate age from the provided date of birth considering leapYear.
@@ -414,7 +417,7 @@
         var patientActions = {};
         if (CardiacRisk.patientInfo.totalCholesterol <= 160 &&
             CardiacRisk.patientInfo.ldl < 100 &&
-            CardiacRisk.patientInfo.hdl >=60) {
+            CardiacRisk.patientInfo.hdl >= 60) {
 
             patientActions.dietHeader = 'Continue to eat a healthy diet and exercise';
             patientActions.diet = 'A healthy diet and regular exercise can keep cholesterol ' +
@@ -430,7 +433,7 @@
         }
         else if (CardiacRisk.patientInfo.totalCholesterol >= 160 ||
             CardiacRisk.patientInfo.ldl >= 130 ||
-            CardiacRisk.patientInfo.hdl <=60) {
+            CardiacRisk.patientInfo.hdl <= 60) {
 
             patientActions.dietHeader = 'Improve your diet and exercise more';
             patientActions.diet = 'A better diet and regular exercise can drastically ' +

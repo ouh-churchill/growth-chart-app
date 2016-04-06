@@ -6,6 +6,7 @@ versions:
       - {author: zp035497, comment: Update Growth Chart App to remove unnecessary contingent messages in parental view, issue: OPENSVC-1356, type: add}
       - {author: zp035497, comment: Update Growth Chart App to display error on invalid gender types (no BG translation), issue: OPENSVC-800, type: add}
       - {author: zp035497, comment: Update Growth Chart App to use patient length/stature to display length data, issue: OPENSVC-1267, type: add}
+      - {author: ss025783, comment: CardiacRisk update for valid dataPoints logic to accept a criteria function, issue: OPENSVC-1950, type: add}
   - version: 1.16.0
     release_date: 2016-03-29
     changes:
