@@ -798,6 +798,12 @@ window.GC = (function(NS) {
             bg : "жена",
             es : "femenino"
         },
+
+        STR_Error_UnknownGender : {
+            en : "Growth charts can only be displayed for males and females.",
+            es : "Los gráficos de crecimiento solo se pueden mostrar para niños y niñas.",
+            bg : ""
+        },
         
         "STR_colorPrreset_Default" : {
             en : "Default",

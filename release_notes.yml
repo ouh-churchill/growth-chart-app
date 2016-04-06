@@ -4,6 +4,7 @@ versions:
     release_date: 2016-xx-xx
     changes:
       - {author: zp035497, comment: Update Growth Chart App to remove unnecessary contingent messages in parental view, issue: OPENSVC-1356, type: add}
+      - {author: zp035497, comment: Update Growth Chart App to display error on invalid gender types (no BG translation), issue: OPENSVC-800, type: add}
   - version: 1.16.0
     release_date: 2016-03-29
     changes:
