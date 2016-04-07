@@ -86,8 +86,8 @@ end
 add_smart_apps(
   # smart_app('4ae44710-dc6e-4c52-82ef-877106846cab', 'Cardiac Risk App DSTU2', 't', 4, 'https://smart.devcernerpowerchart.com/cardiac-risk-app-2.0/launch.html'),
   # smart_app('ddffda5f-3cdc-4efc-bf98-0b1e58a56537', 'Pediatric Growth Chart App DSTU2', 't', 4, 'https://smart.devcernerpowerchart.com/growth-chart-app-2.0/launch.html'),
-  # smart_app('bf7d70ce-56a9-4096-bc36-d91dfff00854', 'EnrG|Rheum (local dev)',        't', 1, 'http://localhost:4271/PointOfEntry'),
-  # smart_app('d63f966e-db03-4f4f-9d17-8c604a7b4dd1', 'EnrG|Rheum (local dev No Auth)','f', 2, 'http://localhost:4271/PointOfEntry'),
+  # smart_app('bf7d70ce-56a9-4096-bc36-d91dfff00854', 'EnrG|Rheum (local dev)',        't', 1, 'http://localhost:4271/SecurePointOfEntry'),
+  # smart_app('d63f966e-db03-4f4f-9d17-8c604a7b4dd1', 'EnrG|Rheum (local dev No Auth)','f', 2, 'http://localhost:4271/SecurePointOfEntry'),
   # smart_app('3175a80b-47b7-471b-aba5-d09349ae7526', 'Cardiac Risk',                  't', 1, 'https://fhir.smarthealthit.org/apps/cardiac-risk/launch.html'),
   # smart_app('9f204c1f-4910-42a6-832e-6ed0e06800f4', 'BP Percentiles',                '4', 4, 'https://fhir-dstu2.smarthealthit.org/apps/bp-centiles/launch.html')
   # smart_app('194099bd-080c-48ae-9f0e-5cb1bf559c2a', 'Pediatric Growth Chart',        't', 1, 'https://fhir.smarthealthit.org/apps/growth-chart/launch.html'),
@@ -148,7 +148,7 @@ add_smart_apps(
   # smart_app('15eca7cf-7d58-4bfa-b0ed-5e66f143ceb5', 'medicity',                 't', 4, 'https://medicity-fhir.x.healthagen.com'),
   # smart_app('d461dfb8-45bd-4291-80c6-091741c3dd79', 'Bespoke Argonaut Test Client',                 't', 4, 'https://www.getpostman.com/oauth2/callback'), #Can't actually launch via SMART
   # smart_app('50367cff-9ab2-458a-905f-19ccb96c476a', 'Diagnotes Development',                 't', 1, 'https://dn-marlon.ngrok.io/smart/launch'),
-  # smart_app('6a35fdd3-8ffe-43ad-b87e-6897232b1660', 'Edifecs FHIR',                 't', 4, 'http://fhir.collablynk.com/application/oauth/callback/cerner'), #Not a SMART app yet
+  # smart_app('6a35fdd3-8ffe-43ad-b87e-6897232b1660', 'Edifecs FHIR',                 't', 4, 'http://localhost:8080/FHIRApp/cernersmartlaunch'),
   # smart_app('f58c446c-2df5-4e89-8c4a-acda83ed8291', 'TriVox',           't', 4, 'https://bch.trivoxhealth.com/v1/smart/launch.html'),
   # smart_app('8b8c17a2-92ec-4f80-ad12-f502ab878634', 'BCH Growth Chart', 't', 4, 'https://smartprd1.tch.harvard.edu/growthchart/launch.html'),
   # smart_app('202b1cdb-452f-4224-b102-7be87a9ba10b', 'BCH BP Centiles',  't', 4, 'https://smartprd1.tch.harvard.edu/bpcentiles/launch.html'),
@@ -158,4 +158,6 @@ add_smart_apps(
   # smart_app('e2868099-eab9-4c4c-97da-4ca414b24933', 'VigiLanz SMARTDemo',  't', 4, 'https://www.vigilanzportal.com/FHIRClient/Launch/SMARTLaunch'),
   # smart_app('37c8edca-8ad5-40fa-b396-d2efe6c2c9a0', 'VigiLanz SMARTDemo Dev',  't', 4, 'http://localhost:8000/fhir-app/Launch/SMARTLaunch'),
   # smart_app('37f6e262-e3d4-42c0-a5b8-e66192b58e07', 'Nurse Dashboard Auth POC',  't', 1, 'http://ec2-52-21-191-250.compute-1.amazonaws.com:3020/api/launch/app/patientDashboard/tenant/780634a0-e7ce-11e5-8a20-b7bbc3c65fa5'),
+  # smart_app('6e9420ce-6706-43d5-97d7-b59ce518d497', 'Sensotrend Diabetes Diary - Dev',  't', 4, 'http://localhost.localdomain:8080/api/fhir/paivakirja'),
+  # smart_app('f8ab32f8-d719-4a96-bb6c-fb89ba9797cb', 'EnrG|Rheum (local dev DSTU 2)',        't', 4, 'http://localhost:4271/SecurePointOfEntry'),
 )
