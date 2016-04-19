@@ -3,7 +3,7 @@ versions:
   - version: 1.18.0
     release_date: 2016-xx-xx
     changes:
-      - {author: xx, comment: xx, issue: OPENSVC-xxxx, type: add}
+      - {author: zp035497, comment: Update Growth Chart App to be able to run using IE11, issue: OPENSVC-1666, type: add}
   - version: 1.17.0
     release_date: 2016-04-06
     changes:
