@@ -32,11 +32,20 @@ GC.get_data = function() {
     var familyHistoryFetch = $.Deferred();
     var ptFetch = patient.read();
 
-    patient.Observation.where.
-    codeIn(['http://loinc.org|3141-9', 'http://loinc.org|8302-2', 'http://loinc.org|8287-5', 'http://loinc.org|39156-5', 'http://loinc.org|18185-9', 'http://loinc.org|37362-1']).    
-    drain(drainVitals).done(doneVitals).fail(onError);
+    ptFetch.done(function() {
+      patient.Observation.where.
+      codeIn(['http://loinc.org|3141-9', 'http://loinc.org|8302-2', 'http://loinc.org|8287-5', 'http://loinc.org|39156-5', 'http://loinc.org|18185-9', 'http://loinc.org|37362-1']).
+      drain(drainVitals).done(doneVitals).fail(function() {
+        onErrorWithWarning(GC.str('STR_Error_LoadingApplication'));
+      });
 
-    patient.FamilyMemberHistory.where.drain(drainFamilyHistory).done(doneFamilyHistory).fail(doneFamilyHistory);
+      patient.FamilyMemberHistory.where.drain(drainFamilyHistory).done(doneFamilyHistory).fail(doneFamilyHistory);
+      $.when(ptFetch, vitalsFetch, familyHistoryFetch).done(onData);
+
+    })
+    .fail(function() {
+      onErrorWithWarning(GC.str('STR_Error_LoadingApplication'));
+    });
 
     var allVitals = [];
     function drainVitals(vs){
@@ -55,8 +64,6 @@ GC.get_data = function() {
     function doneFamilyHistory(){
       familyHistoryFetch.resolve(allFamilyHistories);
     };
-
-    $.when(ptFetch, vitalsFetch, familyHistoryFetch).done(onData);
 
     function onData(patient, vitalsByCode, familyHistories){
       //check patient gender

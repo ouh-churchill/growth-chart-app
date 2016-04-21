@@ -732,6 +732,11 @@ window.GC = (function(NS) {
             es : "Cargando datos",
             bg : "Зареждане на данни"
         },
+        STR_Error_LoadingApplication : {
+            en : "There was an error loading the application",
+            es : "Se ha producido un error al cargar la aplicación",
+            bg : ""
+        },
         STR_ApplyLocalizations : {
             en : "Apply localizations",
             es : "Aplicar localizaciones",
