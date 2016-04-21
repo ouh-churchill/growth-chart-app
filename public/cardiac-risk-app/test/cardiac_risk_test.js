@@ -1,6 +1,27 @@
 
 describe ('CardiacRisk', function() {
 
+  describe ('fetchDataAndPopulateCardiacRiskObject', function (){
+    it ('sets the shouldProcessError flag', function () {
+      expect(CardiacRisk.shouldProcessError).to.equal(false);
+
+      CardiacRisk.fetchDataAndPopulateCardiacRiskObject();
+
+      expect(CardiacRisk.shouldProcessError).to.equal(true);
+    });
+
+    it ('sets the shouldProcessError flag and checked if ready method gets invoked', function () {
+      CardiacRisk.shouldProcessError = false;
+
+      var mock = sinonSandbox.mock(FHIR.oauth2);
+      mock.expects('ready').once();
+      CardiacRisk.fetchDataAndPopulateCardiacRiskObject();
+
+      expect(CardiacRisk.shouldProcessError).to.equal(true);
+      mock.verify();
+    });
+  });
+
   describe ('processLabsData', function () {
     it ('invokes a function processLabResultsPageData when called.', function() {
 

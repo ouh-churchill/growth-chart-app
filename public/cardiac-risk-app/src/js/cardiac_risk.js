@@ -23,6 +23,11 @@
      * @method fetchDataAndPopulateCardiacRiskObject
      */
     var fetchDataAndPopulateCardiacRiskObject = function () {
+
+        //Setting this flag to indicate the system, to display the first error screen triggered.
+        //This flag gets set to false once the error screen has been displayed to stop further UI updates.
+        CardiacRisk.shouldProcessError = true;
+
         var deferred = $.Deferred();
         FHIR.oauth2.ready(onReady,onError);
         function onReady(smart) {
@@ -35,47 +40,49 @@
             dateInPast.setFullYear( currentDate.getFullYear() - 1 );
 
             var patientQuery = smart.context.patient.read();
-            var labsQuery = smart.context.patient.Observation.where
-                .codeIn('http://loinc.org|2089-1', 'http://loinc.org|13457-7',
-                'http://loinc.org|30522-7', 'http://loinc.org|14647-2',
-                'http://loinc.org|2093-3', 'http://loinc.org|2085-9', 'http://loinc.org|8480-6')
-                .date('>=' + dateInPast.toJSON())
-                .search();
+            patientQuery.fail((function () {
+                processError('There was an error loading the application.');
+                deferred.fail();
+            }));
+            patientQuery.done(function () {
+                var labsQuery = smart.context.patient.Observation.where
+                    .codeIn('http://loinc.org|2089-1', 'http://loinc.org|13457-7',
+                    'http://loinc.org|30522-7', 'http://loinc.org|14647-2',
+                    'http://loinc.org|2093-3', 'http://loinc.org|2085-9', 'http://loinc.org|8480-6')
+                    .date('>=' + dateInPast.toJSON())
+                    .search();
 
-            $.when(patientQuery, labsQuery)
-                .done(function (patientData, labResults) {
+                $.when(patientQuery, labsQuery)
+                    .done(function (patientData, labResults) {
 
-                    PatientInfo.firstName = patientData.name[0].given.join(' ');
-                    PatientInfo.lastName = patientData.name[0].family.join(' ');
-                    PatientInfo.gender = patientData.gender;
-                    PatientInfo.dateOfBirth = new Date(patientData.birthDate);
-                    PatientInfo.age = CardiacRisk.computeAgeFromBirthDate(PatientInfo.dateOfBirth);
+                        PatientInfo.firstName = patientData.name[0].given.join(' ');
+                        PatientInfo.lastName = patientData.name[0].family.join(' ');
+                        PatientInfo.gender = patientData.gender;
+                        PatientInfo.dateOfBirth = new Date(patientData.birthDate);
+                        PatientInfo.age = CardiacRisk.computeAgeFromBirthDate(PatientInfo.dateOfBirth);
 
-                    CardiacRisk.patientInfo = PatientInfo;
+                        CardiacRisk.patientInfo = PatientInfo;
 
-                    var relatedFactors = {};
-                    /* Default to undefined since we want to remove error state on radio buttons on the first go */
-                    relatedFactors.smoker = undefined;
-                    relatedFactors.familyHeartAttackHistory = undefined;
-                    CardiacRisk.patientInfo.relatedFactors = relatedFactors;
+                        var relatedFactors = {};
+                        /* Default to undefined since we want to remove error state on radio buttons on the first go */
+                        relatedFactors.smoker = undefined;
+                        relatedFactors.familyHeartAttackHistory = undefined;
+                        CardiacRisk.patientInfo.relatedFactors = relatedFactors;
 
-                    //Setting this flag to indicate the system, to display the first error screen triggered.
-                    //This flag gets set to false once the error screen has been displayed to stop further UI updates.
-                    CardiacRisk.shouldProcessError = true;
-
-                    CardiacRisk.processLabsData(deferred, smart, labResults, function (deferred) {
-                        if (CardiacRisk.hasObservationWithUnsupportedUnits &&
-                            CardiacRisk.isRequiredLabsNotAvailable()) {
-                            processError('One or more results has an unsupported unit of measure. ' +
-                            'Cardiac Risk cannot be calculated.');
-                        }
-                        deferred.resolve();
+                        CardiacRisk.processLabsData(deferred, smart, labResults, function (deferred) {
+                            if (CardiacRisk.hasObservationWithUnsupportedUnits &&
+                                CardiacRisk.isRequiredLabsNotAvailable()) {
+                                processError('One or more results has an unsupported unit of measure. ' +
+                                'Cardiac Risk cannot be calculated.');
+                            }
+                            deferred.resolve();
+                        });
+                    })
+                    .fail(function () {
+                        processError('There was an error loading the application.');
+                        deferred.fail();
                     });
-                })
-                .fail(function () {
-                    processError('There was an error loading the application.');
-                    deferred.fail();
-                });
+            });
         }
         function onError() {
             processError('There was an error loading the application.');
