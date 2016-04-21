@@ -163,4 +163,5 @@ add_smart_apps(
   # smart_app('6e8a2784-6575-489b-a59d-d0784ff73d98', 'HIEBus',        't', 4, 'http://localhost:50000/SmartApp/Launch'),
   # smart_app('bf9496e9-cc51-4911-9dd7-ba35649ea1d7', 'Healthwise Care Management Solution', 't', 4, 'https://coach.healthwise.net/smart/launch'),
   # smart_app('c3862f80-4ea8-409b-9d76-68287e1435d6', 'Healthwise Patient Engagement Solution', 't', 4, 'https://emr.healthwise.net/smart/launch'),
+  # smart_app('d42f11bf-bea3-4f7f-9562-79a918e9a2c8', 'Healthwise Dev Solution', 't', 4, 'http://localhost:50865/smart/launch'),
 )
