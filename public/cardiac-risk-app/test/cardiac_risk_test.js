@@ -769,6 +769,14 @@ describe ('CardiacRisk', function() {
     });
   });
 
+  describe ('computeAgeFromBirthDate', function () {
+    it ('returns undefined for invalid date object', function () {
+      var date = new Date('3/4/5sdkjfh');
+      var response = CardiacRisk.computeAgeFromBirthDate(date);
+      expect(response).to.equal(undefined);
+    })
+  });
+
   describe ('computeRRS', function() {
     describe ('for men', function() {
       it ('with the score in bounds', function () {
@@ -1360,6 +1368,13 @@ describe ('CardiacRisk', function() {
   });
 
   describe ('validateModelForErrors', function(){
+    it('returns errorText for age being undefined', function(){
+      setPatientInfo('male',undefined,0.5,160,100,60,119,false,false,CardiacRisk.patientInfo);
+
+      var functionResponse = CardiacRisk.validateModelForErrors();
+      expect(functionResponse).to.be.equal('Cardiac risk can only be calculated for patients aged 45-80 years old.');
+    });
+
     it('returns errorText for incorrect age <45', function(){
       setPatientInfo('male',40,0.5,160,100,60,119,false,false,CardiacRisk.patientInfo);
 
@@ -1376,6 +1391,13 @@ describe ('CardiacRisk', function() {
 
     it('returns errorText for invalid gender', function(){
       setPatientInfo('malee',59,0.5,160,100,60,119,false,false, CardiacRisk.patientInfo);
+
+      var functionResponse = CardiacRisk.validateModelForErrors();
+      expect(functionResponse).to.be.equal('Cardiac Risk Score cannot be calculated for indeterminate gender.');
+    });
+
+    it('returns errorText for gender undefined', function(){
+      setPatientInfo(undefined,59,0.5,160,100,60,119,false,false, CardiacRisk.patientInfo);
 
       var functionResponse = CardiacRisk.validateModelForErrors();
       expect(functionResponse).to.be.equal('Cardiac Risk Score cannot be calculated for indeterminate gender.');

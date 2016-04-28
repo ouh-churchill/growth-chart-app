@@ -34,12 +34,50 @@ describe ('CardiacRiskController', function() {
       var updatedPatientDOB = document.getElementById('patientDOB');
 
       expect(updatedPatientName.innerHTML).to.equal('John Doe');
-      expect(updatedPatientAge.innerHTML).to.equal('59yrs');
+      expect(updatedPatientAge.innerHTML).to.equal('59 yrs');
       expect(updatedPatientGender.innerHTML).to.equal('M');
       expect(updatedPatientDOB.innerHTML).to.equal('5/22/2016');
 
     });
 
+    it ('sets the UI elements with correct values when age is missing', function() {
+      CardiacRisk.patientInfo = setPatientInfo('male',undefined,0.5,160,100,60,undefined,false,false);
+      CardiacRisk.patientInfo.dateOfBirth = new Date(2016,5,22);
+
+      var patientName = document.createElement('span');
+      patientName.id = 'patientName';
+      patientName.innerHTML = 'Blank';
+      document.body.appendChild(patientName);
+
+      var patientAge = document.createElement('span');
+      patientAge.id = 'patientAge';
+      patientAge.innerHTML = 'Blank';
+      document.body.appendChild(patientAge);
+
+      var patientGender = document.createElement('span');
+      patientGender.id = 'patientGender';
+      patientGender.innerHTML = 'Blank';
+      document.body.appendChild(patientGender);
+
+      var patientDOB = document.createElement('span');
+      patientDOB.id = 'patientDOB';
+      patientDOB.innerHTML = 'Blank';
+      document.body.appendChild(patientDOB);
+
+      updatePatientDemographicsBanner();
+
+      var updatedPatientName = document.getElementById('patientName');
+      var updatedPatientAge = document.getElementById('patientAge');
+      var updatedPatientGender = document.getElementById('patientGender');
+      var updatedPatientDOB = document.getElementById('patientDOB');
+
+      expect(updatedPatientName.innerHTML).to.equal('John Doe');
+      expect(updatedPatientAge.innerHTML).to.equal(' yrs');
+      expect(updatedPatientGender.innerHTML).to.equal('M');
+      expect(updatedPatientDOB.innerHTML).to.equal('5/22/2016');
+
+    });
+    
     it ('sets the UI elements with correct values when female', function() {
       CardiacRisk.patientInfo = setPatientInfo('female',59,0.5,160,100,60,undefined,false,false);
       CardiacRisk.patientInfo.dateOfBirth = new Date(2016,5,22);
@@ -72,9 +110,47 @@ describe ('CardiacRiskController', function() {
       var updatedPatientDOB = document.getElementById('patientDOB');
 
       expect(updatedPatientName.innerHTML).to.equal('John Doe');
-      expect(updatedPatientAge.innerHTML).to.equal('59yrs');
+      expect(updatedPatientAge.innerHTML).to.equal('59 yrs');
       expect(updatedPatientGender.innerHTML).to.equal('F');
       expect(updatedPatientDOB.innerHTML).to.equal('5/22/2016');
+
+    });
+
+    it ('sets the UI elements with correct values when DOB is missing', function() {
+      CardiacRisk.patientInfo = setPatientInfo('female',59,0.5,160,100,60,undefined,false,false);
+      CardiacRisk.patientInfo.dateOfBirth = new Date('2016,5,2sdfsdf2');
+
+      var patientName = document.createElement('span');
+      patientName.id = 'patientName';
+      patientName.innerHTML = 'Blank';
+      document.body.appendChild(patientName);
+
+      var patientAge = document.createElement('span');
+      patientAge.id = 'patientAge';
+      patientAge.innerHTML = 'Blank';
+      document.body.appendChild(patientAge);
+
+      var patientGender = document.createElement('span');
+      patientGender.id = 'patientGender';
+      patientGender.innerHTML = 'Blank';
+      document.body.appendChild(patientGender);
+
+      var patientDOB = document.createElement('span');
+      patientDOB.id = 'patientDOB';
+      patientDOB.innerHTML = 'Blank';
+      document.body.appendChild(patientDOB);
+
+      updatePatientDemographicsBanner();
+
+      var updatedPatientName = document.getElementById('patientName');
+      var updatedPatientAge = document.getElementById('patientAge');
+      var updatedPatientGender = document.getElementById('patientGender');
+      var updatedPatientDOB = document.getElementById('patientDOB');
+
+      expect(updatedPatientName.innerHTML).to.equal('John Doe');
+      expect(updatedPatientAge.innerHTML).to.equal('59 yrs');
+      expect(updatedPatientGender.innerHTML).to.equal('F');
+      expect(updatedPatientDOB.innerHTML).to.equal('');
 
     });
   });

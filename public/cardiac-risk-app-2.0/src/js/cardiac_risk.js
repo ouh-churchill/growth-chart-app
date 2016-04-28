@@ -232,15 +232,20 @@
             return new Date(year, 1, 29).getMonth() == 1;
         }
 
-        var now = new Date();
-        var years = now.getFullYear() - birthDate.getFullYear();
-        birthDate.setFullYear(birthDate.getFullYear() + years);
-        if (birthDate > now) {
-            years--;
-            birthDate.setFullYear(birthDate.getFullYear() - 1);
+        if (Object.prototype.toString.call(birthDate) === '[object Date]' && !isNaN(birthDate.getTime())) {
+            var now = new Date();
+            var years = now.getFullYear() - birthDate.getFullYear();
+            birthDate.setFullYear(birthDate.getFullYear() + years);
+            if (birthDate > now) {
+                years--;
+                birthDate.setFullYear(birthDate.getFullYear() - 1);
+            }
+            var days = (now.getTime() - birthDate.getTime()) / (3600 * 24 * 1000);
+            return Math.floor(years + days / (isLeapYear(now.getFullYear()) ? 366 : 365));
         }
-        var days = (now.getTime() - birthDate.getTime()) / (3600 * 24 * 1000);
-        return Math.floor(years + days / (isLeapYear(now.getFullYear()) ? 366 : 365));
+        else {
+            return undefined;
+        }
 
     };
     CardiacRisk.computeAgeFromBirthDate = computeAgeFromBirthDate;
@@ -597,10 +602,12 @@
      */
     var validateModelForErrors = function () {
         var errorText = '';
-        if (CardiacRisk.patientInfo.age < 45 || CardiacRisk.patientInfo.age > 80) {
+        if (CardiacRisk.patientInfo.age === undefined || CardiacRisk.patientInfo.age < 45 || CardiacRisk.patientInfo.age > 80) {
             errorText = 'Cardiac risk can only be calculated for patients aged 45-80 years old.';
         }
-        else if (!(CardiacRisk.patientInfo.gender.toLowerCase() === 'male' || CardiacRisk.patientInfo.gender.toLowerCase() === 'female')) {
+        else if (CardiacRisk.patientInfo.gender === undefined ||
+            !(CardiacRisk.patientInfo.gender.toLowerCase() === 'male' ||
+            CardiacRisk.patientInfo.gender.toLowerCase() === 'female')) {
             errorText = 'Cardiac Risk Score cannot be calculated for indeterminate gender.';
         }
         if (errorText.length === 0) {

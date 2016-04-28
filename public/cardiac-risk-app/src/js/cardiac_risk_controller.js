@@ -41,7 +41,11 @@
    */
   function updatePatientDemographicsBanner() {
     $('#patientName').text(CardiacRisk.patientInfo.firstName + ' ' + CardiacRisk.patientInfo.lastName);
-    $('#patientAge').text(CardiacRisk.patientInfo.age + 'yrs');
+    var ageString = ' yrs';
+    if (CardiacRisk.patientInfo.age) {
+      ageString = CardiacRisk.patientInfo.age + ageString;
+    }
+    $('#patientAge').text(ageString);
     if (CardiacRisk.patientInfo.gender === 'male') {
       $('#patientGender').text('M');
     }
@@ -49,7 +53,10 @@
       $('#patientGender').text('F');
     }
     var date = CardiacRisk.patientInfo.dateOfBirth;
-    var dobString = date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear();
+    var dobString = '';
+    if (Object.prototype.toString.call(date) === '[object Date]' && !isNaN(date.getTime())) {
+      dobString = date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear();
+    }
     $('#patientDOB').text(dobString);
   }
 

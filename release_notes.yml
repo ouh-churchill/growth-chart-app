@@ -7,6 +7,7 @@ versions:
       - {author: ss025783, comment: Cardiac Risk App DSTU2 New Design, issue: OPENSVC-1732, type: add}
       - {author: zp035497, comment: Update Growth Chart App to remove name in parental view, issue: OPENSVC-1274, type: add}
       - {author: zp035497, comment: Update Growth Chart App to display error on patient load and FHIR call fail, issue: OPENSVC-1667, type: add}
+      - {author: ss025783, comment: Fix for gender and DOB missing scenario cardiac risk app May2015 and DSTU2 versions, issue: OPENSVC-2200, type: add}
   - version: 1.18.0
     release_date: 2016-04-19
     changes:
