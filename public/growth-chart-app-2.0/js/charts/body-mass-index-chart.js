@@ -5,7 +5,7 @@
     "use strict";
     
     var NAME = "Body Mass Index Chart";
-
+    
     function BodyMassIndexChart() 
     {
         this.settings = GC.chartSettings.bodyMassChart;
@@ -35,9 +35,6 @@
         
         _get_dataPoints : function()
         {
-            if (GC.App.getPrimaryChartType() === "FENTON") {
-                return Chart.prototype._get_dataPoints.call( this, true );
-            }
             return Chart.prototype._get_dataPoints.call( this, "bmi" );
         },
         

@@ -99,7 +99,7 @@ XDate, setTimeout, getDataSet*/
     }
     
     function getBMI( entry ) {
-        if ( entry.hasOwnProperty("bmi") && GC.App.getPrimaryChartType() !== "FENTON" ) {
+        if ( entry.hasOwnProperty("bmi") ) {
             return GC.Util.format(entry.bmi, { 
                 type       : "bmi",
                 unitMetric : "",
@@ -108,15 +108,15 @@ XDate, setTimeout, getDataSet*/
         }
         return EMPTY_MARK;
     }
-
+    
     function getPercentile( entry, prop ) {
         if (entry.hasOwnProperty(prop)) {
             var ds = getDataSet(prop), pct;
             if (ds) {
                 pct = GC.findPercentileFromX(
-                    entry[prop],
-                    ds,
-                    GC.App.getGender(),
+                    entry[prop], 
+                    ds, 
+                    GC.App.getGender(), 
                     entry.agemos
                 );
                 if ( isNaN(pct) || !isFinite(pct) ) {

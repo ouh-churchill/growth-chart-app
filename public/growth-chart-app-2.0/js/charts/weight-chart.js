@@ -16,7 +16,7 @@
         title : NAME,
         
         patientDataType : "weight",
-
+        
         getUnits : function() {
             return GC.App.getMetrics() === "eng" ? "lb" : "kg";
         },

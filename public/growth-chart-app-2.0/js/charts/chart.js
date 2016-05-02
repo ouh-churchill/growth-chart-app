@@ -34,7 +34,6 @@ Chart.prototype = {
     problemDataSet : "",
     isInLastRow    : true,
     title          : "Chart",
-    noDataPoints  : false,
     
     /**
      * Initializes the chart 
@@ -704,21 +703,11 @@ Chart.prototype = {
     /**
      * @returns PointSet | null
      */
-    getPatientDataPoints : function()
+    getPatientDataPoints : function() 
     {
-        if (GC.App.getPrimaryChartType() === "FENTON" && this.patientDataType === "bmi") {
-            this.noDataPoints = true;
-            return null;
-        }
         if ( this.patientDataType ) {
             var patient  = GC.App.getPatient(),
-                patientData = patient.data[this.patientDataType],
-                pointSet = new PointSet( patientData, "agemos", "value" );
-
-            // Check if data is defined
-            if (patientData) {
-                this.noDataPoints = patientData.length === 0;
-            }
+                pointSet = new PointSet( patient.data[this.patientDataType], "agemos", "value" );
             
             // Get only the points within the current time range
             pointSet.clip( 
@@ -813,7 +802,7 @@ Chart.prototype = {
             GC.App.getStartAgeMos(), 
             GC.App.getEndAgeMos() 
         );
-
+        
         if ( type == "primary" ) {
             this.dataSet = ds ? ds.name : "";
         }
@@ -1273,12 +1262,11 @@ Chart.prototype = {
         this.drawWaterMark();
         this.drawVerticalGrid();
         this.drawTitle();
-
-        if ( this.noDataPoints && !this.dataSet ) {
-            this.drawNoData(GC.str("STR_158"));
-        } else if ( !this.dataSet ) {
+        
+        if ( !this.dataSet ) {
             this.drawNoData(GC.str("STR_6046"));
         } else {
+            
             if ( GC.chartSettings.drawChartOutlines ) {
                 this.drawOutlines();
             }
@@ -1302,7 +1290,7 @@ Chart.prototype = {
                 x2 = this.x + this.width - rShWidth;
                 
             if ( len < 2 ) {
-                this.drawNoData(GC.str("STR_158"));
+                this.drawNoData(GC.str("STR_6046"));
             } else {
                 
                 this.drawFillChartRegion(data);
