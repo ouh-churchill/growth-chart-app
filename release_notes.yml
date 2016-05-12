@@ -3,7 +3,7 @@ versions:
   - version: 1.20.0
     release_date: 2016-xx-xx
     changes:
-      - {author: xx, comment: xx, issue: OPENSVC-xxxx, type: add}
+      - {author: ss025783, comment: Added Canadarm logging for cardiac risk app May2015 and DSTU2 versions, issue: OPENSVC-2145, type: add}
   - version: 1.19.0
     release_date: 2016-05-02
     changes:

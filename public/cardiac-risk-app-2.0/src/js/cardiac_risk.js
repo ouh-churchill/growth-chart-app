@@ -72,24 +72,59 @@
 
                         var labsByLoincCodes = smart.byCodes(labResults, 'code');
                         CardiacRisk.processLabsData(labsByLoincCodes);
-                        if (CardiacRisk.hasObservationWithUnsupportedUnits &&
-                            CardiacRisk.isRequiredLabsNotAvailable()) {
-                            processError('One or more results has an unsupported unit of measure. ' +
-                            'Cardiac Risk cannot  be calculated.');
+
+                        if (CardiacRisk.isRequiredLabsNotAvailable()) {
+                            var codeText = '';
+
+                            if (CardiacRisk.hasObservationWithUnsupportedUnits) {
+                                processError('One or more results has an unsupported unit of measure. ' +
+                                'Cardiac Risk cannot be calculated.');
+
+                                if (CardiacRisk.unsupportedUnitDataPoint.hasOwnProperty('code')) {
+                                    codeText = CardiacRisk.unsupportedUnitDataPoint.code.text;
+                                }
+                                Canadarm.error('Unsupported unit of measure, observation :', undefined, {
+                                    'status' : CardiacRisk.unsupportedUnitDataPoint.status,
+                                    'value' : CardiacRisk.unsupportedUnitDataPoint.valueQuantity.value,
+                                    'unit' : CardiacRisk.unsupportedUnitDataPoint.valueQuantity.unit,
+                                    'valueString' : CardiacRisk.unsupportedUnitDataPoint.valueString,
+                                    'codeText' : codeText
+                                });
+                            }
+                            else if (CardiacRisk.unsupportedObservationStructureDataPoint) {
+                                var logValue = '';
+                                var logUnits = '';
+                                if (CardiacRisk.unsupportedObservationStructureDataPoint.hasOwnProperty('code')) {
+                                    codeText = CardiacRisk.unsupportedObservationStructureDataPoint.code.text;
+                                }
+                                if (CardiacRisk.unsupportedObservationStructureDataPoint.hasOwnProperty('valueQuantity')) {
+                                    logValue = CardiacRisk.unsupportedObservationStructureDataPoint.valueQuantity.value;
+                                    logUnits = CardiacRisk.unsupportedObservationStructureDataPoint.valueQuantity.unit;
+                                }
+                                Canadarm.error('Unsupported observation structure, observation :', undefined, {
+                                    'status' : CardiacRisk.unsupportedObservationStructureDataPoint.status,
+                                    'value' : logValue,
+                                    'unit' : logUnits,
+                                    'valueString' : CardiacRisk.unsupportedObservationStructureDataPoint.valueString,
+                                    'codeText' : codeText
+                                });
+                            }
                         }
                         deferred.resolve();
-
                     })
                     .fail(function () {
                         processError('There was an error loading the application.');
+                        Canadarm.error('Patient or Observations resource failed.');
                     });
             }
             else {
                 processError('There was an error loading the application.');
+                Canadarm.error('Patient resource failure while loading cardiac risk app.');
             }
         }
         function onError() {
             processError('There was an error loading the application.');
+            Canadarm.error('Authorization error while loading cardiac risk app.');
             deferred.reject();
         }
         return deferred.promise();
@@ -215,6 +250,12 @@
                 // We set this flag here to process later ( once all pages have been scanned for a valid dataPoint),
                 // to convey to the user about unsupported units.
                 CardiacRisk.hasObservationWithUnsupportedUnits = true;
+                CardiacRisk.unsupportedUnitDataPoint = dataPoints[i];
+            }
+            else
+            {
+                // We collect this information to log incase if the user doesnt have a required unit.
+                CardiacRisk.unsupportedObservationStructureDataPoint = dataPoints[i];
             }
         }
         return undefined;

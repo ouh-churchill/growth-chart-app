@@ -181,7 +181,6 @@ describe ('CardiacRisk', function() {
       var mockNextPageObject = sinonSandbox.mock(labResultsObj[1]);
       mockNextPageObject.expects('hasNext').once().returns(true);
 
-      console.log(CardiacRisk.patientInfo.hsCReactiveProtein);
       CardiacRisk.processLabResultsPageData(args, labResultsObj[0], expectedCallBack);
 
       expect(CardiacRisk.patientInfo.hsCReactiveProtein).to.equal(2.5);
@@ -300,12 +299,12 @@ describe ('CardiacRisk', function() {
     describe ('returns given cholesterol input with value as per units', function() {
       it ('when the cholesterol is in mg/dL', function() {
         var cholesterol = [{
-            "valueQuantity" : {
-              units: 'mg/dL',
-              value: 238
-            },
-            "appliesDateTime" : "2016-03-07T18:02:00.000Z",
-            "status" : 'final'
+          "valueQuantity" : {
+            units: 'mg/dL',
+            value: 238
+          },
+          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "status" : 'final'
         }];
 
         expect(CardiacRisk.getCholesterolValue(cholesterol)).to.equal(238.00);
@@ -528,24 +527,24 @@ describe ('CardiacRisk', function() {
         "status" : 'final'
 
       },
-      {
-        "valueQuantity" : {
-          units: 'mmHg',
-          value: 119
-        },
-        "appliesDateTime" : "2016-03-07T18:02:00.000Z",
-        "status" : 'amended'
+        {
+          "valueQuantity" : {
+            units: 'mmHg',
+            value: 119
+          },
+          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "status" : 'amended'
 
-      },
-      {
-        "valueQuantity" : {
-          units: 'mfg/dL',
-          value: 238
         },
-        "appliesDateTime" : "2016-03-07T18:02:00.000Z",
-        "status" : 'final'
+        {
+          "valueQuantity" : {
+            units: 'mfg/dL',
+            value: 238
+          },
+          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "status" : 'final'
 
-      }];
+        }];
 
       var mockCardiacRisk = sinonSandbox.mock(CardiacRisk);
       mockCardiacRisk.expects('sortObservationsByAppliesTimeStamp').once().withExactArgs(observations).returns(observations);
@@ -562,6 +561,37 @@ describe ('CardiacRisk', function() {
 
       expect(CardiacRisk.hasObservationWithUnsupportedUnits).to.equal(true);
       expect(dataPointValue).to.equal(parseFloat(observations[1].valueQuantity.value));
+      expect(CardiacRisk.unsupportedUnitDataPoint).to.equal(observations[0]);
+      mockCardiacRisk.verify();
+    });
+
+    it ('checks if sorting was invoked, checks for invalid observation structure',function (){
+
+      CardiacRisk.hasObservationWithUnsupportedUnits = false;
+      var observations = [{
+        "valueQuantity" : {
+          units: 'msg/dL',
+          value: 238
+        },
+        "appliesDateTime" : "2016-03-07T18:02:00.000Z"
+      }];
+
+      var mockCardiacRisk = sinonSandbox.mock(CardiacRisk);
+      mockCardiacRisk.expects('sortObservationsByAppliesTimeStamp').once().withExactArgs(observations).returns(observations);
+
+      var dataPointValue = CardiacRisk.getFirstValidDataPointValueFromObservations(observations,function (dataPoint) {
+        if (dataPoint.valueQuantity.units === 'mmHg') {
+          return parseFloat(dataPoint.valueQuantity.value);
+        }
+        else
+        {
+          return undefined;
+        }
+      });
+
+      expect(CardiacRisk.hasObservationWithUnsupportedUnits).to.equal(false);
+      expect(dataPointValue).to.equal(undefined);
+      expect(CardiacRisk.unsupportedObservationStructureDataPoint).to.equal(observations[0]);
       mockCardiacRisk.verify();
     });
 
@@ -774,7 +804,7 @@ describe ('CardiacRisk', function() {
       var date = new Date('3/4/5sdkjfh');
       var response = CardiacRisk.computeAgeFromBirthDate(date);
       expect(response).to.equal(undefined);
-    })
+    });
   });
 
   describe ('computeRRS', function() {
