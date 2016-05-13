@@ -77,7 +77,7 @@ describe ('CardiacRiskController', function() {
       expect(updatedPatientDOB.innerHTML).to.equal('5/22/2016');
 
     });
-    
+
     it ('sets the UI elements with correct values when female', function() {
       CardiacRisk.patientInfo = setPatientInfo('female',59,0.5,160,100,60,undefined,false,false);
       CardiacRisk.patientInfo.dateOfBirth = new Date(2016,5,22);

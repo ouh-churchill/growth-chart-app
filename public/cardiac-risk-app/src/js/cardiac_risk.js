@@ -42,7 +42,7 @@
             var patientQuery = smart.context.patient.read();
             patientQuery.fail((function () {
                 processError('There was an error loading the application.');
-                deferred.fail();
+                Canadarm.error('Patient resource failure while loading cardiac risk app.');
             }));
             patientQuery.done(function () {
                 var labsQuery = smart.context.patient.Observation.where
@@ -70,22 +70,55 @@
                         CardiacRisk.patientInfo.relatedFactors = relatedFactors;
 
                         CardiacRisk.processLabsData(deferred, smart, labResults, function (deferred) {
-                            if (CardiacRisk.hasObservationWithUnsupportedUnits &&
-                                CardiacRisk.isRequiredLabsNotAvailable()) {
-                                processError('One or more results has an unsupported unit of measure. ' +
-                                'Cardiac Risk cannot be calculated.');
+                            if (CardiacRisk.isRequiredLabsNotAvailable()) {
+                                var codeText = '';
+
+                                if (CardiacRisk.hasObservationWithUnsupportedUnits) {
+                                    processError('One or more results has an unsupported unit of measure. ' +
+                                    'Cardiac Risk cannot be calculated.');
+
+                                    if (CardiacRisk.unsupportedUnitDataPoint.hasOwnProperty('code')) {
+                                        codeText = CardiacRisk.unsupportedUnitDataPoint.code.text;
+                                    }
+                                    Canadarm.error('Unsupported unit of measure, observation :', undefined, {
+                                        'status' : CardiacRisk.unsupportedUnitDataPoint.status,
+                                        'value' : CardiacRisk.unsupportedUnitDataPoint.valueQuantity.value,
+                                        'unit' : CardiacRisk.unsupportedUnitDataPoint.valueQuantity.units,
+                                        'valueString' : CardiacRisk.unsupportedUnitDataPoint.valueString,
+                                        'codeText' : codeText
+                                    });
+                                }
+                                else if (CardiacRisk.unsupportedObservationStructureDataPoint) {
+                                    var logValue = '';
+                                    var logUnits = '';
+                                    if (CardiacRisk.unsupportedObservationStructureDataPoint.hasOwnProperty('code')) {
+                                        codeText = CardiacRisk.unsupportedObservationStructureDataPoint.code.text;
+                                    }
+                                    if (CardiacRisk.unsupportedObservationStructureDataPoint.hasOwnProperty('valueQuantity')) {
+                                        logValue = CardiacRisk.unsupportedObservationStructureDataPoint.valueQuantity.value;
+                                        logUnits = CardiacRisk.unsupportedObservationStructureDataPoint.valueQuantity.units;
+                                    }
+                                    Canadarm.error('Unsupported observation structure, observation :', undefined, {
+                                        'status' : CardiacRisk.unsupportedObservationStructureDataPoint.status,
+                                        'value' : logValue,
+                                        'unit' : logUnits,
+                                        'valueString' : CardiacRisk.unsupportedObservationStructureDataPoint.valueString,
+                                        'codeText' : codeText
+                                    });
+                                }
                             }
                             deferred.resolve();
                         });
                     })
                     .fail(function () {
                         processError('There was an error loading the application.');
-                        deferred.fail();
+                        Canadarm.error('Observations resource failed.');
                     });
             });
         }
         function onError() {
             processError('There was an error loading the application.');
+            Canadarm.error('Authorization error while loading cardiac risk app.');
             deferred.reject();
         }
         return deferred.promise();
@@ -176,6 +209,7 @@
             })
             .fail(function () {
                 processError('There was an error loading the application.');
+                Canadarm.error('Failed to fetch additional observations resource pages.');
             });
     };
     CardiacRisk.getLabsNextPage = getLabsNextPage;
@@ -278,6 +312,12 @@
                 // We set this flag here to process later ( once all pages have been scanned for a valid dataPoint),
                 // to convey to the user about unsupported units.
                 CardiacRisk.hasObservationWithUnsupportedUnits = true;
+                CardiacRisk.unsupportedUnitDataPoint = dataPoints[i];
+            }
+            else
+            {
+                // We collect this information to log incase if the user doesnt have a required unit.
+                CardiacRisk.unsupportedObservationStructureDataPoint = dataPoints[i];
             }
         }
         return undefined;
@@ -293,7 +333,7 @@
         function isLeapYear(year) {
             return new Date(year, 1, 29).getMonth() == 1;
         }
-        
+
         if (Object.prototype.toString.call(birthDate) === '[object Date]' && !isNaN(birthDate.getTime())) {
             var now = new Date();
             var years = now.getFullYear() - birthDate.getFullYear();
