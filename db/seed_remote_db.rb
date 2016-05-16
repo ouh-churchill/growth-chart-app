@@ -165,6 +165,9 @@ add_smart_apps(
   # smart_app('c3862f80-4ea8-409b-9d76-68287e1435d6', 'Healthwise Patient Engagement Solution', 't', 4, 'https://emr.healthwise.net/smart/launch'),
   # smart_app('d42f11bf-bea3-4f7f-9562-79a918e9a2c8', 'Healthwise Dev Solution', 't', 4, 'http://localhost:50865/smart/launch'),
   # smart_app('72fbe1ea-0d89-4b81-ae6c-a43b644f3025', 'Green Circle Health', 't', 4, 'https://testing.gogch.com/app'),
-  #smart_app('86e33fec-649d-49cb-ae42-460981d53e8a', 'S4S Patient App Demo', 't', 4, 'https://demo.syncfor.science/fhir-app/launch.html'),
-  #smart_app('b14872f2-37f1-4ea7-8b56-f21019748a09', 'MyLinks', 't', 4, 'http://localhost/'),
+  # smart_app('86e33fec-649d-49cb-ae42-460981d53e8a', 'S4S Patient App Demo', 't', 4, 'https://demo.syncfor.science/fhir-app/launch.html'),
+  # smart_app('b14872f2-37f1-4ea7-8b56-f21019748a09', 'MyLinks', 't', 4, 'http://localhost/'),
+  # smart_app('25a189c2-4855-48fa-a28c-101923196df9', 'Juxly TIMELINE', 't', 4, 'https://timeline.juxly.com/fhir-app/launch.html'),
+  # smart_app('2ad5fbbd-d5d7-4da4-a5e8-521624886e0d', 'DatycsAssist', 't', 4, 'https://cds.datycs.com:8443/DatycsAssist/api/service/cernerlaunch'),
+
 )
