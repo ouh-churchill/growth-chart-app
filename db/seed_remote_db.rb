@@ -169,5 +169,5 @@ add_smart_apps(
   # smart_app('b14872f2-37f1-4ea7-8b56-f21019748a09', 'MyLinks', 't', 4, 'http://localhost/'),
   # smart_app('25a189c2-4855-48fa-a28c-101923196df9', 'Juxly TIMELINE', 't', 4, 'https://timeline.juxly.com/fhir-app/launch.html'),
   # smart_app('2ad5fbbd-d5d7-4da4-a5e8-521624886e0d', 'DatycsAssist', 't', 4, 'https://cds.datycs.com:8443/DatycsAssist/api/service/cernerlaunch'),
-
+  # smart_app('cfd8e34c-7897-44fb-98b1-da0dceea721a', 'Finrisk calculator', 't', 3, 'http://fhir.ebmeds.org/smart/finrisk-calculator/launch.html'),
 )
