@@ -159,6 +159,7 @@ add_smart_apps(
   # smart_app('37c8edca-8ad5-40fa-b396-d2efe6c2c9a0', 'VigiLanz SMARTDemo Dev',  't', 4, 'http://localhost:8000/fhir-app/Launch/SMARTLaunch'),
   # smart_app('37f6e262-e3d4-42c0-a5b8-e66192b58e07', 'Nurse Dashboard Auth POC',  't', 1, 'http://ec2-52-21-191-250.compute-1.amazonaws.com:3020/api/launch/app/patientDashboard/tenant/780634a0-e7ce-11e5-8a20-b7bbc3c65fa5'),
   # smart_app('6e9420ce-6706-43d5-97d7-b59ce518d497', 'Sensotrend Diabetes Diary - Dev',  't', 4, 'http://localhost.localdomain:8080/api/fhir/paivakirja'),
+  # smart_app('c299c3a0-5a8b-4985-ac56-74bf072a072e', 'Sensotrend Diabetes Diary',  't', 4, 'https://www.sensotrend.fi/api/fhir/paivakirja'),
   # smart_app('f8ab32f8-d719-4a96-bb6c-fb89ba9797cb', 'EnrG|Rheum (local dev DSTU 2)',        't', 4, 'http://localhost:4271/SecurePointOfEntry'),
   # smart_app('6e8a2784-6575-489b-a59d-d0784ff73d98', 'HIEBus',        't', 4, 'http://localhost:50000/SmartApp/Launch'),
   # smart_app('bf9496e9-cc51-4911-9dd7-ba35649ea1d7', 'Healthwise Care Management Solution', 't', 4, 'https://coach.healthwise.net/smart/launch'),
