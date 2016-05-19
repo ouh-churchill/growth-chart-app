@@ -121,7 +121,7 @@ add_smart_apps(
   # smart_app('334afd39-6ad1-4b10-8081-f760a67c94b8', 'Cerner Direct Referrals (DEV)', 't', 1, 'http://dev.gwx.cerner.corp/toc/smart/launch' ),
   # smart_app('8afe32cd-5fdf-4eff-b19b-7c3fb3cdf49e', 'EnrG|Rheum',                    't', 1, 'https://demoapp.xghealth.com/EnrGRheum/Demo/SecurePointOfEntry/Index' ),
   # smart_app('59059b31-700e-411c-a9db-44e57105009a', 'EnrG|Rheum Questionnaire',      't', 1, 'https://demoapp.xghealth.com/RheumQuestionnaire/Demo/SecurePointOfEntry' ),
-  # smart_app('4d2a4dea-641f-4627-b1a2-32d53d4a294f', 'Pediatric Drug Card',           't', 1, 'https://webedgedev.co.ihc.com/smartapp/apps/pediatric-drug-card/launch.html' ),
+  # smart_app('4d2a4dea-641f-4627-b1a2-32d53d4a294f', 'Pediatric Drug Card',           't', 4, 'https://webedgedev.co.ihc.com/smartapp/apps/pediatric-drug-card/launch.html' ),
   # smart_app('1bb4ba64-a2f5-4e8c-8e18-569acb5effe5', 'Eligible Argonaut Client',      't', 1, 'http://localhost:8000/fhir-app/index.html' ), #Note: Not launch URL, don't have SMART *yet*
   # smart_app('9c558021-c9af-41f6-a603-65826c43fe9e', 'UpToDate Search, SMART on FHIR Prototype',      't', 1, 'http://s5www.utdlab.com/prototype1/launch-new.html' ),
   # smart_app('da2106e1-d2da-4ac8-bbca-a5392c96411a', 'EnrG|Rheum (DEAC_MT)',                    't', 1, 'https://www.enrgrheum.xghealth.com/EnrGRheum/Billings/SecurePointOfEntry' ),
@@ -136,8 +136,8 @@ add_smart_apps(
   # smart_app('48823dac-e7a0-4200-a284-2f8c2cf86955', 'Pionetechs FHIR Test',            't', 1, 'https://cernerfhir.azurewebsites.net/smart' ),
   # smart_app('2d10098b-d709-4197-a332-52c493e8e000', 'BCH Growth Chart App Test',        't', 1, 'http://localhost/growthchart/launch.html' ),
   # smart_app('c0144077-3b73-4ad5-b6fc-63a022a12ead', 'HSP Bilirubin Chart',        't', 1, 'https://sandbox.hspconsortium.org/hsp-bilirubin-app/static/bilirubin-chart/launch.html' ),
-  # smart_app('3c15d3e3-0295-4de2-a90b-4ec6a54136db', 'Pediatric Drug Card (localhost)',        't', 1, 'http://localhost:8081/smartapp/apps/pediatric-drug-card/launch.html' ),
-  # smart_app('5a68eec4-188d-4e2a-9a34-db9c1268c27e', 'Pediatric Drug Card (verification)',        't', 1, 'https://webedgever.co.ihc.com/smartapp/apps/pediatric-drug-card/launch.html' ),
+  # smart_app('3c15d3e3-0295-4de2-a90b-4ec6a54136db', 'Pediatric Drug Card (localhost)',        't', 4, 'http://localhost:8081/smartapp/apps/pediatric-drug-card/launch.html' ),
+  # smart_app('5a68eec4-188d-4e2a-9a34-db9c1268c27e', 'Pediatric Drug Card (verification)',        't', 4, 'https://webedgever.co.ihc.com/smartapp/apps/pediatric-drug-card/launch.html' ),
   # smart_app('6d115b4e-e91b-4741-ae76-c889f034c5c2', 'Meducation Demo',                 't', 1, 'https://fhir-dstu2.meducation.com/launch.html' ),
   # smart_app('93e62de8-2f2c-4168-968d-faffd26d76f9', 'Duke Pillbox',        't', 1, 'http://pillbox.medapptech.com/initapp/launch.html' ),
   # smart_app('bd8f9750-4963-42c6-b433-d98cf7816241', 'ClinDat',                 't', 1, 'https://apps.medapptech.com/fhir-app/launch.html' ),
@@ -171,4 +171,8 @@ add_smart_apps(
   # smart_app('25a189c2-4855-48fa-a28c-101923196df9', 'Juxly TIMELINE', 't', 4, 'https://timeline.juxly.com/fhir-app/launch.html'),
   # smart_app('2ad5fbbd-d5d7-4da4-a5e8-521624886e0d', 'DatycsAssist', 't', 4, 'https://cds.datycs.com:8443/DatycsAssist/api/service/cernerlaunch'),
   # smart_app('cfd8e34c-7897-44fb-98b1-da0dceea721a', 'Finrisk calculator', 't', 3, 'http://fhir.ebmeds.org/smart/finrisk-calculator/launch.html'),
+  # smart_app('598198a5-e174-460c-be6c-339c93f9e4c7', 'TigerText Clinical Messaging', 't', 4, 'https://tigertextjeff.azurewebsites.net/internal/vendors/cerner/launch.aspx'),
+  # smart_app('383b14e9-d1fa-4ef6-b333-854fd7303793', 'DocEdge', 't', 1, ' http://fhir.providentedge.com/launch.html'),
+  # smart_app('7041cb64-d862-4320-b900-a8c771231852', 'S4S Patient App Demo - Crucible', 't', 4, 'http://crucible.dev.syncfor.science:9004/launch'),
+  # smart_app('e82b8d7e-c4bf-401c-9393-fbd92667eed2', 'S4S Patient App Demo - Tests', 't', 4, 'http://tests.dev.syncfor.science:9003/launch/cerner/')
 )
