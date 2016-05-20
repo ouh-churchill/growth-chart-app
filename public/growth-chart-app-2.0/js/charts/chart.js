@@ -2148,24 +2148,19 @@ Chart.prototype = {
                 GC.DATA_SETS[this.dataSet].units || "" : 
                 currentUnits;
         
-        // The point shadow
-        if (!cfg.firstMonth) {
-            set.push(
-                this.pane.paper.circle(cx, cy + 0.5, cfg.firstMonth ? 6 : 5)
-                .attr({
-                    blur : Raphael.svg ? 1 : 0,
-                    fill : "#000"
-                }).addClass("point")
-            );
-        }
-        
         set.push(
+
+            // The shadow
+            this.pane.paper.circle(cx, cy + 0.5, 5).attr({
+                blur : Raphael.svg ? 1 : 0,
+                fill : "#000"
+            }).addClass("point"),
             
             // The point white outline
-            this.pane.paper.circle(cx, cy, cfg.firstMonth ? 5 : 4).attr({
+            this.pane.paper.circle(cx, cy, 4).attr({
                 stroke : "#FFF",
-                "stroke-opacity": cfg.firstMonth ? 0.75 : 1,
-                "stroke-width" : cfg.firstMonth ? 4 : 2
+                "stroke-opacity": 1,
+                "stroke-width" : 2
             }).addClass("point"), 
             
             // The inner point
