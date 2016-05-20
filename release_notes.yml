@@ -1,13 +1,14 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.20.0
-    release_date: 2016-xx-xx
+    release_date: 2016-05-20
     changes:
       - {author: ss025783, comment: Added Canadarm logging for cardiac risk app May2015 and DSTU2 versions, issue: OPENSVC-2145, type: add}
       - {author: zp035497, comment: Update Growth Chart App to have consistent style on chart data points, issue: OPENSVC-1264, type: add}
       - {author: zp035497, comment: Update Growth Chart App to take out BMI data if viewing FENTON Growth Chart, issue: OPENSVC-1273, type: add}
       - {author: zp035497, comment: Update Growth Chart App to display date and age for all data points on the table view, issue: OPENSVC-1344, type: add}
       - {author: ss025783, comment: Cardiac Risk App hides optimal score if greater than or equal to actual score, issue: OPENSVC-2291, type: add}
+      - {author: zp035497, comment: 1.20.0 release review, issue: OPENSVC-2384, type: add}
   - version: 1.19.0
     release_date: 2016-05-02
     changes:
