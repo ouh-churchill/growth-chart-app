@@ -99,7 +99,7 @@ XDate, setTimeout, getDataSet*/
     }
     
     function getBMI( entry ) {
-        if ( entry.hasOwnProperty("bmi") ) {
+        if ( entry.hasOwnProperty("bmi") && GC.App.getPrimaryChartType() !== "FENTON" ) {
             return GC.Util.format(entry.bmi, { 
                 type       : "bmi",
                 unitMetric : "",
