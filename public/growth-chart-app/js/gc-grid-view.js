@@ -259,12 +259,7 @@ XDate, setTimeout, getDataSet*/
             //debugger;
             var age  = new GC.TimeInterval(patient.DOB).setMonths(data.agemos),
                 date = new XDate(patient.DOB.getTime()).addMonths(data.agemos),
-                sameDay = lastDate && lastDate.diffDays(date) < 1,
-                dateText = sameDay ? 
-                    '<div style="text-align: center;font-size:20px">&bull;</div>' : 
-                    date.toString(
-                        GC.chartSettings.dateFormat
-                    ),
+                dateText = date.toString(GC.chartSettings.dateFormat),
                 years,
                 months,
                 days;
@@ -272,16 +267,11 @@ XDate, setTimeout, getDataSet*/
             // Header - Date
             $('<th/>').append( 
                 $('<div class="date"/>').html(dateText)
-            )
-            .appendTo(thr1);
+            ).appendTo(thr1);
             
             // Header - Age
-            $('<th/>')
-                .append( $('<div class=""/>').html(
-                    sameDay ? 
-                    date.toString(GC.chartSettings.timeFormat) :
-                    age.toString(shortDateFormat)
-                )
+            $('<th/>').append(
+                $('<div class=""/>').html(age.toString(shortDateFormat))
             ).appendTo(thr2);
             
             $.each(scheme.header.rows, function(i, o) {
