@@ -1027,6 +1027,22 @@ describe ('CardiacRisk', function() {
       expect(functionResponse.valueText).to.equal(response.valueText);
     });
 
+    it('returns a display text and value when the patient is a smoker and labs are optimal', function() {
+      setPatientInfo('male',59,0.5,150,100,60,106,undefined,undefined,CardiacRisk.patientInfo);
+      CardiacRisk.patientInfo.relatedFactors.smoker = true;
+
+      var rrScore = 39;
+      var response = {};
+
+      var optimalLabsStub = sinonSandbox.stub(CardiacRisk, 'optimalLabs');
+      optimalLabsStub.returns(true);
+
+      var functionResponse = CardiacRisk.buildWhatIfOptimalValues(rrScore);
+      expect(functionResponse).to.be.an('object');
+      expect(functionResponse.value).to.equal('');
+      expect(functionResponse.valueText).to.equal('');
+    });
+
     it('returns a display text and no value when the patient is not a smoker, ' +
     'has optimal labs, family history is true and score is > 5', function() {
       setPatientInfo('male',59,3.5,150,130,40,106,undefined,undefined,CardiacRisk.patientInfo);
@@ -1034,6 +1050,26 @@ describe ('CardiacRisk', function() {
       CardiacRisk.patientInfo.relatedFactors.familyHeartAttackHistory = true;
 
       var rrScore = 39;
+      var response = {};
+      response.value = '';
+      response.valueText = 'Your risk is the lowest it can be based on the supplied information';
+
+      var optimalLabsStub = sinonSandbox.stub(CardiacRisk, 'optimalLabs');
+      optimalLabsStub.returns(true);
+
+      var functionResponse = CardiacRisk.buildWhatIfOptimalValues(rrScore);
+      expect(functionResponse).to.be.an('object');
+      expect(functionResponse.value).to.equal(response.value);
+      expect(functionResponse.valueText).to.equal(response.valueText);
+    });
+
+    it('returns a display text and no value when the patient is not a smoker, ' +
+    'has optimal labs, family history is true and score is = 5', function() {
+      setPatientInfo('male',59,3.5,150,130,40,106,undefined,undefined,CardiacRisk.patientInfo);
+      CardiacRisk.patientInfo.relatedFactors.smoker = false;
+      CardiacRisk.patientInfo.relatedFactors.familyHeartAttackHistory = true;
+
+      var rrScore = 5;
       var response = {};
       response.value = '';
       response.valueText = 'Your risk is the lowest it can be based on the supplied information';

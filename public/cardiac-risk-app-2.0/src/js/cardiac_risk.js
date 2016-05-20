@@ -364,6 +364,7 @@
         }
 
         var score = CardiacRisk.computeRRS(patientInfoCopy);
+        whatIfSBP.score = score;
         whatIfSBP.value = score + '%';
         whatIfSBP.valueText = patientInfoCopy.systolicBloodPressure + ' mm/Hg';
         return whatIfSBP;
@@ -518,14 +519,18 @@
             !CardiacRisk.optimalLabs()) {
             whatIfOptimalValues.valueText = ' if all levels were optimal';
         }
+        else if (CardiacRisk.patientInfo.relatedFactors.smoker === true && CardiacRisk.optimalLabs()) {
+            whatIfOptimalValues.value = '';
+            whatIfOptimalValues.valueText = '';
+        }
         else if (CardiacRisk.patientInfo.relatedFactors.smoker === false &&
             CardiacRisk.optimalLabs() &&
             CardiacRisk.patientInfo.relatedFactors.familyHeartAttackHistory === true &&
-            score > 5) {
+            score >= 5) {
             whatIfOptimalValues.value = '';
             whatIfOptimalValues.valueText = 'Your risk is the lowest it can be based on the supplied information';
         }
-        else if (CardiacRisk.optimalLabs()) {
+        else if (CardiacRisk.patientInfo.relatedFactors.smoker === false && CardiacRisk.optimalLabs()) {
             whatIfOptimalValues.value = '';
             whatIfOptimalValues.valueText = 'All levels are currently optimal';
         }

@@ -163,7 +163,7 @@ function updateUI() {
   updateUIWhatIfSystolicBloodPressure();
   updateUIWhatIfNotSmoker();
   updateUIWhatIfOptimalValues();
-
+  updateUIWhatIfContainer();
   adjustRelatedFactorsSize();
 }
 
@@ -265,7 +265,7 @@ function onFamilyHistoryInput() {
  */
 function updateUICardiacRiskScore() {
   var score = CardiacRisk.computeRRS(CardiacRisk.patientInfo);
-
+  CardiacRisk.currentCardiacRiskScore = score;
   $('#riskDescriptionText').text('Your chance of having a heart attack, stroke, or other ' +
   'heart disease event at some point in the next 10 years is ');
   $('#riskDescriptionValue').text(score + '%');
@@ -292,7 +292,7 @@ function updateUICardiacRiskScore() {
  */
 function updateUIWhatIfSystolicBloodPressure() {
   var whatIfSBPResponse = CardiacRisk.computeWhatIfSBP();
-  if (whatIfSBPResponse === undefined) {
+  if (whatIfSBPResponse === undefined || whatIfSBPResponse.score >= CardiacRisk.currentCardiacRiskScore) {
     $('#whatIfSBP').addClass('contentHidden');
   }
   else {
@@ -306,14 +306,14 @@ function updateUIWhatIfSystolicBloodPressure() {
  * Method to update UI based on the related factors form input.
  */
 function updateUIWhatIfNotSmoker() {
-  if (CardiacRisk.patientInfo.relatedFactors.smoker === true) {
-    var whatIfNotSmokerScore = CardiacRisk.computeWhatIfNotSmoker();
-    var whatIfNotSmoker = CardiacRisk.buildWhatIfNotSmoker(whatIfNotSmokerScore);
-    $('#whatIfNotSmoker').removeClass('contentHidden');
-    $('#whatIfNoSmokerValue').text(whatIfNotSmoker.value);
+  var whatIfNotSmokerScore = CardiacRisk.computeWhatIfNotSmoker();
+  if (whatIfNotSmokerScore === undefined || CardiacRisk.patientInfo.relatedFactors.smoker === false || whatIfNotSmokerScore >= CardiacRisk.currentCardiacRiskScore) {
+    $('#whatIfNotSmoker').addClass('contentHidden');
   }
   else {
-    $('#whatIfNotSmoker').addClass('contentHidden');
+      var whatIfNotSmoker = CardiacRisk.buildWhatIfNotSmoker(whatIfNotSmokerScore);
+      $('#whatIfNotSmoker').removeClass('contentHidden');
+      $('#whatIfNoSmokerValue').text(whatIfNotSmoker.value);
   }
 }
 
@@ -322,10 +322,26 @@ function updateUIWhatIfNotSmoker() {
  */
 function updateUIWhatIfOptimalValues() {
   var whatIfOptimalScore = CardiacRisk.computeWhatIfOptimal();
-  var whatIfOptimalValues = CardiacRisk.buildWhatIfOptimalValues(whatIfOptimalScore);
+  if (whatIfOptimalScore === undefined || whatIfOptimalScore >= CardiacRisk.currentCardiacRiskScore) {
+    $('#whatIfOptimal').addClass('contentHidden');
+  }
+  else
+  {
+    var whatIfOptimalValues = CardiacRisk.buildWhatIfOptimalValues(whatIfOptimalScore);
+    $('#whatIfOptimal').removeClass('contentHidden');
+    $('#whatIfOptimalValue').text(whatIfOptimalValues.value);
+    $('#whatIfOptimalValueText').text(whatIfOptimalValues.valueText);
+  }
+}
 
-  $('#whatIfOptimalValue').text(whatIfOptimalValues.value);
-  $('#whatIfOptimalValueText').text(whatIfOptimalValues.valueText);
+function updateUIWhatIfContainer() {
+  if ($('#whatIfSBP').hasClass('contentHidden') && $('#whatIfNotSmoker').hasClass('contentHidden') && $('#whatIfOptimal').hasClass('contentHidden')) {
+    $('#whatIfContainer').addClass('contentHidden');
+  }
+  else
+  {
+    $('#whatIfContainer').removeClass('contentHidden');
+  }
 }
 
 /**

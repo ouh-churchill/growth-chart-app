@@ -459,6 +459,7 @@ describe ('CardiacRiskController', function() {
       mockWindow.expects('updateUIWhatIfSystolicBloodPressure').once();
       mockWindow.expects('updateUIWhatIfNotSmoker').once();
       mockWindow.expects('updateUIWhatIfOptimalValues').once();
+      mockWindow.expects('updateUIWhatIfContainer').once();
       mockWindow.expects('adjustRelatedFactorsSize').once();
 
       updateUI();
@@ -607,6 +608,8 @@ describe ('CardiacRiskController', function() {
       var updatedRiskDescriptionValue = document.getElementById('riskDescriptionValue');
       expect(updatedRiskDescriptionValue.innerHTML).to.be.equal('4%');
 
+      expect(CardiacRisk.currentCardiacRiskScore).to.equal(4);
+
       mock.verify();
     });
 
@@ -628,6 +631,8 @@ describe ('CardiacRiskController', function() {
       'heart disease event at some point in the next 10 years is ');
       var updatedRiskDescriptionValue = document.getElementById('riskDescriptionValue');
       expect(updatedRiskDescriptionValue.innerHTML).to.be.equal('5%');
+
+      expect(CardiacRisk.currentCardiacRiskScore).to.equal(5);
 
       mock.verify();
     });
@@ -651,6 +656,8 @@ describe ('CardiacRiskController', function() {
       var updatedRiskDescriptionValue = document.getElementById('riskDescriptionValue');
       expect(updatedRiskDescriptionValue.innerHTML).to.be.equal('10%');
 
+      expect(CardiacRisk.currentCardiacRiskScore).to.equal(10);
+
       mock.verify();
     });
 
@@ -672,6 +679,8 @@ describe ('CardiacRiskController', function() {
       'heart disease event at some point in the next 10 years is ');
       var updatedRiskDescriptionValue = document.getElementById('riskDescriptionValue');
       expect(updatedRiskDescriptionValue.innerHTML).to.be.equal('20%');
+
+      expect(CardiacRisk.currentCardiacRiskScore).to.equal(20);
 
       mock.verify();
     });
@@ -696,8 +705,55 @@ describe ('CardiacRiskController', function() {
       mock.verify();
     });
 
+    it ('updates the blood pressure UI correctly when score is higher than current score', function () {
+
+      CardiacRisk.currentCardiacRiskScore = 4;
+      var whatIfSBP = document.createElement('div');
+      whatIfSBP.id = 'whatIfSBP';
+      whatIfSBP.className = 'abc';
+      document.body.appendChild(whatIfSBP);
+
+      var whatIfSBPResponse = {};
+      whatIfSBPResponse.score = 5;
+      whatIfSBPResponse.valueText = '119 mm/Hg';
+      whatIfSBPResponse.value = '5%';
+
+      var mock = sinonSandbox.mock(CardiacRisk);
+      mock.expects("computeWhatIfSBP").returns(whatIfSBPResponse);
+
+      updateUIWhatIfSystolicBloodPressure();
+
+      var updatedWhatIfSBP = document.getElementById('whatIfSBP');
+      expect(updatedWhatIfSBP.className).to.be.equal('abc contentHidden');
+      mock.verify();
+    });
+
+    it ('updates the blood pressure UI correctly when score is same as the current score', function () {
+
+      CardiacRisk.currentCardiacRiskScore = 5;
+      var whatIfSBP = document.createElement('div');
+      whatIfSBP.id = 'whatIfSBP';
+      whatIfSBP.className = 'abc';
+      document.body.appendChild(whatIfSBP);
+
+      var whatIfSBPResponse = {};
+      whatIfSBPResponse.score = 5;
+      whatIfSBPResponse.valueText = '119 mm/Hg';
+      whatIfSBPResponse.value = '5%';
+
+      var mock = sinonSandbox.mock(CardiacRisk);
+      mock.expects("computeWhatIfSBP").returns(whatIfSBPResponse);
+
+      updateUIWhatIfSystolicBloodPressure();
+
+      var updatedWhatIfSBP = document.getElementById('whatIfSBP');
+      expect(updatedWhatIfSBP.className).to.be.equal('abc contentHidden');
+      mock.verify();
+    });
+
     it ('updates the blood pressure UI correctly when defined response', function () {
 
+      CardiacRisk.currentCardiacRiskScore = 10;
       var whatIfSBP = document.createElement('div');
       whatIfSBP.id = 'whatIfSBP';
       whatIfSBP.className = 'abc contentHidden';
@@ -712,6 +768,7 @@ describe ('CardiacRiskController', function() {
       document.body.appendChild(whatIfSBPValueText);
 
       var whatIfSBPResponse = {};
+      whatIfSBPResponse.score = 5;
       whatIfSBPResponse.valueText = '119 mm/Hg';
       whatIfSBPResponse.value = '5%';
 
@@ -732,10 +789,77 @@ describe ('CardiacRiskController', function() {
   });
 
   describe ('updateUIWhatIfNotSmoker', function() {
-    it('updates correctly is patient is a smoker', function () {
+    it('updated the UI to contenthidden if score is undefined', function () {
+
+      CardiacRisk.patientInfo = setPatientInfo('male',59,0.5,160,100,60,119,false,false);
+
+      CardiacRisk.currentCardiacRiskScore = 5;
+      var whatIfNotSmoker = document.createElement('div');
+      whatIfNotSmoker.id = 'whatIfNotSmoker';
+      whatIfNotSmoker.className = 'abc';
+      document.body.appendChild(whatIfNotSmoker);
+
+      var mock = sinonSandbox.mock(CardiacRisk);
+      mock.expects("computeWhatIfNotSmoker").returns(undefined);
+      mock.expects("buildWhatIfNotSmoker").never();
+
+      updateUIWhatIfNotSmoker();
+
+      var updatedWhatIfNotSmoker = document.getElementById('whatIfNotSmoker');
+      expect(updatedWhatIfNotSmoker.className).to.be.equal('abc contentHidden');
+
+      mock.verify();
+
+    });
+
+    it('updated the UI to contenthidden if score is equal to current score', function () {
+
+      CardiacRisk.patientInfo = setPatientInfo('male',59,0.5,160,100,60,119,false,false);
+      CardiacRisk.currentCardiacRiskScore = 5;
+      var whatIfNotSmoker = document.createElement('div');
+      whatIfNotSmoker.id = 'whatIfNotSmoker';
+      whatIfNotSmoker.className = 'abc';
+      document.body.appendChild(whatIfNotSmoker);
+
+      var mock = sinonSandbox.mock(CardiacRisk);
+      mock.expects("computeWhatIfNotSmoker").returns(5);
+      mock.expects("buildWhatIfNotSmoker").never();
+
+      updateUIWhatIfNotSmoker();
+
+      var updatedWhatIfNotSmoker = document.getElementById('whatIfNotSmoker');
+      expect(updatedWhatIfNotSmoker.className).to.be.equal('abc contentHidden');
+
+      mock.verify();
+
+    });
+
+    it('updated the UI to contenthidden if score is greater than current score', function () {
+
+      CardiacRisk.patientInfo = setPatientInfo('male',59,0.5,160,100,60,119,false,false);
+      CardiacRisk.currentCardiacRiskScore = 5;
+      var whatIfNotSmoker = document.createElement('div');
+      whatIfNotSmoker.id = 'whatIfNotSmoker';
+      whatIfNotSmoker.className = 'abc';
+      document.body.appendChild(whatIfNotSmoker);
+
+      var mock = sinonSandbox.mock(CardiacRisk);
+      mock.expects("computeWhatIfNotSmoker").returns(6);
+      mock.expects("buildWhatIfNotSmoker").never();
+
+      updateUIWhatIfNotSmoker();
+
+      var updatedWhatIfNotSmoker = document.getElementById('whatIfNotSmoker');
+      expect(updatedWhatIfNotSmoker.className).to.be.equal('abc contentHidden');
+
+      mock.verify();
+
+    });
+
+    it('updates UI if score is less than current score and patient is a smoker', function () {
 
       CardiacRisk.patientInfo = setPatientInfo('male',59,0.5,160,100,60,119,true,false);
-
+      CardiacRisk.currentCardiacRiskScore = 8;
       var whatIfNotSmoker = document.createElement('div');
       whatIfNotSmoker.id = 'whatIfNotSmoker';
       whatIfNotSmoker.className = 'abc contentHidden';
@@ -763,33 +887,73 @@ describe ('CardiacRiskController', function() {
       mock.verify();
     });
 
-    it('updates correctly is patient is not a smoker', function () {
-
-      CardiacRisk.patientInfo = setPatientInfo('male',59,0.5,160,100,60,119,false,false);
-
-      var whatIfNotSmoker = document.createElement('div');
-      whatIfNotSmoker.id = 'whatIfNotSmoker';
-      whatIfNotSmoker.className = 'abc';
-      document.body.appendChild(whatIfNotSmoker);
-
-      var whatIfNotSmokerResponse = {};
-      whatIfNotSmokerResponse.value = "whatIfNotSmoker";
-
-      var mock = sinonSandbox.mock(CardiacRisk);
-      mock.expects("computeWhatIfNotSmoker").never();
-      mock.expects("buildWhatIfNotSmoker").never();
-
-      updateUIWhatIfNotSmoker();
-
-      var updatedWhatIfNotSmoker = document.getElementById('whatIfNotSmoker');
-      expect(updatedWhatIfNotSmoker.className).to.be.equal('abc contentHidden');
-
-      mock.verify();
-    });
   });
 
   describe ('updateUIWhatIfOptimalValues', function() {
+    it ('updated the ui to contentHidden if score is undefined', function() {
+
+      CardiacRisk.currentCardiacRiskScore = 5;
+      var whatIfOptimal = document.createElement('div');
+      whatIfOptimal.id = 'whatIfOptimal';
+      whatIfOptimal.className = 'abc';
+      document.body.appendChild(whatIfOptimal);
+
+      var mock = sinonSandbox.mock(CardiacRisk);
+      mock.expects("computeWhatIfOptimal").once().returns(undefined);
+
+      updateUIWhatIfOptimalValues();
+
+      var updatedWhatIfOptimal = document.getElementById('whatIfOptimal');
+      expect(updatedWhatIfOptimal.className).to.be.equal('abc contentHidden');
+
+      mock.verify();
+    });
+
+    it ('updated the ui to contentHidden if score is equal to the current score', function() {
+
+      CardiacRisk.currentCardiacRiskScore = 5;
+      var whatIfOptimal = document.createElement('div');
+      whatIfOptimal.id = 'whatIfOptimal';
+      whatIfOptimal.className = 'abc';
+      document.body.appendChild(whatIfOptimal);
+
+      var mock = sinonSandbox.mock(CardiacRisk);
+      mock.expects("computeWhatIfOptimal").once().returns(5);
+
+      updateUIWhatIfOptimalValues();
+
+      var updatedWhatIfOptimal = document.getElementById('whatIfOptimal');
+      expect(updatedWhatIfOptimal.className).to.be.equal('abc contentHidden');
+
+      mock.verify();
+    });
+
+    it ('updated the ui to contentHidden if score is greater than the current score', function() {
+
+      CardiacRisk.currentCardiacRiskScore = 5;
+      var whatIfOptimal = document.createElement('div');
+      whatIfOptimal.id = 'whatIfOptimal';
+      whatIfOptimal.className = 'abc';
+      document.body.appendChild(whatIfOptimal);
+
+      var mock = sinonSandbox.mock(CardiacRisk);
+      mock.expects("computeWhatIfOptimal").once().returns(6);
+
+      updateUIWhatIfOptimalValues();
+
+      var updatedWhatIfOptimal = document.getElementById('whatIfOptimal');
+      expect(updatedWhatIfOptimal.className).to.be.equal('abc contentHidden');
+
+      mock.verify();
+    });
+
     it ('updates the optimal values correctly', function () {
+
+      CardiacRisk.currentCardiacRiskScore = 8;
+      var whatIfOptimal = document.createElement('div');
+      whatIfOptimal.id = 'whatIfOptimal';
+      whatIfOptimal.className = 'abc';
+      document.body.appendChild(whatIfOptimal);
 
       var whatIfOptimalValue = document.createElement('span');
       whatIfOptimalValue.id = 'whatIfOptimalValue';
@@ -811,12 +975,96 @@ describe ('CardiacRiskController', function() {
 
       updateUIWhatIfOptimalValues();
 
+      var updatedWhatIfOptimal = document.getElementById('whatIfOptimal');
+      expect(updatedWhatIfOptimal.className).to.be.equal('abc');
       var updatedWhatIfOptimalValue = document.getElementById('whatIfOptimalValue');
       expect(updatedWhatIfOptimalValue.innerHTML).to.be.equal('5%');
       var updatedWhatIfOptimalValueText = document.getElementById('whatIfOptimalValueText');
       expect(updatedWhatIfOptimalValueText.innerHTML).to.be.equal('value test text');
 
       mock.verify();
+    });
+  });
+
+  describe ('updateUIWhatIfContainer', function() {
+    it ('updated the UI with contentHidden if all sublevel divs have contentHidden class', function (){
+
+      var whatIfContainer = document.getElementById('whatIfContainer');
+      if (!whatIfContainer) {
+        whatIfContainer = document.createElement('div');
+        whatIfContainer.id = 'whatIfContainer';
+        document.body.appendChild(whatIfContainer);
+      }
+      whatIfContainer.className = 'abc';
+
+      var whatIfSBP = document.getElementById('whatIfSBP');
+      if (!whatIfSBP) {
+        whatIfSBP = document.createElement('div');
+        whatIfSBP.id = 'whatIfSBP';
+        document.body.appendChild(whatIfSBP);
+      }
+      whatIfSBP.className = 'abc contentHidden';
+
+      var whatIfNotSmoker = document.getElementById('whatIfNotSmoker');
+      if (!whatIfNotSmoker) {
+        whatIfNotSmoker = document.createElement('div');
+        whatIfNotSmoker.id = 'whatIfNotSmoker';
+        document.body.appendChild(whatIfNotSmoker);
+      }
+      whatIfNotSmoker.className = 'abc contentHidden';
+
+      var whatIfOptimal = document.getElementById('whatIfOptimal');
+      if (!whatIfOptimal) {
+        whatIfOptimal = document.createElement('div');
+        whatIfOptimal.id = 'whatIfOptimal';
+        document.body.appendChild(whatIfOptimal);
+      }
+      whatIfOptimal.className = 'abc contentHidden';
+
+      updateUIWhatIfContainer();
+
+      var updatedWhatIfContainer = document.getElementById('whatIfContainer');
+      expect(updatedWhatIfContainer.className).to.be.equal('abc contentHidden');
+    });
+
+    it ('updated the UI by removing contentHidden class if any sublevel divs dont have contentHidden class', function (){
+
+      var whatIfContainer = document.getElementById('whatIfContainer');
+      if (!whatIfContainer) {
+        whatIfContainer = document.createElement('div');
+        whatIfContainer.id = 'whatIfContainer';
+        document.body.appendChild(whatIfContainer);
+      }
+      whatIfContainer.className = 'abc contentHidden';
+
+      var whatIfSBP = document.getElementById('whatIfSBP');
+      if (!whatIfSBP) {
+        whatIfSBP = document.createElement('div');
+        whatIfSBP.id = 'whatIfSBP';
+        document.body.appendChild(whatIfSBP);
+      }
+      whatIfSBP.className = 'abc contentHidden';
+
+      var whatIfNotSmoker = document.getElementById('whatIfNotSmoker');
+      if (!whatIfNotSmoker) {
+        whatIfNotSmoker = document.createElement('div');
+        whatIfNotSmoker.id = 'whatIfNotSmoker';
+        document.body.appendChild(whatIfNotSmoker);
+      }
+      whatIfNotSmoker.className = 'abc contentHidden';
+
+      var whatIfOptimal = document.getElementById('whatIfOptimal');
+      if (!whatIfOptimal) {
+        whatIfOptimal = document.createElement('div');
+        whatIfOptimal.id = 'whatIfOptimal';
+        document.body.appendChild(whatIfOptimal);
+      }
+      whatIfOptimal.className = 'abc';
+
+      updateUIWhatIfContainer();
+
+      var updatedWhatIfContainer = document.getElementById('whatIfContainer');
+      expect(updatedWhatIfContainer.className).to.be.equal('abc');
     });
   });
 
