@@ -174,5 +174,6 @@ add_smart_apps(
   # smart_app('598198a5-e174-460c-be6c-339c93f9e4c7', 'TigerText Clinical Messaging', 't', 4, 'https://tigertextjeff.azurewebsites.net/internal/vendors/cerner/launch.aspx'),
   # smart_app('383b14e9-d1fa-4ef6-b333-854fd7303793', 'DocEdge', 't', 1, ' http://fhir.providentedge.com/launch.html'),
   # smart_app('7041cb64-d862-4320-b900-a8c771231852', 'S4S Patient App Demo - Crucible', 't', 4, 'http://crucible.dev.syncfor.science:9004/launch'),
-  # smart_app('e82b8d7e-c4bf-401c-9393-fbd92667eed2', 'S4S Patient App Demo - Tests', 't', 4, 'http://tests.dev.syncfor.science:9003/launch/cerner/')
+  # smart_app('e82b8d7e-c4bf-401c-9393-fbd92667eed2', 'S4S Patient App Demo - Tests', 't', 4, 'http://tests.dev.syncfor.science:9003/launch/cerner/'),
+  # smart_app('8b977bb9-a5a9-427d-90b9-9ed6d69749b3', 'Juxly Timeline Dev', 't', 4, 'http://localhost:8000/fhir-app/launch.html'),
 )
