@@ -24,7 +24,7 @@ window.GC = window.GC || {};
     // =========================================================================
     var readOnlySettings = {
         
-        fileRevision : 202,
+        fileRevision : 210,
         
         // See the toString method for the rendering template
         version : {
@@ -53,7 +53,7 @@ window.GC = window.GC || {};
         mouseTrackingEnabled : false,
         
         // set to true to enable the editing of the parents in the header
-        patientFamilyHistoryEditable : false,
+        patientFamilyHistoryEditable : true,
         patientDataEditable : false
     };
     
@@ -62,8 +62,10 @@ window.GC = window.GC || {};
     // by whatever is stored on the server as preferences
     // =========================================================================
     var settings = {
-        
         hidePatientHeader: false,
+        hideAppPreferences: true,
+        hideGCComparison: true,
+        hideAddData: true,
         defaultChart : "CDC", // 2+ years
         defaultBabyChart : "WHO", // 0 - 2 years
         defaultPrematureChart : "FENTON", // premature

@@ -5,6 +5,7 @@ versions:
     changes:
       - {author: ss025783, comment: Update Cardiac Risk App to display systolic blood pressure in Incomplete display state of the app, issue: OPENSVC-2348, type: add}
       - {author: zp035497, comment: Update FHIR clients to support refresh tokens and update SMART apps to allow for refresh tokens, issue: OPENSVC-1263, type: add}
+      - {author: zp035497, comment: Update Growth Chart App to support hiding of advanced app functionalities, issue: OPENSVC-793, type: add}
   - version: 1.20.0
     release_date: 2016-05-20
     changes:
