@@ -16898,6 +16898,33 @@ function completeCodeFlow(params){
   return ret.promise;
 }
 
+function completeRefreshFlow() {
+  var ret = Adapter.get().defer();
+  var params = {
+    state: urlParam('state')
+  };
+
+  var state = JSON.parse(sessionStorage[params.state]);
+  var refresh_token = state.tokenResponse.refresh_token;
+
+  Adapter.get().http({
+    method: 'POST',
+    url: state.provider.oauth2.token_uri,
+    data: {
+      grant_type: 'refresh_token',
+      refresh_token: refresh_token
+    },
+  }).then(function(authz){
+    authz = $.extend(state.tokenResponse, authz);
+    ret.resolve(authz);
+  }, function(){
+    console.log("failed to exchange refresh_token for access_token", arguments);
+    ret.reject();
+  });
+
+  return ret.promise;
+}
+
 function completePageReload(){
   var d = Adapter.get().defer();
   process.nextTick(function(){
@@ -16955,13 +16982,26 @@ BBClient.ready = function(input, callback, errback){
   var state = urlParam('state') || (args.input && args.input.state);
 
   var accessTokenResolver = null;
-  if (state && sessionStorage[state] && JSON.parse(sessionStorage[state]).tokenResponse) { // we're reloading after successful completion
-    accessTokenResolver = completePageReload();
+  var tokenResponseCheck = JSON.parse(sessionStorage[state]).tokenResponse;
+
+  if (state && sessionStorage[state] && tokenResponseCheck) { // we're reloading after successful completion
+    // Check if 2 minutes from access token expiration timestamp
+    var payloadCheck = jwt.decode(tokenResponseCheck.access_token);
+    var nearExpTime = Math.floor(Date.now() / 1000) >= (payloadCheck[“exp”] - 120);
+
+    if (tokenResponseCheck.refresh_token
+        && tokenResponseCheck.scope.indexOf(‘online_access’) > -1
+        && nearExpTime) { // refresh token flow
+          accessTokenResolver = completeRefreshFlow();
+    else { // existing access token flow
+      accessTokenResolver = completePageReload();
+    }
   } else if (isCode) { // code flow
     accessTokenResolver = completeCodeFlow(args.input);
   } else { // token flow
     accessTokenResolver = completeTokenFlow(args.input);
   }
+
   accessTokenResolver.done(function(tokenResponse){
 
     if (!tokenResponse || !tokenResponse.state) {
