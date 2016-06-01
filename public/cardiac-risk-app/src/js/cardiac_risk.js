@@ -19,7 +19,8 @@
      * Fetches patient context to get basic patient info and observations to get lab results based on the
      * supplied LOINC codes.
      * LOINC Codes used : 'http://loinc.org|30522-7', 'http://loinc.org|14647-2', 'http://loinc.org|2093-3',
-     * 'http://loinc.org|2085-9', 'http://loinc.org|8480-6', 'http://loinc.org|2089-1', 'http://loinc.org|13457-7'
+     * 'http://loinc.org|2085-9', 'http://loinc.org|8480-6', 'http://loinc.org|2089-1', 'http://loinc.org|13457-7',
+     * 'http://loinc.org|8462-4', 'http://loinc.org|55284-4'
      * @method fetchDataAndPopulateCardiacRiskObject
      */
     var fetchDataAndPopulateCardiacRiskObject = function () {
@@ -48,7 +49,9 @@
                 var labsQuery = smart.context.patient.Observation.where
                     .codeIn('http://loinc.org|2089-1', 'http://loinc.org|13457-7',
                     'http://loinc.org|30522-7', 'http://loinc.org|14647-2',
-                    'http://loinc.org|2093-3', 'http://loinc.org|2085-9', 'http://loinc.org|8480-6')
+                    'http://loinc.org|2093-3', 'http://loinc.org|2085-9',
+                    'http://loinc.org|8480-6', 'http://loinc.org|8462-4',
+                    'http://loinc.org|55284-4')
                     .date('>=' + dateInPast.toJSON())
                     .search();
 
@@ -172,7 +175,7 @@
             CardiacRisk.patientInfo.ldlCalculated = CardiacRisk.getCholesterolValue(loincCodes('13457-7'));
         }
         if (CardiacRisk.patientInfo.systolicBloodPressure === undefined) {
-            CardiacRisk.patientInfo.systolicBloodPressure = CardiacRisk.getSystolicBloodPressureValue(loincCodes('8480-6'));
+            CardiacRisk.patientInfo.systolicBloodPressure = CardiacRisk.getSystolicBloodPressureValue(loincCodes('55284-4'));
         }
 
         //We need to look for ldlDirect before we consider ldlCalculated value for ldl.
@@ -273,8 +276,20 @@
      * @param {object} sysBPObservations - sysBloodPressure array object with valueQuantity elements having units and value.
      */
     var getSystolicBloodPressureValue = function (sysBPObservations) {
-        return CardiacRisk.getFirstValidDataPointValueFromObservations(sysBPObservations, function (dataPoint) {
-            if (dataPoint.valueQuantity.units === 'mmHg') {
+        var formattedSysBPObservations = [];
+        sysBPObservations.forEach(function(observation){
+            var systolicBP = observation.contained.find(function(component){
+                return component.code.coding.find(function(coding) {
+                    return coding.code === "8480-6";
+                });
+            });
+            if (systolicBP) {
+                formattedSysBPObservations.push(systolicBP);
+            }
+        });
+
+        return CardiacRisk.getFirstValidDataPointValueFromObservations(formattedSysBPObservations, function (dataPoint) {
+            if (dataPoint.valueQuantity.code === 'mm[Hg]' || dataPoint.valueQuantity.units === 'mmHg') {
                 return parseFloat(dataPoint.valueQuantity.value);
             }
             else {

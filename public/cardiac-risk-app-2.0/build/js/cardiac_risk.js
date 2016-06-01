@@ -19,7 +19,8 @@
      * Fetches patient context to get basic patient info and observations to get lab results based on the
      * supplied LOINC codes.
      * LOINC Codes used : 'http://loinc.org|30522-7', 'http://loinc.org|14647-2', 'http://loinc.org|2093-3',
-     * 'http://loinc.org|2085-9', 'http://loinc.org|8480-6', 'http://loinc.org|2089-1', 'http://loinc.org|13457-7'
+     * 'http://loinc.org|2085-9', 'http://loinc.org|8480-6', 'http://loinc.org|2089-1', 'http://loinc.org|13457-7',
+     * 'http://loinc.org|8462-4', 'http://loinc.org|55284-4'
      * @method fetchDataAndPopulateCardiacRiskObject
      */
     var fetchDataAndPopulateCardiacRiskObject = function () {
@@ -47,8 +48,9 @@
                         code: {
                             $or: ['http://loinc.org|2089-1', 'http://loinc.org|13457-7',
                                 'http://loinc.org|30522-7', 'http://loinc.org|14647-2',
-                                'http://loinc.org|2093-3', 'http://loinc.org|2085-9', 'http://loinc.org|8480-6'
-                            ]
+                                'http://loinc.org|2093-3', 'http://loinc.org|2085-9',
+                                'http://loinc.org|8480-6', 'http://loinc.org|8462-4',
+                                'http://loinc.org|55284-4']
                         },
                         date: 'gt' + dateInPast.toJSON()
                     }
@@ -143,7 +145,7 @@
         CardiacRisk.patientInfo.hdl = CardiacRisk.getCholesterolValue(labsByLoincCodes('2085-9'));
         CardiacRisk.patientInfo.ldl = CardiacRisk.getCholesterolValue(labsByLoincCodes('2089-1'));
         CardiacRisk.patientInfo.ldlCalculated = CardiacRisk.getCholesterolValue(labsByLoincCodes('13457-7'));
-        CardiacRisk.patientInfo.systolicBloodPressure = CardiacRisk.getSystolicBloodPressureValue(labsByLoincCodes('8480-6'));
+        CardiacRisk.patientInfo.systolicBloodPressure = CardiacRisk.getSystolicBloodPressureValue(labsByLoincCodes('55284-4'));
 
         //We need to look for ldlDirect before we consider ldlCalculated value for ldl.
         if (CardiacRisk.patientInfo.ldl === undefined) {
@@ -159,7 +161,7 @@
      */
     var sortObservationsByAppliesTimeStamp = function (labsToSort) {
         labsToSort.sort(function (a,b) {
-            return Date.parse(b.appliesDateTime) - Date.parse(a.appliesDateTime);
+            return Date.parse(b.effectiveDateTime) - Date.parse(a.effectiveDateTime);
         });
         return labsToSort;
     };
@@ -211,8 +213,20 @@
      * @param {object} sysBPObservations - sysBloodPressure array object with valueQuantity elements having units and value.
      */
     var getSystolicBloodPressureValue = function (sysBPObservations) {
-        return CardiacRisk.getFirstValidDataPointValueFromObservations(sysBPObservations, function (dataPoint) {
-            if (dataPoint.valueQuantity.unit === 'mmHg') {
+        var formattedSysBPObservations = [];
+        sysBPObservations.forEach(function(observation){
+            var systolicBP = observation.component.find(function(component){
+                return component.code.coding.find(function(coding) {
+                    return coding.code === "8480-6";
+                });
+            });
+            if (systolicBP) {
+                observation.valueQuantity = systolicBP.valueQuantity;
+                formattedSysBPObservations.push(observation);
+            }
+        });
+        return CardiacRisk.getFirstValidDataPointValueFromObservations(formattedSysBPObservations, function (dataPoint) {
+            if (dataPoint.valueQuantity.code === 'mm[Hg]' || dataPoint.valueQuantity.unit === 'mmHg') {
                 return parseFloat(dataPoint.valueQuantity.value);
             }
             else {
@@ -787,10 +801,8 @@ function checkForIncompleteState() {
     $('#whatIfContainer').removeClass().addClass('contentHidden');
     $('#horizontalRule').removeClass().addClass('contentHidden');
   }
-  else
-  {
-    $('#sbpInput').val(CardiacRisk.patientInfo.systolicBloodPressure);
-  }
+  $('#sbpInput').val(CardiacRisk.patientInfo.systolicBloodPressure);
+  onSBPInput();
 }
 
 /**
@@ -1229,6 +1241,32 @@ function adjustRangeSliderThumbPosition() {
       CardiacRisk.graphData.hdlSliderData.upperBound);
 }
 
+/**
+ * This polyfill adds in the "find" function to the Array prototype.
+ * Array.prototype.find was added in the ECMAScript 2015 specification and is not available in most browsers.
+ */
+if (!Array.prototype.find) {
+    Array.prototype.find = function(predicate) {
+        if (this === null) {
+            throw new TypeError('Array.prototype.find called on null or undefined');
+        }
+        if (typeof predicate !== 'function') {
+            throw new TypeError('predicate must be a function');
+        }
+        var list = Object(this);
+        var length = list.length >>> 0;
+        var thisArg = arguments[1];
+        var value;
+
+        for (var i = 0; i < length; i++) {
+            value = list[i];
+            if (predicate.call(thisArg, value, i, list)) {
+                return value;
+            }
+        }
+        return undefined;
+    };
+}
 
 /**
  * This method builds all the data required to display graphs for lab values.

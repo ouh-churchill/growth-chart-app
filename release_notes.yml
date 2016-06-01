@@ -3,7 +3,7 @@ versions:
   - version: 1.21.0
     release_date: 2016-xx-xx
     changes:
-      - {author: xx, comment: xx, issue: OPENSVC-xxxx, type: add}
+      - {author: ss025783, comment: Update Cardiac Risk App to display systolic blood pressure in Incomplete display state of the app, issue: OPENSVC-2348, type: add}
   - version: 1.20.0
     release_date: 2016-05-20
     changes:

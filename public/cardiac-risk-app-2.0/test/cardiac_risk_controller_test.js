@@ -236,8 +236,8 @@ describe ('CardiacRiskController', function() {
   });
 
   describe('checkForIncompleteState', function(){
-    it('sets UI elements for invalid sbp', function(){
-      CardiacRisk.patientInfo = setPatientInfo('male',59,0.5,160,100,60,undefined,false,false);
+    it('sets UI elements for incomplete state with sbp', function(){
+      CardiacRisk.patientInfo = setPatientInfo('male',59,0.5,160,100,60,110,undefined,false);
 
       var resultsInfo = document.createElement('div');
       resultsInfo.id = 'resultsInfo';
@@ -284,6 +284,14 @@ describe ('CardiacRiskController', function() {
       horizontalRule.className = 'abc';
       document.body.appendChild(horizontalRule);
 
+      var sbpInput = document.createElement('INPUT');
+      sbpInput.id = 'sbpInput';
+      sbpInput.setAttribute('type', 'text');
+      document.body.appendChild(sbpInput);
+
+      var mockWindow = sinonSandbox.mock(window);
+      mockWindow.expects('onSBPInput').once();
+
       checkForIncompleteState();
 
       var updatedResultsInfo = document.getElementById('resultsInfo');
@@ -305,21 +313,29 @@ describe ('CardiacRiskController', function() {
       expect(updatedWhatIfContainer.className).to.be.equal('contentHidden');
       var updatedHorizontalRule = document.getElementById('horizontalRule');
       expect(updatedHorizontalRule.className).to.be.equal('contentHidden');
+      var updatedSbpInput = document.getElementById('sbpInput');
+      expect(updatedSbpInput.value).to.be.equal('110');
 
+      mockWindow.verify();
     });
 
-    it('sets UI elements for valid sbp', function() {
-      CardiacRisk.patientInfo = setPatientInfo('male',59,0.5,160,100,60,119,false,false);
+    it('sets UI elements for without sbp', function() {
+      CardiacRisk.patientInfo = setPatientInfo('male',59,0.5,160,100,60,undefined,false,false);
 
       var sbpInput = document.createElement('INPUT');
       sbpInput.id = 'sbpInput';
       sbpInput.setAttribute('type', 'text');
       document.body.appendChild(sbpInput);
 
+      var mockWindow = sinonSandbox.mock(window);
+      mockWindow.expects('onSBPInput').once();
+
       checkForIncompleteState();
 
       var updatedSbpInput = document.getElementById('sbpInput');
-      expect(updatedSbpInput.value).to.be.equal('119');
+      expect(updatedSbpInput.value).to.be.equal('');
+
+      mockWindow.verify();
     });
   });
 

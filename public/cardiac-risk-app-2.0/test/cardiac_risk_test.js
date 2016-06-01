@@ -85,7 +85,7 @@ describe ('CardiacRisk', function() {
             value: 119
           },
           "status" : 'amended',
-          'appliesDateTime' : "2016-01-15T20:26:00.000Z"
+          'effectiveDateTime' : "2016-01-15T20:26:00.000Z"
         },
         {
           "valueQuantity" : {
@@ -93,7 +93,7 @@ describe ('CardiacRisk', function() {
             value: 0.38
           },
           "status" : 'final',
-          'appliesDateTime' : "2016-03-07T18:02:00.000Z"
+          'effectiveDateTime' : "2016-03-07T18:02:00.000Z"
         },
         {
           "valueQuantity" : {
@@ -101,7 +101,7 @@ describe ('CardiacRisk', function() {
             value: 10
           },
           "status" : 'entered-in-error',
-          'appliesDateTime' : "2016-03-07T14:20:00.000Z"
+          'effectiveDateTime' : "2016-03-07T14:20:00.000Z"
         },
         {
           "valueQuantity" : {
@@ -109,7 +109,7 @@ describe ('CardiacRisk', function() {
             value: 38
           },
           "status" : 'final',
-          'appliesDateTime' : "2016-03-07T17:14:00.000Z"
+          'effectiveDateTime' : "2016-03-07T17:14:00.000Z"
         },
         {
           "valueQuantity" : {
@@ -117,7 +117,7 @@ describe ('CardiacRisk', function() {
             value: 0.38
           },
           "status" : 'final',
-          'appliesDateTime' : "2015-12-16T19:54:00.000Z"
+          'effectiveDateTime' : "2015-12-16T19:54:00.000Z"
         }];
 
       var expectedResponse = [
@@ -127,7 +127,7 @@ describe ('CardiacRisk', function() {
             value: 0.38
           },
           "status" : 'final',
-          'appliesDateTime' : "2016-03-07T18:02:00.000Z"
+          'effectiveDateTime' : "2016-03-07T18:02:00.000Z"
         },
         {
           "valueQuantity" : {
@@ -135,7 +135,7 @@ describe ('CardiacRisk', function() {
             value: 38
           },
           "status" : 'final',
-          'appliesDateTime' : "2016-03-07T17:14:00.000Z"
+          'effectiveDateTime' : "2016-03-07T17:14:00.000Z"
         },
         {
           "valueQuantity" : {
@@ -143,7 +143,7 @@ describe ('CardiacRisk', function() {
             value: 10
           },
           "status" : 'entered-in-error',
-          'appliesDateTime' : "2016-03-07T14:20:00.000Z"
+          'effectiveDateTime' : "2016-03-07T14:20:00.000Z"
         },
         {
           "valueQuantity" : {
@@ -151,7 +151,7 @@ describe ('CardiacRisk', function() {
             value: 119
           },
           "status" : 'amended',
-          'appliesDateTime' : "2016-01-15T20:26:00.000Z"
+          'effectiveDateTime' : "2016-01-15T20:26:00.000Z"
         },
         {
           "valueQuantity" : {
@@ -159,7 +159,7 @@ describe ('CardiacRisk', function() {
             value: 0.38
           },
           "status" : 'final',
-          'appliesDateTime' : "2015-12-16T19:54:00.000Z"
+          'effectiveDateTime' : "2015-12-16T19:54:00.000Z"
         }];
       var response = CardiacRisk.sortObservationsByAppliesTimeStamp(labsToSort);
 
@@ -182,7 +182,7 @@ describe ('CardiacRisk', function() {
             unit: 'mg/dL',
             value: 238
           },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'final'
         }];
 
@@ -195,7 +195,7 @@ describe ('CardiacRisk', function() {
             unit: 'mmol/L',
             value: 238
           },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'amended'
         }];
 
@@ -208,7 +208,7 @@ describe ('CardiacRisk', function() {
             unit: 'mmol/L',
             value: 238
           },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'amended'
         }];
 
@@ -226,7 +226,7 @@ describe ('CardiacRisk', function() {
             unit: 'mol/L',
             value: 238
           },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'final'
         }];
 
@@ -238,7 +238,7 @@ describe ('CardiacRisk', function() {
           "valueQuantity" : {
             value: 238
           },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'final'
         }];
         expect(CardiacRisk.getCholesterolValue(cholesterol)).to.equal(undefined);
@@ -259,7 +259,7 @@ describe ('CardiacRisk', function() {
             unit: 'mg/L',
             value: 3.8
           },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'final'
         }];
 
@@ -272,7 +272,7 @@ describe ('CardiacRisk', function() {
             unit: 'mmol/L',
             value: 0.38
           },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'final'
         }];
 
@@ -285,7 +285,7 @@ describe ('CardiacRisk', function() {
             unit: 'mmol/L',
             value: 0.38
           },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'final'
         }];
 
@@ -303,7 +303,7 @@ describe ('CardiacRisk', function() {
             unit: 'mol/L',
             value: 0.38
           },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'final'
         }];
 
@@ -316,7 +316,7 @@ describe ('CardiacRisk', function() {
           "valueQuantity" : {
             value: 0.38
           },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'final'
         }];
 
@@ -335,23 +335,60 @@ describe ('CardiacRisk', function() {
     describe('returns given valid SBP in float value', function() {
       it('when SBP is a valid value in mmHg', function(){
         var sbp = [{
-          "valueQuantity" : {
-            value: 106,
-            unit: 'mmHg'
+          component : [{
+            code : {
+              coding : [{
+                code : "8480-6",
+                display : "Systolic Blood Pressure",
+                system : "http://loinc.org"
+              }],
+              text : "Systolic Blood Pressure"
+            },
+            valueQuantity : {
+              code : 'mm[Hg]',
+              value : 106,
+              unit : 'mmHg'
+            }
           },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
-          "status" : 'final'
+            {
+              code : {
+                coding : [{
+                  code : "84830-6",
+                  display : "Systolic Blood Pressure",
+                  system : "http://loinc.org"
+                }],
+                text : "Systolic Blood Pressure"
+              },
+              valueQuantity : {
+                code : 'mm[Hg]',
+                value : 111,
+                unit : 'mmHg'
+              }
+            }],
+          effectiveDateTime : "2016-03-07T18:02:00.000Z",
+          status : 'final'
         }];
         expect(CardiacRisk.getSystolicBloodPressureValue(sbp)).to.equal(106.00);
       });
 
       it('when SBP is an invalid value in mmHg', function(){
         var sbp = [{
-          "valueQuantity" : {
-            value: 106,
-            unit: 'mmsHg'
-          },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          component : [{
+            code : {
+              coding : [{
+                code : "8480-6",
+                display : "Systolic Blood Pressure",
+                system : "http://loinc.org"
+              }],
+              text : "Systolic Blood Pressure"
+            },
+            valueQuantity : {
+              code : 'msm[Hg]',
+              value : 106,
+              unit : 'mmsHg'
+            }
+          }],
+          "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'final'
         }];
 
@@ -360,16 +397,51 @@ describe ('CardiacRisk', function() {
 
       it('when SBP is an invalid value in mmHg when getFirstValidDataPointValueFromObservations is mocked', function(){
         var sbp = [{
-          "valueQuantity" : {
-            value: 106,
-            unit: 'mmHg'
-          },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
-          "status" : 'final'
+          component : [{
+            code : {
+              coding : [{
+                code : "8480-6",
+                display : "Systolic Blood Pressure",
+                system : "http://loinc.org"
+              }],
+              text : "Systolic Blood Pressure"
+            },
+            valueQuantity : {
+              code : 'mm[Hg]',
+              value : 106,
+              unit : 'mmsHg'
+            }
+          }],
+          effectiveDateTime : "2016-03-07T18:02:00.000Z",
+          status : 'final'
         }];
 
+        var expectedSBP = [{
+          component : [{
+            code : {
+              coding : [{
+                code : "8480-6",
+                display : "Systolic Blood Pressure",
+                system : "http://loinc.org"
+              }],
+              text : "Systolic Blood Pressure"
+            },
+            valueQuantity : {
+              code : 'mm[Hg]',
+              value : 106,
+              unit : 'mmsHg'
+            }
+          }],
+          valueQuantity : {
+            code : 'mm[Hg]',
+            value : 106,
+            unit : 'mmsHg'
+          },
+          effectiveDateTime : "2016-03-07T18:02:00.000Z",
+          status : 'final'
+        }];
         var mock = sinonSandbox.mock(CardiacRisk);
-        mock.expects('getFirstValidDataPointValueFromObservations').once().withArgs(sbp).returns(parseFloat(sbp[0].valueQuantity.value));
+        mock.expects('getFirstValidDataPointValueFromObservations').once().withArgs(expectedSBP).returns(parseFloat(expectedSBP[0].valueQuantity.value));
         var response = CardiacRisk.getSystolicBloodPressureValue(sbp);
         expect(response).to.equal(106);
         mock.verify();
@@ -401,7 +473,7 @@ describe ('CardiacRisk', function() {
           unit: 'mg/dL',
           value: 238
         },
-        "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+        "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
         "status" : 'Final'
       }];
 
@@ -432,7 +504,7 @@ describe ('CardiacRisk', function() {
           unit: 'msg/dL',
           value: 238
         },
-        "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+        "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
         "status" : 'final'
 
       },
@@ -441,7 +513,7 @@ describe ('CardiacRisk', function() {
             unit: 'mmHg',
             value: 119
           },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'amended'
 
         },
@@ -450,7 +522,7 @@ describe ('CardiacRisk', function() {
             unit: 'mfg/dL',
             value: 238
           },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'final'
 
         }];
@@ -482,7 +554,7 @@ describe ('CardiacRisk', function() {
           unit: 'mg/dL',
           value: 238
         },
-        "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+        "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
         "status" : 'entered-in-error'
 
       },
@@ -491,7 +563,7 @@ describe ('CardiacRisk', function() {
             unit: 'mmHg',
             value: 119
           },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'entered-in-error'
 
         },
@@ -500,7 +572,7 @@ describe ('CardiacRisk', function() {
             unit: 'mg/dL',
             value: 238
           },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'entered-in-error'
 
         }];
@@ -527,15 +599,15 @@ describe ('CardiacRisk', function() {
 
       CardiacRisk.hasObservationWithUnsupportedUnits = false;
       var observations = [{
-        "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+        "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
         "status" : 'final'
       },
         {
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'final'
         },
         {
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'final'
         }];
 
@@ -553,15 +625,15 @@ describe ('CardiacRisk', function() {
 
       CardiacRisk.hasObservationWithUnsupportedUnits = false;
       var observations = [{
-        "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+        "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
         "status" : 'final'
       },
         {
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'final'
         },
         {
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'final'
         }];
 
@@ -583,14 +655,14 @@ describe ('CardiacRisk', function() {
         "valueQuantity" : {
           unit: 'mg/dL'
         },
-        "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+        "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
         "status" : 'final'
       },
         {
           "valueQuantity" : {
             unit: 'mmHg'
           },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'final'
 
         },
@@ -598,7 +670,7 @@ describe ('CardiacRisk', function() {
           "valueQuantity" : {
             unit: 'mg/dL'
           },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'final'
 
         }];
@@ -620,7 +692,7 @@ describe ('CardiacRisk', function() {
         "valueQuantity" : {
           value: 238
         },
-        "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+        "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
         "status" : 'final'
 
       },
@@ -628,7 +700,7 @@ describe ('CardiacRisk', function() {
           "valueQuantity" : {
             value: 119
           },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'final'
 
         },
@@ -636,7 +708,7 @@ describe ('CardiacRisk', function() {
           "valueQuantity" : {
             value: 238
           },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'final'
 
         }];
@@ -659,7 +731,7 @@ describe ('CardiacRisk', function() {
           unit: 'mg/dL',
           value: 238
         },
-        "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+        "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
         "status" : 'final'
 
       },
@@ -668,7 +740,7 @@ describe ('CardiacRisk', function() {
             unit: 'mmdHg',
             value: 119
           },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'amended'
 
         },
@@ -677,7 +749,7 @@ describe ('CardiacRisk', function() {
             unit: 'mfg/dL',
             value: 238
           },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
+          "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'final'
 
         }];

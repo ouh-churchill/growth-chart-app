@@ -456,41 +456,94 @@ describe ('CardiacRisk', function() {
     describe('returns given valid SBP in float value', function() {
       it('when SBP is a valid value in mmHg', function(){
         var sbp = [{
-          "valueQuantity" : {
-            "value": 106,
-            "units" : 'mmHg'
-          },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
-          "status" : 'final'
+          contained : [{
+            code : {
+              coding : [{
+                code : '8480-6',
+                display : '"Systolic blood pressure"',
+                system : '"http://loinc.org"'
+              }],
+              text : "Systolic Blood Pressure"
+            },
+            valueQuantity : {
+              code : "mm[Hg]",
+              value: 106,
+              units : 'mmHg'
+            },
+            appliesDateTime : "2016-03-07T18:02:00.000Z",
+            status : 'final'
+          }],
+          status : 'unknown'
         }];
         expect(CardiacRisk.getSystolicBloodPressureValue(sbp)).to.equal(106.00);
       });
 
       it('when SBP is an invalid value in mmHg', function(){
         var sbp = [{
-          "valueQuantity" : {
-            "value": 106,
-            "units" : 'mmsHg'
-          },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
-          "status" : 'final'
+          contained : [{
+            code : {
+              coding : [{
+                code : '8480-6',
+                display : '"Systolic blood pressure"',
+                system : '"http://loinc.org"'
+              }],
+              text : "Systolic Blood Pressure"
+            },
+            valueQuantity : {
+              code : "mmd[Hg]",
+              value: 106,
+              units : 'mdmHg'
+            },
+            appliesDateTime : "2016-03-07T18:02:00.000Z",
+            status : 'final'
+          }],
+          status : 'unknown'
         }];
 
         expect(CardiacRisk.getSystolicBloodPressureValue(sbp)).to.equal(undefined);
       });
 
-      it('when SBP is an invalid value in mmHg when getFirstValidDataPointValueFromObservations is mocked', function(){
+      it('when SBP has a valid value in mmHg when getFirstValidDataPointValueFromObservations is mocked', function(){
         var sbp = [{
-          "valueQuantity" : {
-            "value": 106,
-            "units" : 'mmHg'
-          },
-          "appliesDateTime" : "2016-03-07T18:02:00.000Z",
-          "status" : 'final'
+          contained : [{
+            code : {
+              coding : [{
+                code : '8480-6',
+                display : '"Systolic blood pressure"',
+                system : '"http://loinc.org"'
+              }],
+              text : "Systolic Blood Pressure"
+            },
+            valueQuantity : {
+              code : "mm[Hg]",
+              value: 106,
+              units : 'mmHg'
+            },
+            appliesDateTime : "2016-03-07T18:02:00.000Z",
+            status : 'final'
+          }],
+          status : 'unknown'
         }];
 
+        var expectedSBP = [{
+            code : {
+              coding : [{
+                code : '8480-6',
+                display : '"Systolic blood pressure"',
+                system : '"http://loinc.org"'
+              }],
+              text : "Systolic Blood Pressure"
+            },
+            valueQuantity : {
+              code : "mm[Hg]",
+              value: 106,
+              units : 'mmHg'
+            },
+            appliesDateTime : "2016-03-07T18:02:00.000Z",
+            status : 'final'
+        }];
         var mock = sinonSandbox.mock(CardiacRisk);
-        mock.expects('getFirstValidDataPointValueFromObservations').once().withArgs(sbp).returns(parseFloat(sbp[0].valueQuantity.value));
+        mock.expects('getFirstValidDataPointValueFromObservations').once().withArgs(expectedSBP).returns(parseFloat(expectedSBP[0].valueQuantity.value));
         var response = CardiacRisk.getSystolicBloodPressureValue(sbp);
         expect(response).to.equal(106);
         mock.verify();

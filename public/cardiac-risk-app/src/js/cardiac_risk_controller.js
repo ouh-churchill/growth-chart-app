@@ -112,10 +112,8 @@ function checkForIncompleteState() {
     $('#whatIfContainer').removeClass().addClass('contentHidden');
     $('#horizontalRule').removeClass().addClass('contentHidden');
   }
-  else
-  {
-    $('#sbpInput').val(CardiacRisk.patientInfo.systolicBloodPressure);
-  }
+  $('#sbpInput').val(CardiacRisk.patientInfo.systolicBloodPressure);
+  onSBPInput();
 }
 
 /**
