@@ -34,7 +34,9 @@ GC.get_data = function() {
 
     ptFetch.done(function() {
       patient.Observation.where.
-      codeIn(['http://loinc.org|3141-9', 'http://loinc.org|8302-2', 'http://loinc.org|8287-5', 'http://loinc.org|39156-5', 'http://loinc.org|18185-9', 'http://loinc.org|37362-1']).
+      codeIn(['http://loinc.org|3141-9', 'http://loinc.org|8302-2', 'http://loinc.org|8287-5',
+        'http://loinc.org|39156-5', 'http://loinc.org|18185-9', 'http://loinc.org|37362-1',
+        'http://loinc.org|11884-4']).
       drain(drainVitals).done(doneVitals).fail(function() {
         onErrorWithWarning(GC.str('STR_Error_LoadingApplication'));
       });
@@ -106,9 +108,40 @@ GC.get_data = function() {
       p.demographics.gender = patient.gender;
 
       var gestAge = vitalsByCode['18185-9'];
+      if (gestAge === undefined) {
+        //handle an alternate mapping of Gest Age used by Cerner
+        gestAge = vitalsByCode['11884-4'];
+      }
       if (gestAge && gestAge.length > 0) {
-        p.demographics.gestationalAge = gestAge[0].valueQuantity.value;
-        p.demographics.weeker = p.demographics.gestationalAge;
+        var weeks = 0;
+        var qty;
+        if (gestAge[0].valueString) {
+          qty = gestAge[0].valueString.value || '40W 0D';
+        } else {
+          if (gestAge[0].valueQuantity) {
+            qty = gestAge[0].valueQuantity.value || 40;
+          } else {
+            qty = 40;
+          }
+        }
+
+        if (typeof qty == 'string') {
+          if (qty.indexOf("weeks") > 0 ) {
+            qty = qty.replace(/ weeks/gi, "W");
+          }
+          qty.replace(/(\d+)([WD])\s*/gi, function(token, num, code) {
+            num = parseFloat(num);
+            if (code.toUpperCase() == 'D') {
+              num /= 7;
+            }
+            weeks += num;
+          });
+        } else {
+          weeks = qty;
+        }
+
+        p.demographics.gestationalAge = weeks;
+        p.demographics.weeker = weeks;
       }
 
       var units = smart.units;
@@ -140,7 +173,8 @@ GC.get_data = function() {
           }
           arr.push({
             agemos: months(v.appliesDateTime, patient.birthDate),
-            value: value
+            value: value,
+            display: v.appliesDateTime
           })
         });
       };

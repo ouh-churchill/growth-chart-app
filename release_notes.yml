@@ -8,6 +8,7 @@ versions:
       - {author: kt026311, comment: Create API to return FHIR servers, issue: OPENSVC-2584, type: add}
       - {author: ss025783, comment: Updated JS to fix SMART apps launches in Safari, issue: OPENSVC-2561, type: add}
       - {author: ss025783, comment: Updated Launch Context to ignore parameter values having value <= 0, issue: OPENSVC-2044, type: add}
+      - {author: zp035497, comment: Update Growth Chart App to incorporate Intermountain HC changes to open-source app, issue: OPENSVC-2087, type: add}
   - version: 1.21.0
     release_date: 2016-06-06
     changes:

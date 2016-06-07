@@ -112,6 +112,9 @@ GC.get_data = function() {
             40;
 
         if (typeof qty == 'string') {
+          if (qty.indexOf("weeks") > 0 ) {
+            qty = qty.replace(/ weeks/gi, "W");
+          }
           qty.replace(/(\d+)([WD])\s*/gi, function(token, num, code) {
             num = parseFloat(num);
             if (code.toUpperCase() == 'D') {
@@ -148,7 +151,8 @@ GC.get_data = function() {
         observationValues && observationValues.forEach(function(v){
           arr.push({
             agemos: months(v.effectiveDateTime, patient.birthDate),
-            value: toUnit(v.valueQuantity)
+            value: toUnit(v.valueQuantity),
+            display: v.effectiveDateTime
           })
         });
       };

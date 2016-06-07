@@ -108,6 +108,17 @@ XDate, setTimeout, getDataSet*/
         }
         return EMPTY_MARK;
     }
+
+    function monthsInDays(d) {
+        var diffDays = -1 * (new XDate(d)).diffDays(GC.App.getPatient().DOB);
+        var weeksInMonth = 4.348214285714286;
+        if (diffDays < 0) {
+            return ((Math.ceil(diffDays))/7)/ weeksInMonth;
+        }
+        else {
+            return ((Math.floor(diffDays))/7)/ weeksInMonth;
+        }
+    }
     
     function getPercentile( entry, prop ) {
         if (entry.hasOwnProperty(prop)) {
@@ -117,12 +128,13 @@ XDate, setTimeout, getDataSet*/
                     entry[prop], 
                     ds, 
                     GC.App.getGender(), 
-                    entry.agemos
+                    monthsInDays(entry.display)
                 );
                 if ( isNaN(pct) || !isFinite(pct) ) {
                     return EMPTY_MARK;
                 }
-                return GC.Util.roundToPrecision(pct * 100, 0);
+                var prec = GC.chartSettings.roundPrecision.percentile[GC.chartSettings.nicu ? "nicu" : "std"];
+                return GC.Util.roundToPrecision(pct * 100, prec);
             }
         }
         return EMPTY_MARK;
@@ -141,7 +153,8 @@ XDate, setTimeout, getDataSet*/
                 if ( isNaN(z) || !isFinite(z) ) {
                     return EMPTY_MARK;
                 }
-                return GC.Util.roundToPrecision(z, 1);
+                var prec = GC.chartSettings.roundPrecision.percentile[GC.chartSettings.nicu ? "nicu" : "std"];
+                return GC.Util.roundToPrecision(z, prec);
             }
         }
         return EMPTY_MARK;
@@ -182,7 +195,7 @@ XDate, setTimeout, getDataSet*/
             case "weight":
                 return GC.DATA_SETS[ds + "_WEIGHT"];
             case "headc":
-                return GC.DATA_SETS[ds + "_HEAD_CIRCUMFERENCE_INF"];
+                return GC.DATA_SETS[ds + "_HEADC"];
         }
     }
     
