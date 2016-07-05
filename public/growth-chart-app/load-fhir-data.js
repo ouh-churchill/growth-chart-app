@@ -163,28 +163,24 @@ GC.get_data = function() {
 
       function process(observationValues, toUnit, arr){
         observationValues && observationValues.forEach(function(v){
-          var value = null;
-          try {
-            value = toUnit(v.valueQuantity);
+          if (v.status.toLowerCase() === 'final' || v.status.toLowerCase() === 'amended') {
+            arr.push({
+              agemos: months(v.appliesDateTime, patient.birthDate),
+              value: toUnit(v.valueQuantity),
+              display: v.appliesDateTime
+            });
           }
-          catch (err) {
-            console.log("Invalid unit code " + v.valueQuantity.code + " for value " + v.valueQuantity.value);
-            return;
-          }
-          arr.push({
-            agemos: months(v.appliesDateTime, patient.birthDate),
-            value: value,
-            display: v.appliesDateTime
-          })
         });
       };
 
       function processBA(boneAgeValues, arr){
         boneAgeValues && boneAgeValues.forEach(function(v){
-          arr.push({
-            date: v.appliesDateTime,
-            boneAgeMos: units.any(v.valueQuantity)
-          })
+          if (v.status.toLowerCase() === 'final' || v.status.toLowerCase() === 'amended') {
+            arr.push({
+              date: v.appliesDateTime,
+              boneAgeMos: units.any(v.valueQuantity)
+            });
+          }
         });
       };
 

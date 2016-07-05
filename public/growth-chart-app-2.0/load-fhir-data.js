@@ -149,20 +149,24 @@ GC.get_data = function() {
 
       function process(observationValues, toUnit, arr){
         observationValues && observationValues.forEach(function(v){
-          arr.push({
-            agemos: months(v.effectiveDateTime, patient.birthDate),
-            value: toUnit(v.valueQuantity),
-            display: v.effectiveDateTime
-          })
+          if (v.status.toLowerCase() === 'final' || v.status.toLowerCase() === 'amended') {
+            arr.push({
+              agemos: months(v.effectiveDateTime, patient.birthDate),
+              value: toUnit(v.valueQuantity),
+              display: v.effectiveDateTime
+            });
+          }
         });
       };
 
       function processBA(boneAgeValues, arr){
         boneAgeValues && boneAgeValues.forEach(function(v){
-          arr.push({
-            date: v.effectiveDateTime,
-            boneAgeMos: units.any(v.valueQuantity)
-          })
+          if (v.status.toLowerCase() === 'final' || v.status.toLowerCase() === 'amended') {
+            arr.push({
+              date: v.effectiveDateTime,
+              boneAgeMos: units.any(v.valueQuantity)
+            });
+          }
         });
       };
 
