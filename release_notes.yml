@@ -3,7 +3,7 @@ versions:
   - version: 1.22.0
     release_date: 2016-xx-xx
     changes:
-      - {author: xx, comment: xx, issue: OPENSVC-xxxx, type: add}
+      - {author: kk014173, comment: Update ion_common to latest version and opt out of ion_common middleware, issue: OPENSVC-1850, type: add}
   - version: 1.21.0
     release_date: 2016-06-06
     changes:
