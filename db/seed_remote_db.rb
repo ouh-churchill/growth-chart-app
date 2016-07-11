@@ -191,4 +191,5 @@ add_smart_apps(
   # smart_app('48c70d9d-987d-466e-844e-82365a2f6e1a', 'MedSafe', 't', 4, 'http://gs:3000/launch'),
   # smart_app('07afc4d1-2a22-47f5-ae00-5d7a0c172717', 'PDemo', 't', 4, 'http://localhost:50143/Public/PDemo/PDemo.html'), #Not truly SMART capable, can remove after launch no longer reqd
   # smart_app('38bec537-a706-4563-9242-7d4432bc6500', 'Loopback FHIR Test', 't', 4, 'http://localhost:11890/Home/Login'),
+  # smart_app('ce1e6662-b08f-400f-8c96-328d91511c1a', 'HACI Timeline (Localhost)', 't', 4, 'http://localhost:8000/launch.html'),
 )
