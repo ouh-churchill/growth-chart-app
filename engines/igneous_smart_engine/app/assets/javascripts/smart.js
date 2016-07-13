@@ -15,7 +15,9 @@ CERNER_SMART_LAUNCH.requestSync = new XMLCclRequest();
 * in a stand alone browser.
 */
 function isRunningInPowerChart() {
-  return (typeof window.external.DiscernObjectFactory !== 'undefined');
+
+  return (window.external && typeof window.external.DiscernObjectFactory !== 'undefined');
+
 }
 
 /**
