@@ -70,6 +70,14 @@ window.GC = window.GC || {};
         defaultChart : "CDC", // 2+ years
         defaultBabyChart : "WHO", // 0 - 2 years
         defaultPrematureChart : "FENTON", // premature
+
+        // Graphs and data sets allowed for visibility
+        publicGraphs: {
+            "CDC" : { name: "CDC", val: true },
+            "WHO" : { name: "WHO", val: true },
+            "FENTON" : { name: "FENTON", val: true },
+            "OLSEN" : { name: "OLSEN", val: true }
+        },
         
         widthType  : "auto",// or "fixed"
         paperWidth : 1200,

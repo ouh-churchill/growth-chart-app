@@ -2193,33 +2193,53 @@ if ( !Array.prototype.indexOf ) {
         }
         
     });
-    
+
     $(function() {
-        $(".menu-button").menuButton({
-            placeHolder : "STR_6049",
-            dataSet : [
-                {
-                    label : "CDC",
-                    value : "CDC"
-                },
-                {
-                    label : "WHO",
-                    value : "WHO"
-                },
-                "-",
-                {
-                    label    : "Bayer-Bayley",
-                    value    : "BB"
-                },
-                {
-                    label : "Down Syndrome",
-                    value : "DS"
-                },
-                {
-                    label : "Fenton",
-                    value : "FENTON"
+        $.ajax({
+            url: "GCMenuItemsJSON.txt",
+            success: function (data) {
+                try {
+                    var parsedData = JSON.parse(data);
+
+                    // Parse through GC's specified in GCMenuItemsJSON.txt and identify which of the GC datasets
+                    // are acceptable to display based on settings in the chart configuration
+                    var list = GC.chartSettings.publicGraphs;
+                    var chartMenuItems = [];
+                    for (var obj in parsedData) {
+                        if (parsedData.hasOwnProperty(obj)) {
+                            for (var key in list) {
+                                if (list.hasOwnProperty(key)) {
+                                    var chart = list[key];
+                                    if (chart.val === true && parsedData[obj].value === chart.name) {
+                                        var addOption = '<option value="' + chart.name + '">' + chart.name + '</option>';
+                                        $('select[name=defaultPrematureChart]').append(addOption);
+                                        $('select[name=defaultBabyChart]').append(addOption);
+                                        $('select[name=defaultChart]').append(addOption);
+
+                                        chartMenuItems.push(parsedData[obj]);
+                                    }
+                                    if (parsedData[obj] === "-") {
+                                        chartMenuItems.push(parsedData[obj]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    GC.MENU_MAP = chartMenuItems;
+
+                    $(".menu-button").menuButton({
+                        placeHolder : "STR_6049",
+                        dataSet : GC.MENU_MAP
+                    });
                 }
-            ]
+                catch (exc) {
+                    console.log("error reading menu data from JSON file." +" \n" + exc);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log("error loading menu data from JSON file.\n" + jqXHR.status + " " + textStatus + " " + errorThrown);
+            }
         });
     });
     

@@ -415,19 +415,10 @@
         function sync() {
             var dfd = $.Deferred();
             model.proxy.read().done(function(serverData) {
-                
-                // Update the stored data because the config file is newer
-                if (!serverData || !serverData.fileRevision || serverData.fileRevision < data.fileRevision) {
-                    data.fileRevision = data.fileRevision || 1;
-                    save().done(function(data) {
-                        dfd.resolve(data);
-                    });
-                } 
-                
-                // Use the stored data because the config file is NOT newer
-                else {
-                    dfd.resolve($.extend(true, data, serverData, readOnlyData));
-                }
+                data.fileRevision = data.fileRevision || 1;
+                save().done(function(data) {
+                    dfd.resolve(data);
+                });
             });
             return dfd;
         }
