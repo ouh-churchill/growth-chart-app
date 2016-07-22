@@ -30,9 +30,10 @@ module Igneous
             # As parameters are always Strings in Rails, we'll convert to an Fixnum/Bignum (.to_i)
             # to strip the .00 and then convert back to a String (.to_s).
 
-            value = is_numeric ? params[j].to_i.to_s : params[j]
+            value = is_numeric ? (params[j].to_i > 0 ? params[j].to_i.to_s : nil) : params[j]
 
-            smart_context[i] = value
+            smart_context[i] = value unless value.nil?
+
           end
         end
 

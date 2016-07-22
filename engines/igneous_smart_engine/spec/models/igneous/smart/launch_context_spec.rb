@@ -162,5 +162,36 @@ describe Igneous::Smart::LaunchContext do
                                                       'container_name' => nil)
       expect(context.need_patient_banner).to eq false
     end
+
+    it 'will not add key, value pair when value supplied has value <= 0' do
+      params = {
+          'pat_personid' => '1.00',
+          'vis_encntrid' => '0.00',
+          'pat_pprcode' => '324',
+          'dev_location' => nil,
+          'app_appname'  => nil,
+          'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc',
+          'need_patient_banner' => 'false',
+          'username' => 'test_username'
+      }
+
+      context_id = '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
+      app_id = 'd193fa79-c165-4daa-a8fd-c187fba2af4d'
+      smart_launch_url = 'http://example.com/smart/launch.html'
+      allow(SecureRandom).to receive(:uuid).and_return(context_id)
+      launch_context.context(params, app_id, smart_launch_url)
+      context = Igneous::Smart::LaunchContext.find_by context_id: context_id
+
+      expect(JSON.parse(context.data)).to include('patient' => '1', 'ppr' => '324')
+      expect(JSON.parse(context.data)).to_not include('encounter' => '0.00' ,'device_location' => nil,
+                                                      'container_name' => nil)
+      expect(context.context_id).to eq('46134c2c-7412-4d53-b09e-e8ced4c73dbc')
+      expect(context.username).to eq('test_username')
+      expect(context.app_id).to eq('d193fa79-c165-4daa-a8fd-c187fba2af4d')
+      expect(context.smart_launch_url).to eq('http://example.com/smart/launch.html')
+      expect(context.tenant).to eq('46134c2c-7412-4d53-b09e-e8ced4c73dbc')
+      expect(context.need_patient_banner).to eq false
+
+    end
   end
 end
