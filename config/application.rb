@@ -65,6 +65,9 @@ module IgneousSmartServer
     # Rails::Rack::Logger after the additional logging information is injected.
     config.middleware.swap Rails::Rack::Logger, Igneous::Smart::Logger
 
+    # Insert ActionDispatch::ParamsParser after Igneous::Smart::Logger to ensure parsing of JSON appropriately
+    config.middleware.insert_after ActionDispatch::ParamsParser, Igneous::Smart::Logger
+
     config.action_dispatch.default_headers.merge!('Strict-Transport-Security' => 'max-age=631152000')
 
     # Disable profiler for tests

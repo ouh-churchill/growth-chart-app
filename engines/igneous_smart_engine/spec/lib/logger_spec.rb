@@ -11,14 +11,13 @@ describe Igneous::Smart::Logger do
   describe '#call_app' do
     let(:mock_app) { double(Object) }
     let(:env) { {'REQUEST_METHOD' => 'GET'} }
+    let(:returned_context) { HashWithIndifferentAccess.new }
 
     before(:each) do
       @logger = Igneous::Smart::Logger.new(mock_app)
     end
 
     it 'adds correlation_id and tenant_key to timber' do
-      returned_context = HashWithIndifferentAccess.new
-
       # Stub Timber::Diagnostics.context to return back the context
       # to use for validating that the correlation_id and tenant_key is stored correctly.
       expect(Timber::Diagnostics).to receive(:contexts).at_least(1).and_return(returned_context)
@@ -36,8 +35,6 @@ describe Igneous::Smart::Logger do
     end
 
     it 'tenant param added to timber' do
-      returned_context = HashWithIndifferentAccess.new
-
       # Stub Timber::Diagnostics.context to return back the context
       # to use for validating that the correlation_id and tenant_key is stored correctly.
       expect(Timber::Diagnostics).to receive(:contexts).at_least(1).and_return(returned_context)
@@ -56,9 +53,95 @@ describe Igneous::Smart::Logger do
       @logger.call_app(request_mock, env)
     end
 
-    it 'adds only correlation_id to timber' do
-      returned_context = HashWithIndifferentAccess.new
+    it 'tnt from request body added to timber' do
+      expect(Timber::Diagnostics).to receive(:contexts).at_least(1).and_return(returned_context)
 
+      body_mock = { 'tnt' => '345' }
+      request_mock = ActionDispatch::Request.new(env)
+
+      path = '/smart/launch/resolve'
+      content_type = 'application/json'
+      env['action_dispatch.request.request_parameters'] = body_mock
+
+      expect(request_mock).to receive(:path).and_return(path)
+      expect(request_mock).to receive(:content_type).and_return(content_type)
+      expect(request_mock).to receive(:params).at_least(1).and_return({})
+
+      expect(returned_context).to receive(:[]=).with(:correlation_id, request_mock.uuid)
+      expect(returned_context).to receive(:[]=).with(:tenant_key, '345')
+      expect(returned_context).to receive(:delete).with(:correlation_id)
+      expect(returned_context).to receive(:delete).with(:tenant_key)
+
+      @logger.call_app(request_mock, env)
+    end
+
+    it 'adds the ehr_source_id to Timber if request body is nil' do
+      expect(Timber::Diagnostics).to receive(:contexts).at_least(1).and_return(returned_context)
+
+      body_mock = nil
+      request_mock = ActionDispatch::Request.new(env)
+
+      path = '/smart/launch/resolve'
+      content_type = 'application/json'
+      env['action_dispatch.request.request_parameters'] = body_mock
+      env['PATH_INFO'] = '/smart/closed-ehr-source-id/Resource/'
+
+      expect(request_mock).to receive(:path).and_return(path)
+      expect(request_mock).to receive(:content_type).and_return(content_type)
+      expect(request_mock).to receive(:params).at_least(1).and_return({})
+
+      expect(returned_context).to receive(:[]=).with(:correlation_id, request_mock.uuid)
+      expect(returned_context).to receive(:[]=).with(:tenant_key, 'closed-ehr-source-id')
+      expect(returned_context).to receive(:delete).with(:correlation_id)
+      expect(returned_context).to receive(:delete).with(:tenant_key)
+
+      @logger.call_app(request_mock, env)
+    end
+
+    it 'adds the ehr_source_id to Timber if tnt is not in request body' do
+      expect(Timber::Diagnostics).to receive(:contexts).at_least(1).and_return(returned_context)
+
+      body_mock = { 'abc' => '345' }
+      request_mock = ActionDispatch::Request.new(env)
+
+      path = '/smart/launch/resolve'
+      content_type = 'application/json'
+      env['action_dispatch.request.request_parameters'] = body_mock
+      env['PATH_INFO'] = '/smart/closed-ehr-source-id/Resource/'
+
+      expect(request_mock).to receive(:path).and_return(path)
+      expect(request_mock).to receive(:content_type).and_return(content_type)
+      expect(request_mock).to receive(:params).at_least(1).and_return({})
+
+      expect(returned_context).to receive(:[]=).with(:correlation_id, request_mock.uuid)
+      expect(returned_context).to receive(:[]=).with(:tenant_key, 'closed-ehr-source-id')
+      expect(returned_context).to receive(:delete).with(:correlation_id)
+      expect(returned_context).to receive(:delete).with(:tenant_key)
+
+      @logger.call_app(request_mock, env)
+    end
+
+    it 'adds tenant param to Timber if path is not in smart/launch/resolve' do
+      expect(Timber::Diagnostics).to receive(:contexts).at_least(1).and_return(returned_context)
+
+      request_mock = ActionDispatch::Request.new(env)
+      params = {'tenant' => '345'}
+
+      path = '/smart/abc/def'
+      env['PATH_INFO'] = '/smart/closed-ehr-source-id/Resource/'
+
+      expect(request_mock).to receive(:path).and_return(path)
+      expect(request_mock).to receive(:params).at_least(1).and_return(params)
+
+      expect(returned_context).to receive(:[]=).with(:correlation_id, request_mock.uuid)
+      expect(returned_context).to receive(:[]=).with(:tenant_key, '345')
+      expect(returned_context).to receive(:delete).with(:correlation_id)
+      expect(returned_context).to receive(:delete).with(:tenant_key)
+
+      @logger.call_app(request_mock, env)
+    end
+
+    it 'adds only correlation_id to timber' do
       # Stub Timber::Diagnostics.context to return back the context
       # to use for validating that the correlation_id is stored correctly.
       expect(Timber::Diagnostics).to receive(:contexts).at_least(1).and_return(returned_context)
@@ -74,7 +157,6 @@ describe Igneous::Smart::Logger do
     end
 
     it 'deletes correlation_id and tenant_key from timber' do
-
       request_mock = ActionDispatch::Request.new(env)
       expect(request_mock).to receive(:params).at_least(1).and_return({})
       env['PATH_INFO'] = '/smart/closed-ehr-source-id/Resource/'
@@ -87,7 +169,6 @@ describe Igneous::Smart::Logger do
     end
 
     it 'deletes correlation_id  from timber' do
-
       request_mock = ActionDispatch::Request.new({})
       expect(request_mock).to receive(:params).at_least(1).and_return({})
 

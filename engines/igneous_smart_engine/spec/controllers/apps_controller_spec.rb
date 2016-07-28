@@ -90,7 +90,7 @@ describe Igneous::Smart::AppsController, type: :controller do
                    'username' => 'test_username'
 
         expect(response).to have_http_status(302)
-        expect(response).to redirect_to('http://test.host/smart/user/preauth?context_id=11309546-4ef4-4dba-8f36-53ef3834d90e')
+        expect(response).to redirect_to('http://test.host/smart/user/preauth?context_id=11309546-4ef4-4dba-8f36-53ef3834d90e&tenant=foo')
 
         context = Igneous::Smart::LaunchContext.find_by context_id: '11309546-4ef4-4dba-8f36-53ef3834d90e'
 
@@ -128,7 +128,7 @@ describe Igneous::Smart::AppsController, type: :controller do
                    'username' => 'test_username'
 
         expect(response).to have_http_status(302)
-        expect(response).to redirect_to('http://test.host/smart/user/preauth?context_id=11309546-4ef4-4dba-8f36-53ef3834d90e')
+        expect(response).to redirect_to('http://test.host/smart/user/preauth?context_id=11309546-4ef4-4dba-8f36-53ef3834d90e&tenant=foo')
 
         context = Igneous::Smart::LaunchContext.find_by context_id: '11309546-4ef4-4dba-8f36-53ef3834d90e'
 
@@ -165,7 +165,7 @@ describe Igneous::Smart::AppsController, type: :controller do
                    'vis_encntrid' => '300.00', 'usr_personid' => '400.00', 'username' => 'test_username'
 
         expect(response).to have_http_status(302)
-        expect(response).to redirect_to('http://test.host/smart/user/preauth?context_id=11309546-4ef4-4dba-8f36-53ef3834d90e')
+        expect(response).to redirect_to('http://test.host/smart/user/preauth?context_id=11309546-4ef4-4dba-8f36-53ef3834d90e&tenant=foo')
 
         context = Igneous::Smart::LaunchContext.find_by context_id: '11309546-4ef4-4dba-8f36-53ef3834d90e'
 

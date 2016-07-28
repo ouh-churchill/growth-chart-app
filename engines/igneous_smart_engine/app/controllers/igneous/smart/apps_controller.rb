@@ -50,7 +50,7 @@ module Igneous
         audit_smart_launch_app_success(params, context_data)
 
         if app.authorized
-          redirect_to controller: 'user', action: 'preauth', context_id: launch_context.context_id
+          redirect_to controller: 'user', action: 'preauth', context_id: launch_context.context_id, tenant: params['ehr_source_id']
         else
           redirect_to smart_launch_url
         end
