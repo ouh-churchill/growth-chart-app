@@ -193,4 +193,5 @@ add_smart_apps(
   # smart_app('38bec537-a706-4563-9242-7d4432bc6500', 'Loopback FHIR Test', 't', 4, 'http://localhost:11890/Home/Login'),
   # smart_app('ce1e6662-b08f-400f-8c96-328d91511c1a', 'HACI Timeline (Localhost)', 't', 4, 'http://localhost:8000/launch.html'),
   # smart_app('d94d2955-810d-4242-92ae-fdf7a6745db9', 'EAPathways', 't', 4, 'http://pathways.developmentdemo.com/launch.html'),
+  # smart_app('cc092a4d-ca40-4168-84e4-9e86c9d45406', 'ePreop SurgicalValet (DEVELOPMENT)', 't', 4, 'https://services.dev.epreop.com/ExternalServices/OpenIdConnect10/Launch.aspx'),
 )
