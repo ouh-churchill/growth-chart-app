@@ -195,4 +195,5 @@ add_smart_apps(
   # smart_app('d94d2955-810d-4242-92ae-fdf7a6745db9', 'EAPathways', 't', 4, 'http://pathways.developmentdemo.com/launch.html'),
   # smart_app('cc092a4d-ca40-4168-84e4-9e86c9d45406', 'ePreop SurgicalValet (DEVELOPMENT)', 't', 4, 'https://services.dev.epreop.com/ExternalServices/OpenIdConnect10/Launch.aspx'),
   # smart_app('46df0b7b-ca9a-4b4a-ba9f-083f52f0469e', 'DIASYST', 't', 4, 'https://emr.diasyst.com/cerner/launch'),
+  # smart_app('31df47af-bb5d-4291-9d87-504e078cc9c8', 'SMART on FHIR Starter App', 't', 4, 'https://parthivbhagat.github.io/pb026393.github.io/launch.html')
 )
