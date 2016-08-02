@@ -46,4 +46,32 @@ describe Igneous::Smart::FhirServersController, type: :controller do
     end
 
   end
+
+  context '#fhir_servers' do
+    describe 'when the request is not from the Cerner internal network' do
+      it 'returns 404 if the Cerner-Trusted-Traffic header is not present' do
+        get :index
+
+        expect(response).to have_http_status(404)
+      end
+
+      it 'returns 404 if the traffic is from a trusted external source' do
+        request.headers['Cerner-Trusted-Traffic'] = 'not-cerner'
+        get :index
+
+        expect(response).to have_http_status(404)
+      end
+    end
+
+    describe 'when the request is from the Cerner internal network' do
+      it 'successfully returns all FhirServers' do
+        request.headers['Cerner-Trusted-Traffic'] = 'cerner'
+
+        get :index
+
+        expect(response).to have_http_status(200)
+      end
+    end
+
+  end
 end

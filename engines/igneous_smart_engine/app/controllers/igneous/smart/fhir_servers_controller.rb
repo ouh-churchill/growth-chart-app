@@ -8,6 +8,10 @@ module Igneous
         FhirServer.create!(params.require(:fhir_server).permit(:name, :url))
         head 204
       end
+
+      def index
+        render json: FhirServer.all
+      end
     end
   end
 end

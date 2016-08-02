@@ -76,11 +76,11 @@ def smart_app_validator_url_dstu2
 end
 
 # add_fhir_servers(
-#   fhir_server('cerner',            "#{FHIR_SERVER}/may2015/@tenant_id@"),
-#   fhir_server('cerner_open',       "#{FHIR_SERVER}/may2015/open/@tenant_id@"),
-#   fhir_server('cerner_dstu2',      "#{FHIR_SERVER}/dstu2/@tenant_id@"),
-#   fhir_server('cerner_dstu2_open', "#{FHIR_SERVER}/dstu2/open/@tenant_id@"),
-#   fhir_server('cerner_staging',    'https://fhir.stagingcernerpowerchart.com/dstu2/@tenant_id@')
+#   fhir_server('cerner',            "#{FHIR_SERVER}/may2015/@tenant_id@",                         't', 't'),
+#   fhir_server('cerner_open',       "#{FHIR_SERVER}/may2015/open/@tenant_id@",                    'f', 't'),
+#   fhir_server('cerner_dstu2',      "#{FHIR_SERVER}/dstu2/@tenant_id@",                           't', 't'),
+#   fhir_server('cerner_dstu2_open', "#{FHIR_SERVER}/dstu2/open/@tenant_id@",                      'f', 't'),
+#   fhir_server('cerner_staging',    'https://fhir.stagingcernerpowerchart.com/dstu2/@tenant_id@', 't', 't')
 # )
 
 add_smart_apps(

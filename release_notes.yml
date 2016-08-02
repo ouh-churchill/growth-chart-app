@@ -5,6 +5,7 @@ versions:
     changes:
       - {author: kk014173, comment: Update ion_common to latest version and opt out of ion_common middleware, issue: OPENSVC-1850, type: add}
       - {author: zp035497, comment: Fix logger to display tenant IDs for calls without populated tenant ID param, issue: OPENSVC-2040, type: add}
+      - {author: kt026311, comment: Create API to return FHIR servers, issue: OPENSVC-2584, type: add}
   - version: 1.21.0
     release_date: 2016-06-06
     changes:

@@ -5,4 +5,9 @@ describe Igneous::Smart::FhirServersController, type: :routing do
     expect(post('fhir_servers')).to \
       route_to(controller: 'igneous/smart/fhir_servers', action: 'create')
   end
+
+  it 'routes to fhir_servers#index' do
+    expect(get('fhir_servers')).to \
+      route_to(controller: 'igneous/smart/fhir_servers', action: 'index')
+  end
 end
