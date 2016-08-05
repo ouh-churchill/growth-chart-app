@@ -1,7 +1,7 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.22.0
-    release_date: 2016-xx-xx
+    release_date: 2016-08-05
     changes:
       - {author: kk014173, comment: Update ion_common to latest version and opt out of ion_common middleware, issue: OPENSVC-1850, type: add}
       - {author: zp035497, comment: Fix logger to display tenant IDs for calls without populated tenant ID param, issue: OPENSVC-2040, type: add}
@@ -11,6 +11,7 @@ versions:
       - {author: zp035497, comment: Update Growth Chart App to incorporate Intermountain HC changes to open-source app, issue: OPENSVC-2087, type: add}
       - {author: zp035497, comment: Update Growth Chart App to filter Observations by their status for accurate results, issue: OPENSVC-2536, type: add}
       - {author: zp035497, comment: Update Growth Chart App to incorporate deployment time config in choosing public facing GCs, issue: OPENSVC-2630, type: add}
+      - {author: zp035497, comment: 1.22.0 release review, issue: OPENSVC-2730, type: add}
   - version: 1.21.0
     release_date: 2016-06-06
     changes:
