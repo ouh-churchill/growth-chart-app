@@ -1,5 +1,9 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
+  - version: 1.22.1
+    release_date: 2016-08-08
+    changes:
+      - {author: zp035497, comment: 1.22.1 release review, issue: OPENSVC-2730, type: add}
   - version: 1.22.0
     release_date: 2016-08-05
     changes:

@@ -97,7 +97,7 @@ GEM
       activesupport (>= 4.1.0)
     haml (4.0.7)
       tilt
-    hi-checkup (1.7.0)
+    hi-checkup (1.8.0)
       rails (~> 4.0)
     highline (1.6.21)
     hike (1.2.3)
