@@ -198,4 +198,5 @@ add_smart_apps(
   # smart_app('31df47af-bb5d-4291-9d87-504e078cc9c8', 'SMART on FHIR Starter App', 't', 4, 'https://parthivbhagat.github.io/pb026393.github.io/launch.html'),
   # smart_app('8612902c-dd96-4703-b2be-2ac064b23437', 'EAPathways', 't', 4, 'http://peopleconnectmore-dev.carolinas.org/aspxapps/LCIPathways/launch.html'),
   # smart_app('3090076c-d6a0-4ebf-b819-0905fcdfa1c1', 'MedCalc 3000', 't', 4, 'https://fhircalc.com/static/ACCAHA2013.htm'),
+  # smart_app('a1952130-a00e-43d9-b6be-a50588bc9114', 'ARUP Test App - Walt', 't', 4, 'http://localhost:42406/Launch/Index'),
 )
