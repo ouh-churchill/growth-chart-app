@@ -3,7 +3,7 @@ versions:
   - version: 1.23.0
     release_date: 2016-xx-xx
     changes:
-      - {author: xxx, comment: xxx, issue: OPENSVC-xxxx, type: add}
+      - {author: kt026311, comment: Fix error in seed script while adding new FHIR servers, issue: OPENSVC-2584, type: add}
   - version: 1.22.1
     release_date: 2016-08-08
     changes:

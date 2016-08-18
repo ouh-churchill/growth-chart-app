@@ -5,7 +5,7 @@ module Igneous
     class FhirServersController < Igneous::Smart::ApplicationController
 
       def create
-        FhirServer.create!(params.require(:fhir_server).permit(:name, :url))
+        FhirServer.create!(params.require(:fhir_server).permit(:name, :url, :secured, :public_access))
         head 204
       end
 

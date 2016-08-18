@@ -37,10 +37,13 @@ describe Igneous::Smart::FhirServersController, type: :controller do
       end
 
       it 'successfully creates a new FhirServer' do
-        post(:create, fhir_server: { name: :cerner, url: 'https://fhir.example.com/' })
+        post(:create, fhir_server: { name: :cerner, url: 'https://fhir.example.com/',
+                                     secured: 'f', public_access: 't' })
 
         fhir_server = Igneous::Smart::FhirServer.find_by name: 'cerner'
         expect(fhir_server.url).to eq 'https://fhir.example.com/'
+        expect(fhir_server.secured).to eq false
+        expect(fhir_server.public_access).to eq true
         expect(response).to have_http_status(204)
       end
     end

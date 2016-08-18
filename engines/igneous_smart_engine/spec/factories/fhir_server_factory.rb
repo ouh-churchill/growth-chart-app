@@ -3,5 +3,7 @@ FactoryGirl.define do
     id 1
     name 'cerner'
     url 'http://fhir.example.com'
+    secured 't'
+    public_access 't'
   end
 end

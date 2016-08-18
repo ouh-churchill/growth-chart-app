@@ -56,8 +56,8 @@ def add_smart_apps(*data)
   end
 end
 
-def fhir_server(name, url)
-  { fhir_server: { name: name, url: url } }.to_json
+def fhir_server(name, url, secured, public_access)
+  { fhir_server: { name: name, url: url, secured: secured, public_access: public_access } }.to_json
 end
 
 def smart_app(app_id, name, authorized, fhir_server_id, launch_url)
