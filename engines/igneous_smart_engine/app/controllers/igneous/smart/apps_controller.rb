@@ -6,9 +6,11 @@ module Igneous
 
       skip_before_action :ensure_request_is_from_cerner_network, only: [:show]
 
-      # Rubocop will generate a lint issue; however, this statement is perfectly fine.
+      # rubocop:disable all
       @@app_param_keys = %w(ehr_source_id id pat_personid pat_pprcode vis_encntrid \
-                            usr_personid usr_positioncd dev_location app_appname need_patient_banner username)
+                            usr_personid usr_positioncd dev_location app_appname need_patient_banner \
+                            username identity_token)
+      # rubocop:enable all
 
       def index
         render locals: {
@@ -38,8 +40,7 @@ module Igneous
 
         if app.nil?
           audit_smart_event(:smart_launch_app, :minor_failure, app_id: params[:id], error: 'Unknown Application')
-          head 404
-          return
+          return head 404
         end
 
         launch_context = LaunchContext.new
@@ -50,7 +51,8 @@ module Igneous
         audit_smart_launch_app_success(params, context_data)
 
         if app.authorized
-          redirect_to controller: 'user', action: 'preauth', context_id: launch_context.context_id, tenant: params['ehr_source_id']
+          redirect_to controller: 'user', action: 'preauth', context_id: launch_context.context_id,
+                      tenant: params['ehr_source_id'], identity_token: lowercase_params['identity_token']
         else
           redirect_to smart_launch_url
         end

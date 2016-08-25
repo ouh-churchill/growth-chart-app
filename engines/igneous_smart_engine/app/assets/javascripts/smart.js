@@ -15,9 +15,33 @@ CERNER_SMART_LAUNCH.requestSync = new XMLCclRequest();
 * in a stand alone browser.
 */
 function isRunningInPowerChart() {
-
   return (window.external && typeof window.external.DiscernObjectFactory !== 'undefined');
+}
 
+/**
+* Get the value of paramStr in query parameter based on the urlStr.
+* urlStr - the URL with query param
+* paramStr - the value of the parameter to search
+* 
+* return value for paramStr or empty string if paramStr not found.
+*/
+function parseQueryParamByStr(urlStr, paramStr) {
+  var indexOfParamStr = urlStr.indexOf(paramStr);
+  if (indexOfParamStr === -1) {
+    return '';
+  }
+  
+  var beginParam = urlStr.substring(indexOfParamStr, urlStr.length);
+  var keyValuePairArr = beginParam.split('&');
+  var keyValueArr = [];
+  for (var i = 0; i < keyValuePairArr.length; i++) {
+    var tempKeyValArr = keyValuePairArr[i].split('=');
+    if (tempKeyValArr[0] && tempKeyValArr[1]) {
+      keyValueArr[tempKeyValArr[0].valueOf()] = tempKeyValArr[1].valueOf();
+    }
+  }
+
+  return keyValueArr[paramStr];
 }
 
 /**
@@ -54,12 +78,27 @@ function getOAuthConsumerKey() {
 }
 
 /**
+ * Use the identity_token in the query param, if one provided.  Otherwise,
  * Use XMLCclRequest to execute mp_exec_std_request having the target
  * script/EJS as 99999124 - GenerateSingleUseIdentityToken.  This function
  * will return an identity token if the request was successful.  It will
  * return an empty string when the request failed.
  */
 function getMillenniumIntegratedAuthToken() {
+  var identityTokenStr = parseQueryParamByStr(window.location.href, 'identity_token');
+  if (identityTokenStr) {
+    return identityTokenStr.trim();
+  }
+
+  // If this page is not executing in PowerChart and identity_token query string is not provided,
+  // redirect the user to the login page.
+  if (!isRunningInPowerChart() && !identityTokenStr) {
+    window.location.href = CERNER_SMART_LAUNCH.launchURL;
+    Canadarm.info('The application is being launched outside of PowerChart. ' +
+                  'No preauth needed. Launch Id: ' + CERNER_SMART_LAUNCH.launchId, CERNER_SMART_LAUNCH.errorObj);
+    return;
+  }
+
   // Setup a synch request of mp_exec_std_request script
   CERNER_SMART_LAUNCH.requestSync.open('GET','mp_exec_std_request', 0);
 
@@ -129,34 +168,6 @@ function getUsernameByPersonnelId(personnel_id) {
 }
 
 /**
-* Get the value of paramStr in query parameter based on the urlStr.
-* urlStr - the URL with query param
-* paramStr - the value of the parameter to search
-* 
-* return value for paramStr or empty string if paramStr not found.
-*/
-function parseQueryParamByStr(urlStr, paramStr) {
-  var urlStrLowerCase = urlStr.toLowerCase();
-  var indexOfParamStr = urlStrLowerCase.indexOf(paramStr);
-  
-  if (indexOfParamStr === -1) {
-    return '';
-  }
-  
-  var beginParam = urlStrLowerCase.substring(indexOfParamStr, urlStrLowerCase.length);
-  var keyValuePairArr = beginParam.split('&');
-  var keyValueArr = [];
-  for (var i = 0; i < keyValuePairArr.length; i++) {
-    var tempKeyValArr = keyValuePairArr[i].split('=');
-    if (tempKeyValArr[0] && tempKeyValArr[1]) {
-      keyValueArr[tempKeyValArr[0].valueOf()] = tempKeyValArr[1].valueOf();
-    }
-  }
-
-  return keyValueArr[paramStr];
-}
-
-/**
  * This function will submit the identity token to the
  * OAuth2 server for pre-authentication workflow.  This
  * will enable a seamless transition to the SMART app
@@ -189,18 +200,14 @@ function submitToken(token) {
  * This function hooks and waits for the pre-authentication frame to signal completion.
  */
 function receiveMessage(event) {
-  // Clear the timeout
-  clearTimeout(CERNER_SMART_LAUNCH.preauthTimeoutVar);
-  
   // Only handle message from the expected origin domain.
   if (CERNER_SMART_LAUNCH.oauth2BaseURL.indexOf(event.origin) === -1) {
-    Canadarm.warn('The OAuth2 base URLs do not match. Expected: ' + CERNER_SMART_LAUNCH.oauth2BaseURL +
-                  ' but got: ' + event.origin + ' Launch Id: ' +
-                  CERNER_SMART_LAUNCH.launchId, CERNER_SMART_LAUNCH.errorObj);
-    window.location.href = CERNER_SMART_LAUNCH.launchURL;
     return;
   }
 
+  // Clear the timeout
+  clearTimeout(CERNER_SMART_LAUNCH.preauthTimeoutVar);
+  
   // Successfully pre-authenticated
   if (event.data === 'com.cerner.authorization:notification:preauthentication-complete') {
     Canadarm.info('Preauthentication completed. Launch Id: ' + CERNER_SMART_LAUNCH.launchId +
@@ -250,16 +257,6 @@ function performPreauthentication(oauth2BaseUrl, launchUrl) {
   CERNER_SMART_LAUNCH.oauth2BaseURL = oauth2BaseUrl;
   CERNER_SMART_LAUNCH.launchURL = launchUrl;
   CERNER_SMART_LAUNCH.launchId = parseQueryParamByStr(launchUrl, 'launch');
-
-  // If this page is not executing in PowerChart,
-  // redirect the user to the login page.
-
-  if (!isRunningInPowerChart()) {
-    window.location.href = CERNER_SMART_LAUNCH.launchURL;
-    Canadarm.info('The application is being launched outside of PowerChart. ' +
-                  'No preauth needed. Launch Id: ' + CERNER_SMART_LAUNCH.launchId, CERNER_SMART_LAUNCH.errorObj);
-    return;
-  }
 
   var token = getMillenniumIntegratedAuthToken();
 

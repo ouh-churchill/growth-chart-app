@@ -1,0 +1,6 @@
+development:
+  acls:
+  - https://embedded.devcernerpowerchart.com
+production:
+  acls:
+  - https://embedded.devcernerpowerchart.com

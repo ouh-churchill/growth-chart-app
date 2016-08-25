@@ -33,11 +33,11 @@ module IgneousSmartServer
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-     # Flag to allow consumers to opt out of use of IonCommon::Middleware.
-     # Excludes the use of middleware if set to true.
-     # The exclusion of this middleware is required in order to maintain consistent logging of tenant keys
-     # within the server.
-     IonCommon.exclude_middleware = true
+    # Flag to allow consumers to opt out of use of IonCommon::Middleware.
+    # Excludes the use of middleware if set to true.
+    # The exclusion of this middleware is required in order to maintain consistent logging of tenant keys
+    # within the server.
+    IonCommon.exclude_middleware = true
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true

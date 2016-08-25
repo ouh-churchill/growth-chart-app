@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-us" hidden>
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta charset='utf-8'/>
   <title>SMART Apps</title>
   <base href="<%= "#{request.base_url}" %>">
   <%= csrf_meta_tags %>
+  <%= stylesheet_link_tag 'embedded_content_engine/embedded_content' %>
+  <%= javascript_include_tag "application" %>
   <%= stylesheet_link_tag 'smart_apps' %>
 </head>
 <body>
@@ -18,5 +20,6 @@
       </li>
   <% end %>
 </ul>
+<%= javascript_include_tag 'embedded_content_engine/embedded_content' %>
 </body>
 </html>

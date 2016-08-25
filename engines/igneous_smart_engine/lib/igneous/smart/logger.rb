@@ -10,7 +10,7 @@ module Igneous
       def call_app(request, env)
         Timber::Diagnostics.contexts[:correlation_id] = request.uuid
 
-        if request.path === '/smart/launch/resolve' && request.content_type === 'application/json'
+        if request.path == '/smart/launch/resolve' && request.content_type == 'application/json'
           body = env['action_dispatch.request.request_parameters']
         end
 

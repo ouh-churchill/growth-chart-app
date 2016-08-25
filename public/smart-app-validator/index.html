@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang='en' hidden>
   <head>
     <title>SMART App Validator</title>
     <meta charset='UTF-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1' />
     <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+    <link rel='stylesheet' type='text/css' href='../embedded_content/embedded_content.min.css'>
     <link rel='stylesheet' type='text/css' href='style.css'>
     <script src='../fhir-client/fhir-client.js'></script>
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js'></script>
@@ -54,5 +55,6 @@
       $('#MedicationStatement').click(function() { $('#MedicationStatement-details').toggle(); });
       $('#DocumentReference').click(function() { $('#DocumentReference-details').toggle(); });
     </script>
+    <script src='../embedded_content/embedded_content.min.js'></script>
   </body>
 </html>

@@ -44,16 +44,18 @@ group :cerner, :default do
   gem 'canadarm_ruby', '~> 1.0',   source: 'http://repo.release.cerner.corp/main/rubygems/'
   gem 'igneous-smart', '1.0.0',    path:   'engines/igneous_smart_engine'
   gem 'ion_profiler_engine', '~> 1.8', source: 'http://repo.release.cerner.corp/main/rubygems/'
+  gem 'embedded_content_engine', '~> 1.0', source: 'http://repo.release.cerner.corp/main/rubygems/'
 end
 
 group :development do
-  gem 'roll_out',          '~> 1.10', source: 'http://repo.release.cerner.corp/internal/rubygems/'
+  gem 'roll_out',          '~> 1.11', source: 'http://repo.release.cerner.corp/internal/rubygems/'
   gem 'roll_out-security', '~> 1.3',  source: 'http://repo.release.cerner.corp/internal/rubygems/'
   gem 'philter',           '~> 1.8',  source: 'http://repo.release.cerner.corp/internal/rubygems/'
 end
 
 group :development,:test do
   gem 'rspec-rails', '~> 3.2'
+  gem 'rspec-core', '~> 3.4'
   gem 'combustion', '~> 0.5'
   gem 'simplecov', '~> 0.10'
   gem 'rspec-collection_matchers', '~> 1.1'

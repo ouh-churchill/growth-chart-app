@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-us" hidden>
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>Loading...</title>
 <base href="<%= "#{request.base_url}" %>">
+<%= stylesheet_link_tag 'embedded_content_engine/embedded_content' %>
 <%= javascript_include_tag "application" %>
 <%= canadarm_logging_tag %>
 <%= javascript_include_tag "igneous-smart.min" %>
 </head>
 <body onload="retrieveRequiredInfoAndRedirect('<%= url_with_tenant_place_holder %>', <%= user_person_id %>)">
 <div id='error-message'></div>
+<%= javascript_include_tag 'embedded_content_engine/embedded_content' %>
 </body>
 </html>
