@@ -1,12 +1,13 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.23.0
-    release_date: 2016-xx-xx
+    release_date: 2016-08-26
     changes:
       - {author: kt026311, comment: Fix error in seed script while adding new FHIR servers, issue: OPENSVC-2584, type: add}
       - {author: kk014173, comment: Upgrade rails to 4.2.7.1, issue: OPENSVC-2794, type: add}
       - {author: ss025783, comment: Enhance CSS to launch Cardiac Risk App in an iFrame, issue: OPENSVC-2647, type: add}
       - {author: kk014173, comment: Add ability to embed SMART Apps in MPage framework, issue: OPENSVC-1173, type: add}
+      - {author: kk014173, comment: 1.23.0 release review, issue: OPENSVC-2806, type: add}
   - version: 1.22.1
     release_date: 2016-08-08
     changes:
