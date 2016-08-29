@@ -201,4 +201,5 @@ add_smart_apps(
   # smart_app('a1952130-a00e-43d9-b6be-a50588bc9114', 'ARUP Test App - Walt', 't', 4, 'http://localhost:42406/Launch/Index'),
   # smart_app('fe1ceae0-03fd-45ec-b036-27e208619890', 'HealtheInsights JF8275 Test', 't', 4, 'http://m1600563.cerner.com:3000/smart'),
   # smart_app('0fe652e7-8e87-4b47-a45f-c7bfe80772ff', 'HealtheInsights JF8275 Localhost', 't', 4, 'http://localhost:3000/smart'),
+  # smart_app('ca98095c-f14a-41a8-bdee-2b880e88d343', 'Syapse (localhost)', 't', 4, 'http://localhost:8000/login/fhir-oauth2'),
 )
