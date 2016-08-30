@@ -202,4 +202,6 @@ add_smart_apps(
   # smart_app('fe1ceae0-03fd-45ec-b036-27e208619890', 'HealtheInsights JF8275 Test', 't', 4, 'http://m1600563.cerner.com:3000/smart'),
   # smart_app('0fe652e7-8e87-4b47-a45f-c7bfe80772ff', 'HealtheInsights JF8275 Localhost', 't', 4, 'http://localhost:3000/smart'),
   # smart_app('ca98095c-f14a-41a8-bdee-2b880e88d343', 'Syapse (localhost)', 't', 4, 'http://localhost:8000/login/fhir-oauth2'),
+  # smart_app('4ea0d2cf-ed87-470d-9fc3-e3d5548f353f', 'FHIR Bridge to DHP POC (Encounter Summary)', 't', 4, 'http://leo.i3l.gatech.edu:8000/sendEncounterSummary/'),
+  # smart_app('2547eceb-bb08-42fd-8f72-cb48a20744b3', 'FHIR Bridge to DHP POC (Referral Request)', 't', 4, 'http://leo.i3l.gatech.edu:8000/sendReferralRequest/'),
 )
