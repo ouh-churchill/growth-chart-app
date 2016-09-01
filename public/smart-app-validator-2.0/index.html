@@ -16,6 +16,7 @@
     <div id='headerContainer'>
       <div id='title'>
         <h3>SMART App Validator</h3>
+        <h5>Tenant : <span id="tenant"></span></h5>
         <h5>Resources Version Supported : <a href="http://fhir.cerner.com/dstu2/">DSTU2</a></h5>
       </div>
     </div>
@@ -33,7 +34,8 @@
     <div id='Conformance'><p> Conformance:</p></div>
     <div id='Patient'><p> Patient:</p></div>
     <div id='Encounter'><p> Encounter:</p></div>
-    <div id='Condition'><p> Condition:</p></div>
+    <div id='Condition_Diagnosis'><p> Condition-Diagnosis:</p></div>
+    <div id='Condition_Problem'><p> Condition-Problem:</p></div>
     <div id='AllergyIntolerance'><p> AllergyIntolerance:</p></div>
     <div id='Observation'><p> Observation:</p></div>
     <div id='DiagnosticReport'><p> DiagnosticReport:</p></div>
@@ -49,7 +51,8 @@
       $('#Conformance').click(function() { $('#Conformance-details').toggle(); });
       $('#Patient').click(function() { $('#Patient-details').toggle(); });
       $('#Encounter').click(function() { $('#Encounter-details').toggle(); });
-      $('#Condition').click(function() { $('#Condition-details').toggle(); });
+      $('#Condition_Diagnosis').click(function() { $('#Condition_Diagnosis-details').toggle(); });
+      $('#Condition_Problem').click(function() { $('#Condition_Problem-details').toggle(); });
       $('#AllergyIntolerance').click(function() { $('#AllergyIntolerance-details').toggle(); });
       $('#Observation').click(function() { $('#Observation-details').toggle(); });
       $('#DiagnosticReport').click(function() { $('#DiagnosticReport-details').toggle(); });

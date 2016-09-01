@@ -6,7 +6,7 @@
 #headerContainer {
   width: 100%;
   text-align: justify;
-  height: 80px;
+  height: 120px;
   position: relative; }
   #headerContainer #title {
     float: left;

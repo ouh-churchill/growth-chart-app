@@ -22,6 +22,8 @@
       results.successCount = 0;
       results.failureCount = 0;
 
+      document.getElementById('tenant').innerHTML = smart.tokenResponse.tenant;
+
       var authenticated = function(param) {
         var header = null;
 
@@ -98,7 +100,8 @@
         });
       };
 
-      function Resource(name, patient, encounter, params) {
+      function Resource(name, patient, encounter, params, displayName) {
+        this.resourceDisplayName = displayName.length ? displayName : name;
         this.name = name;
         this.patient = patient;
         this.encounter = encounter;
@@ -119,14 +122,14 @@
       }
 
       function getResources() {
-        var resources = ['Conformance', 'Patient', 'Encounter', 'AllergyIntolerance', 'Condition', 'DiagnosticReport',
+        var resources = ['Conformance', 'Patient', 'Encounter', 'AllergyIntolerance', 'Condition_Diagnosis', 'Condition_Problem', 'DiagnosticReport',
           'Immunization', 'Observation', 'MedicationOrder', 'DocumentReference', 'MedicationStatement'];
 
         var deferreds = [];
 
         for (var j = 0; j < resources.length; j++) {
           var resource = resources[j];
-
+          var resourceDisplayName = '';
           if (resource === 'Conformance') {
             deferreds.push(getResource('Conformance', 'metadata'));
             continue;
@@ -137,8 +140,16 @@
             additionalParam = 'status=unconfirmed';
           }
 
-          if (resource === 'Condition') {
-            additionalParam = 'category=diagnosis&clinicalstatus=confirmed,unknown';
+          if (resource === 'Condition_Diagnosis') {
+            resource = 'Condition';
+            resourceDisplayName = 'Condition_Diagnosis';
+            additionalParam = 'category=diagnosis&clinicalstatus=active,resolved';
+          }
+
+          if (resource === 'Condition_Problem') {
+            resource = 'Condition';
+            resourceDisplayName = 'Condition_Problem';
+            additionalParam = 'category=problem&clinicalstatus=active,resolved';
           }
 
           if (resource === 'MedicationOrder') {
@@ -164,7 +175,7 @@
             additionalParam += '&_count=20';
           }
 
-          var resourceObj = new Resource(resource, patientId, encounterId, additionalParam);
+          var resourceObj = new Resource(resource, patientId, encounterId, additionalParam, resourceDisplayName);
 
           if (resource === 'Patient') {
             deferreds.push(getResourceById(resourceObj.name, resourceObj.patient));
@@ -177,7 +188,7 @@
                 'Skipped as validating write transactions are not supported at this time.</p>';
           }
           else {
-            deferreds.push(getResource(resourceObj.name, resourceObj.uri()));
+            deferreds.push(getResource(resourceObj.resourceDisplayName, resourceObj.uri()));
           }
         }
 
