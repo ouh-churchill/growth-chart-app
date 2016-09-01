@@ -1,0 +1,19 @@
+<html lang="en" hidden>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Cardiac Risk SMART Application</title>
+    <link rel='stylesheet' type='text/css' href='../embedded_content/embedded_content.min.css'>
+    <script src="../fhir-client/fhir-client.min.js"></script>
+    <script>
+      FHIR.oauth2.authorize({
+        "client_id": "f267c118-a07e-46ae-b197-933a1f8b4fb6",
+        "scope":  "patient/Patient.read patient/Observation.read online_access"
+      });
+    </script>
+  </head>
+<body>
+  Loading...
+  <script src='../embedded_content/embedded_content.min.js'></script>
+</body>
+</html>

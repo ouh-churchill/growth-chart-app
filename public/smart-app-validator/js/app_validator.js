@@ -289,9 +289,9 @@
 
   AppValidator.loadData = loadData;
 
-  var authorize = function() {
+  var authorize = function(client_id) {
     FHIR.oauth2.authorize({
-      'client_id': 'af73d4a2-4909-40a3-bffb-78755bcf764c',
+      'client_id': client_id,
       'scope':  'launch online_access profile openid ' +
                 'patient/Encounter.read patient/Patient.read patient/Observation.read patient/Immunization.read ' +
                 'patient/AllergyIntolerance.read patient/Condition.read patient/DiagnosticReport.read ' +
