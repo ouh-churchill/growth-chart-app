@@ -1,10 +1,11 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.24.0
-    release_date: 2016-09-xx
+    release_date: 2016-09-01
     changes:
       - {author: ss025783, comment: Update SMART App Validator DSTU2 for Condition resource updates, issue: OPENSVC-2906, type: add}
       - {author: kk014173, comment: Setup additional OAuth2 client IDs for hosted SMART Apps, issue: OPENSVC-2915, type: add}
+      - {author: ss025783, comment: 1.24.0 release review, issue: OPENSVC-2919, type: add}
   - version: 1.23.0
     release_date: 2016-08-26
     changes:
