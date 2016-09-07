@@ -216,4 +216,5 @@ add_smart_apps(
   # smart_app('613be291-b868-4597-af78-6fe222a98a5d', 'Pediatric Growth Chart App DSTU2 (testing blue/green)', 't', 3, 'https://smart-latest.cernerpowerchart.com/growth-chart-app-2.0/launch-latest.html'),
   # smart_app('bfc562e2-f9e5-4d1b-95c1-f01ca81f64de', 'Cerner SMART App Validator (testing blue/green)', 't', 1, 'https://smart-latest.cernerpowerchart.com/smart-app-validator/launch-latest.html'),
   # smart_app('78b31f8e-51d8-479f-a68d-2a5ae4f7b8d0', 'Cerner SMART App Validator DSTU2 (testing blue/green)', 't', 3, 'https://smart-latest.cernerpowerchart.com/smart-app-validator-2.0/launch-latest.html'),
+  # smart_app('6a4c154e-a5ea-47fe-a7e2-dd51626d6640', 'HEART Pathway', 't', 4, 'https://app.decisionpointinformatics.com/smart/launch'),
 )
