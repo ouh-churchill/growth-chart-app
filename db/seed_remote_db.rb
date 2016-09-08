@@ -188,7 +188,7 @@ add_smart_apps(
   # smart_app('96ff31f1-c1df-437f-a8ca-bee0c2657e51', 'Medical Necessity', 't', 4, 'https://www.automatedmd.com/Callback/Cerner/Launch.pl'),
   # smart_app('d0a3d2e1-7d3b-40e9-9b5c-be906a0d7db0', 'CHFPredictiveAnalytics', 't', 4, 'http://223.31.99.62:8000/CHFPredictiveAnalytics/launch.html'),
   # smart_app('75c2941b-0fd1-485b-9375-88209b7f0ddb', 'Clinical Decision Support', 't', 4, 'http://utd03830:8080/acds/launch/ringmaster'),
-  # smart_app('48c70d9d-987d-466e-844e-82365a2f6e1a', 'MedSafe', 't', 4, 'http://gs:3000/launch'),
+  # smart_app('48c70d9d-987d-466e-844e-82365a2f6e1a', 'MedSafe', 't', 4, 'http://localhost:3000/launch'),
   # smart_app('07afc4d1-2a22-47f5-ae00-5d7a0c172717', 'PDemo', 't', 4, 'http://localhost:50143/Public/PDemo/PDemo.html'), #Not truly SMART capable, can remove after launch no longer reqd
   # smart_app('38bec537-a706-4563-9242-7d4432bc6500', 'Loopback FHIR Test', 't', 4, 'http://localhost:11890/Home/Login'),
   # smart_app('ce1e6662-b08f-400f-8c96-328d91511c1a', 'HACI Timeline (Localhost)', 't', 4, 'http://localhost:8000/launch.html'),
