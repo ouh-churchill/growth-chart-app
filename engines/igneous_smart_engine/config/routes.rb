@@ -7,6 +7,7 @@ Igneous::Smart::Engine.routes.draw do
   resources :apps, only: [:show, :create]
   resources :fhir_servers, only: [:create, :index]
 
+  match 'apps/details/:id' => 'apps_details#show', via: [:get]
   get 'user/preauth' => 'user#preauth'
   post 'launch/resolve' => 'launch_context#resolve', :constraints => { format: :json }
   post 'validator/results' => 'app_validator#results', :constraints => { format: :json }

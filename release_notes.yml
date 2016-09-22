@@ -3,7 +3,7 @@ versions:
   - version: 1.25.0
     release_date: 2016-09-xx
     changes:
-      - {author: xx, comment: xx, issue: OPENSVC-xx, type: add}
+      - {author: kt026311, comment: Create API to return SMART Apps details, issue: OPENSVC-2778, type: add}
   - version: 1.24.0
     release_date: 2016-09-01
     changes:
