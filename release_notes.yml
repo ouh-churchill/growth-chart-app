@@ -1,10 +1,11 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.25.0
-    release_date: 2016-09-xx
+    release_date: 2016-09-27
     changes:
       - {author: kt026311, comment: Create API to return SMART Apps details, issue: OPENSVC-2778, type: add}
       - {author: zp035497, comment: Upgrade Growth Chart to fit chart label text on all data curves, issue: OPENSVC-1262, type: add}
+      - {author: zp035497, comment: 1.25.0 release review, issue: OPENSVC-3037, type: add}
   - version: 1.24.0
     release_date: 2016-09-01
     changes:
