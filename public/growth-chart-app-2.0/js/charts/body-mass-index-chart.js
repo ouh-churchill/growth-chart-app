@@ -20,7 +20,7 @@
         patientDataType : "bmi",
 
         getTitle : function() {
-            return GC.str("STR_5") + " (" + this.getUnits().replace(/\n/g, " ") + ")";
+            return GC.str("STR_5");
         },
 
         setDataSource : function( src ) 

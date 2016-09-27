@@ -82,10 +82,6 @@
                 title = GC.str("STR_3"); // Stature
             }
             
-            if ( title ) {
-                title += " (" + this.getUnits() + ")";
-            }
-            
             return title;
         },
 

@@ -4,6 +4,7 @@ versions:
     release_date: 2016-09-xx
     changes:
       - {author: kt026311, comment: Create API to return SMART Apps details, issue: OPENSVC-2778, type: add}
+      - {author: zp035497, comment: Upgrade Growth Chart to fit chart label text on all data curves, issue: OPENSVC-1262, type: add}
   - version: 1.24.0
     release_date: 2016-09-01
     changes:

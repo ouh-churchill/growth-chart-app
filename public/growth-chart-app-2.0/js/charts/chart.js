@@ -1507,7 +1507,7 @@ Chart.prototype = {
                 if (!path) {
                     path    = document.createElementNS("http://www.w3.org/2000/svg", "path");
                     path.id = refId;
-                    path.setAttribute("transform", "translate(0, -12)");
+                    path.setAttribute("transform", "translate(0, -10)");
                     path.setAttribute("d", "M " + p);
                     this.pane.paper.defs.appendChild(path);
                 }
@@ -1520,7 +1520,7 @@ Chart.prototype = {
                 
                 path = document.createElementNS("http://www.w3.org/2000/svg", "textPath");
                 path.setAttributeNS("http://www.w3.org/1999/xlink", "href", "#" + refId);
-                path.setAttribute("startOffset", "90%");
+                path.setAttribute("startOffset", "93%");
                 //path.setAttribute("text-anchor", "end");
                 path.appendChild(document.createTextNode(titleText));
                 this.pane.paper.canvas.appendChild(txt);

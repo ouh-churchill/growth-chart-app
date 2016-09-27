@@ -24,7 +24,7 @@
         },
         
         getTitle : function() {
-            return GC.str("STR_1") + " (" + this.getUnits() + ")";
+            return GC.str("STR_5007");
         },
 
         setDataSource : function( src ) {

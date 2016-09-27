@@ -249,7 +249,7 @@ window.GC = window.GC || {};
         chartLabels : {
             attr : {
                 "font-family" : "sans-serif, Verdana, Arial",
-                "font-size"   : 20,
+                "font-size"   : 14,
                 "font-weight" : "normal",
                 "text-anchor" : "end",
                 "stroke"      : "none"
@@ -402,7 +402,7 @@ window.GC = window.GC || {};
         headChart : {
             abbr : "HC",
             shortName : "HEAD C",
-            shortNameId : "STR_13",
+            shortNameId : "STR_1",
             color : "", // general use clear color
             lines : {
                 stroke           : "", 

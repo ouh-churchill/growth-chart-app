@@ -22,7 +22,7 @@
         },
         
         getTitle : function() {
-            return GC.str("STR_6") + " (" + this.getUnits() + ")";
+            return GC.str("STR_6");
         },
         
         setDataSource : function( src ) {
