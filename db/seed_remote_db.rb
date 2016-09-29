@@ -222,4 +222,5 @@ add_smart_apps(
   # smart_app('d88bd1aa-b138-48fd-9d36-ae219cbf8f2a', 'HealtheInsights Development', 't', 4, 'https://mill-int-test.insights.devhealtheintent.com/smart'),
   # smart_app('4ac08999-67b5-4927-aec7-6d4ba39dc854', 'DHI Cardiac Risk App (Prod)', 't', 4, 'https://dhiapp.ondemand.sas.com/cardiac-risk/launch.html'),
   # smart_app('7940a6e7-87fe-4e87-89a6-d1f5453ca4f5', 'HealtheInsights Staging', 't', 4, 'https://mill-int-test.insights.staginghealtheintent.com/smart'),
+  # smart_app('a4cbff7f-e747-4294-8f4a-9b487278d332', 'UML_DEMO', 't', 4, 'http://52.54.75.123/launch.html'),
 )
