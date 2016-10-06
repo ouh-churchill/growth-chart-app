@@ -191,6 +191,14 @@ describe Igneous::Smart::AppsController, type: :controller do
 
     describe 'when tenant id or username is not supplied' do
       it 'renders html page' do
+        FactoryGirl.create(:fhir_server_factory)
+        FactoryGirl.create(:app_factory,
+                           app_id: '777',
+                           name: 'cardia9',
+                           launch_url: 'http://smart.example5.com/',
+                           authorized: false,
+                           persona: 'provider')
+
         get :show, id: '777'
         expect(response).to have_http_status(:ok)
         expect(response).to render_template(:show)
@@ -199,6 +207,14 @@ describe Igneous::Smart::AppsController, type: :controller do
 
     describe 'when tenant id is supplied and username is not supplied' do
       it 'renders html page' do
+        FactoryGirl.create(:fhir_server_factory)
+        FactoryGirl.create(:app_factory,
+                           app_id: '777',
+                           name: 'cardia9',
+                           launch_url: 'http://smart.example5.com/',
+                           authorized: false,
+                           persona: 'provider')
+
         get :show, id: '777', ehr_source_id: 'foo'
         expect(response).to have_http_status(:ok)
         expect(response).to render_template(:show)

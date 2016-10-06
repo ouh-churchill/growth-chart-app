@@ -22,25 +22,27 @@ module Igneous
 
       def show
         lowercase_params = lowercase_app_params(params)
-        if params['ehr_source_id'].blank?
-          render locals: {
-            url_with_tenant_place_holder: "#{app_url(':tenant_id', params[:id])}?#{request.query_string}",
-            user_person_id: lowercase_params['usr_personid']
-          }
-          return
-        elsif lowercase_params['username'].blank?
-          render locals: {
-            url_with_tenant_place_holder: "#{app_url(params['ehr_source_id'], params[:id])}?#{request.query_string}",
-            user_person_id: lowercase_params['usr_personid']
-          }
-          return
-        end
-
         app = App.find_by app_id: params[:id]
 
         if app.nil?
           audit_smart_event(:smart_launch_app, :minor_failure, app_id: params[:id], error: 'Unknown Application')
           return head 404
+        end
+
+        if params['ehr_source_id'].blank?
+          render locals: {
+            url_with_tenant_place_holder: "#{app_url(':tenant_id', params[:id])}?#{request.query_string}",
+            user_person_id: lowercase_params['usr_personid'],
+            persona: app.persona ? app.persona : :provider.to_s
+          }
+          return
+        elsif lowercase_params['username'].blank?
+          render locals: {
+            url_with_tenant_place_holder: "#{app_url(params['ehr_source_id'], params[:id])}?#{request.query_string}",
+            user_person_id: lowercase_params['usr_personid'],
+            persona: app.persona ? app.persona : :provider.to_s
+          }
+          return
         end
 
         launch_context = LaunchContext.new
@@ -50,7 +52,7 @@ module Igneous
 
         audit_smart_launch_app_success(params, context_data)
 
-        if app.authorized
+        if app.authorized && (app.persona == :provider.to_s)
           redirect_to controller: 'user', action: 'preauth', context_id: launch_context.context_id,
                       tenant: params['ehr_source_id'], identity_token: lowercase_params['identity_token']
         else
@@ -66,7 +68,7 @@ module Igneous
       private
 
       def app_params
-        params.require(:app).permit(:app_id, :name, :launch_url, :igneous_smart_fhir_server_id, :authorized)
+        params.require(:app).permit(:app_id, :name, :launch_url, :igneous_smart_fhir_server_id, :authorized, :persona)
       end
 
       def lowercase_app_params(params)

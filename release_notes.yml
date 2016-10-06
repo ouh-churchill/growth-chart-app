@@ -3,7 +3,7 @@ versions:
   - version: 1.26.0
     release_date: 2016-xx-xx
     changes:
-      - {author: xx, comment: xx, issue: OPENSVC-xxxx, type: add}
+      - {author: ss025783, comment: 'Patient Access - Persona Based SMART Apps for Healthe Life', issue: OPENSVC-2463, type: add}
   - version: 1.25.0
     release_date: 2016-09-27
     changes:
