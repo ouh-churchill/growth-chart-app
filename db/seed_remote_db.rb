@@ -226,4 +226,5 @@ add_smart_apps(
   # smart_app('27b880c4-cdee-4c51-9454-84be6040cce7', 'HealtheInsights Staging (Latest)', 't', 4, 'https://mill-int-latest.insights.staginghealtheintent.com/smart'),
   # smart_app('62bf1026-82fd-4006-8178-70238ec9979c', 'Infera CDSS', 't', 4, 'https://myinfera.inferscience.com/integrations/fhir/launch'),
   # smart_app('74f9084f-cb46-4292-adf1-ae9b2ce43e51', 'Elsevier Calculator Prototype', 't', 4, 'http://localhost/launch.htm'),
+  # smart_app('eecd0d41-790d-405d-b6b2-93f24a4633aa', 'HealtheInsights Staging (Mill Int Test Latest)', 't', 4, 'https://mill-int-test-latest.insights.staginghealtheintent.com/smart'),
 )
