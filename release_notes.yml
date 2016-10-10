@@ -1,9 +1,10 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.26.0
-    release_date: 2016-xx-xx
+    release_date: 2016-10-10
     changes:
       - {author: ss025783, comment: 'Patient Access - Persona Based SMART Apps for Healthe Life', issue: OPENSVC-2463, type: add}
+      - {author: ss025783, comment: 1.26.0 release review, issue: OPENSVC-3123, type: add}
   - version: 1.25.0
     release_date: 2016-09-27
     changes:
