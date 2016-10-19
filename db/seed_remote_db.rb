@@ -228,4 +228,5 @@ add_smart_apps(
   # smart_app('74f9084f-cb46-4292-adf1-ae9b2ce43e51', 'Elsevier Calculator Prototype', 't', 4, 'http://localhost/launch.htm'),
   # smart_app('eecd0d41-790d-405d-b6b2-93f24a4633aa', 'HealtheInsights Staging (Mill Int Test Latest)', 't', 4, 'https://mill-int-test-latest.insights.staginghealtheintent.com/smart'),
   # smart_app('798cb6d7-42f6-4af7-94c3-523af31022fb', 'Local - HealtheIntent - Record - Millenium Integration Test', 't', 4, 'http://mill-int-test.record.localhealtheintent.com:3000/smart/launch'),
+  # smart_app('f0f9297d-7570-4db4-9a70-45aea965330c', 'HealtheRegistries Localhost', 't', 4, 'http://mill-int-test.registries.localhealtheintent.com/smart/launch'),
 )
