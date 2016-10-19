@@ -230,4 +230,5 @@ add_smart_apps(
   # smart_app('798cb6d7-42f6-4af7-94c3-523af31022fb', 'Local - HealtheIntent - Record - Millenium Integration Test', 't', 4, 'http://mill-int-test.record.localhealtheintent.com:3000/smart/launch'),
   # smart_app('f0f9297d-7570-4db4-9a70-45aea965330c', 'HealtheRegistries Localhost', 't', 4, 'http://mill-int-test.registries.localhealtheintent.com/smart/launch'),
   # smart_app('7d23d56f-4d33-4211-ae6c-90bc68358cd9', 'My Legacy', 't', 4, 'https://clinical.familycarepath.com/authorization '),
+  # smart_app('5904028f-6228-45a8-83ad-4cdb0a4a98eb', 'HW EMR Module', 't', 4, 'http://localhost:1890/smart/launch'),
 )
