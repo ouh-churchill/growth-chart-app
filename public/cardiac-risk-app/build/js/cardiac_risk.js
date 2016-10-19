@@ -15,6 +15,24 @@
     };
 
     /**
+     * Function to initialize Canadarm logging for the application.
+     */
+    function initalizeLogging() {
+        Canadarm.init({
+            onError: false,  // Set to false if you do not want window.onerror set.
+            wrapEvents: false, // Set to false if you do not want all event handlers to be logged for errors
+            logLevel: Canadarm.level.INFO, // Will only send logs for level of INFO and above.
+            appenders: [
+                Canadarm.Appender.standardLogAppender
+            ],
+            handlers: [
+                Canadarm.Handler.beaconLogHandler(config.canadarm_beacon_url),
+                Canadarm.Handler.consoleLogHandler
+            ]
+        });
+    }
+
+    /**
      * Loads patient's FHIR data and updates the CardiacRisk data model.
      * Fetches patient context to get basic patient info and observations to get lab results based on the
      * supplied LOINC codes.
@@ -24,6 +42,8 @@
      * @method fetchDataAndPopulateCardiacRiskObject
      */
     var fetchDataAndPopulateCardiacRiskObject = function () {
+
+        initalizeLogging();
 
         //Setting this flag to indicate the system, to display the first error screen triggered.
         //This flag gets set to false once the error screen has been displayed to stop further UI updates.
@@ -751,7 +771,6 @@
  * Function to perform initial setup for the application.
  */
 function initialSetup() {
-  initalizeLogging();
   $(window).resize(function () {
     adjustRelatedFactorsSize();
 
@@ -759,24 +778,6 @@ function initialSetup() {
     if ($leftContentBox.width() < 490 && $leftContentBox.width() > 377) {
       adjustRangeSliderThumbPosition();
     }
-  });
-}
-
-/**
- * Function to initialize Canadarm logging for the application.
- */
-function initalizeLogging() {
-  Canadarm.init({
-    onError: false,  // Set to false if you do not want window.onerror set.
-    wrapEvents: false, // Set to false if you do not want all event handlers to be logged for errors
-    logLevel: Canadarm.level.INFO, // Will only send logs for level of INFO and above.
-    appenders: [
-      Canadarm.Appender.standardLogAppender
-    ],
-    handlers: [
-      Canadarm.Handler.beaconLogHandler(config.canadarm_beacon_url),
-      Canadarm.Handler.consoleLogHandler
-    ]
   });
 }
 

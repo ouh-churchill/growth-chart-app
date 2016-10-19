@@ -3,7 +3,7 @@ versions:
   - version: 1.27.0
     release_date: 2016-xx-xx
     changes:
-      - {author: xx, comment: xx, issue: OPENSVC-xxxx, type: add}
+      - {author: ss025783, comment: Cardiac Risk App throwing Canadarm undefined issue fix , issue: OPENSVC-2939, type: add}
   - version: 1.26.0
     release_date: 2016-10-10
     changes:

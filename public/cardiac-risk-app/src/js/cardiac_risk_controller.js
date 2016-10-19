@@ -2,7 +2,6 @@
  * Function to perform initial setup for the application.
  */
 function initialSetup() {
-  initalizeLogging();
   $(window).resize(function () {
     adjustRelatedFactorsSize();
 
@@ -10,24 +9,6 @@ function initialSetup() {
     if ($leftContentBox.width() < 490 && $leftContentBox.width() > 377) {
       adjustRangeSliderThumbPosition();
     }
-  });
-}
-
-/**
- * Function to initialize Canadarm logging for the application.
- */
-function initalizeLogging() {
-  Canadarm.init({
-    onError: false,  // Set to false if you do not want window.onerror set.
-    wrapEvents: false, // Set to false if you do not want all event handlers to be logged for errors
-    logLevel: Canadarm.level.INFO, // Will only send logs for level of INFO and above.
-    appenders: [
-      Canadarm.Appender.standardLogAppender
-    ],
-    handlers: [
-      Canadarm.Handler.beaconLogHandler(config.canadarm_beacon_url),
-      Canadarm.Handler.consoleLogHandler
-    ]
   });
 }
 
