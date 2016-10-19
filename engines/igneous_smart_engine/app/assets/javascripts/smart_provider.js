@@ -36,7 +36,7 @@ function retrieveProviderInfoAndRedirect(urlWithTenantPlaceHolder, user_person_i
       }
     }
   } else {
-    validateDataAndReportErrors();
+    validateDataAndReportErrors(urlWithTenantPlaceHolder);
   }
 }
 

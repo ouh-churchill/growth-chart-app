@@ -189,7 +189,7 @@ describe Igneous::Smart::AppsController, type: :controller do
       end
     end
 
-    describe 'when tenant id or username is not supplied' do
+    describe 'when tenant id and username are not supplied' do
       it 'renders html page' do
         FactoryGirl.create(:fhir_server_factory)
         FactoryGirl.create(:app_factory,
@@ -224,6 +224,23 @@ describe Igneous::Smart::AppsController, type: :controller do
     describe 'when tenant id and usernme are supplied' do
       it 'will not render html page' do
         get :show, id: '777', ehr_source_id: 'foo', username: 'test_username'
+        expect(response).to_not render_template(:show)
+      end
+
+      it 'renders plain text throwing 400 when the supplied username is more than 256 characters' do
+        FactoryGirl.create(:fhir_server_factory)
+        FactoryGirl.create(:app_factory,
+                           app_id: '777',
+                           name: 'cardia9',
+                           launch_url: 'http://smart.example5.com/',
+                           authorized: false,
+                           persona: 'provider')
+
+        get :show, id: '777', ehr_source_id: 'foo', username: 'ThisUserNameIsLongThisUserNameIsLong
+        ThisUserNameIsLongThisUserNameIsLongThisUserNameIsLongThisUserNameIsLongThisUserNameIsLong
+        ThisUserNameIsLongThisUserNameIsLongThisUserNameIsLongThisUserNameIsLongThisUserNameIsLong
+        ThisUserNameIsLongThisUserNameIsLongThisUserNameIsLong'
+        expect(response).to have_http_status(400)
         expect(response).to_not render_template(:show)
       end
     end

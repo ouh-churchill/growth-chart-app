@@ -4,6 +4,7 @@ versions:
     release_date: 2016-xx-xx
     changes:
       - {author: ss025783, comment: Cardiac Risk App throwing Canadarm undefined issue fix , issue: OPENSVC-2939, type: add}
+      - {author: ss025783, comment: Update username column type to text from VARCHAR, issue: OPENSVC-3132, type: add}
   - version: 1.26.0
     release_date: 2016-10-10
     changes:
