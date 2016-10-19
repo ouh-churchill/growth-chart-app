@@ -1,10 +1,11 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.27.0
-    release_date: 2016-xx-xx
+    release_date: 2016-10-18
     changes:
       - {author: ss025783, comment: Cardiac Risk App throwing Canadarm undefined issue fix , issue: OPENSVC-2939, type: add}
       - {author: ss025783, comment: Update username column type to text from VARCHAR, issue: OPENSVC-3132, type: add}
+      - {author: zp035497, comment: 1.27.0 release review, issue: OPENSVC-3164, type: add}
   - version: 1.26.0
     release_date: 2016-10-10
     changes:
