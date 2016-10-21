@@ -232,4 +232,5 @@ add_smart_apps(
   # smart_app('7d23d56f-4d33-4211-ae6c-90bc68358cd9', 'My Legacy', 't', 4, 'https://clinical.familycarepath.com/authorization '),
   # smart_app('5904028f-6228-45a8-83ad-4cdb0a4a98eb', 'HW EMR Module', 't', 4, 'http://localhost:1890/smart/launch'),
   # smart_app('aaba54b9-3140-457d-8db5-b9e412ac56aa', 'HealtheRegistries cernerdemo-latest', 't', 3, 'https://cernerdemo-latest.registries.healtheintent.com/smart/launch'),
+  # smart_app('82986a80-4585-4b57-b74b-c40b2b2365b5', 'MedSafe', 't', 3, 'http://smartprd1.tch.harvard.edu/medsafe/launch'),
 )
