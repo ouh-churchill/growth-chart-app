@@ -233,4 +233,5 @@ add_smart_apps(
   # smart_app('5904028f-6228-45a8-83ad-4cdb0a4a98eb', 'HW EMR Module', 't', 4, 'http://localhost:1890/smart/launch'),
   # smart_app('aaba54b9-3140-457d-8db5-b9e412ac56aa', 'HealtheRegistries cernerdemo-latest', 't', 3, 'https://cernerdemo-latest.registries.healtheintent.com/smart/launch'),
   # smart_app('82986a80-4585-4b57-b74b-c40b2b2365b5', 'MedSafe', 't', 3, 'http://smartprd1.tch.harvard.edu/medsafe/launch'),
+  # smart_app('8d92ccd1-f521-412f-9b47-7c9fbfe27838', 'HealtheRegistries dev', 't', 4, 'https://mill-int-test.registries.devhealtheintent.com/smart/launch'),
 )
