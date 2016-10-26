@@ -4,6 +4,7 @@ versions:
     release_date: 2016-10-26
     changes:
       - {author: kk014173, comment: Create additional route for SMART MPage preauth (sso), issue: OPENSVC-3227, type: add}
+      - {author: ss025783, comment: 1.28.0 release review, issue: OPENSVC-3185, type: add}
   - version: 1.27.0
     release_date: 2016-10-18
     changes:
