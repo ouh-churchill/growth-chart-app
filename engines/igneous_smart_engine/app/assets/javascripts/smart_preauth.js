@@ -2,6 +2,8 @@
  * Created by ss025783 on 9/6/16.
  */
 
+/* globals CERNER_SMART_LAUNCH */
+
 // Listen on the message and invoke receiveMessage function.
 window.addEventListener('message', receiveMessage, false);
 
@@ -86,7 +88,6 @@ var preAuthFailed = function () {
  * specified value, the user will be asked to log in.
  * Once logged in, the user will be redirected to the SMART app.
  */
-/*jshint unused:false*/
 function performPreauthentication(oauth2BaseUrl, launchUrl) {
 
   CERNER_SMART_LAUNCH.oauth2BaseURL = oauth2BaseUrl;

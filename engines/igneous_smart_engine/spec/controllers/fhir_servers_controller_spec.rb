@@ -1,3 +1,4 @@
+
 describe Igneous::Smart::FhirServersController, type: :controller do
   routes { Igneous::Smart::Engine.routes }
 

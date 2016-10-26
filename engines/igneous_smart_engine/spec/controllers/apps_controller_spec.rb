@@ -246,6 +246,43 @@ describe Igneous::Smart::AppsController, type: :controller do
     end
   end
 
+  context '#render_json_or_redirect' do
+    describe 'when Accept header is application/json' do
+      before :each do
+        request.env['HTTP_ACCEPT'] = 'application/json'
+      end
+
+      it 'will render json response' do
+        FactoryGirl.create(:fhir_server_factory)
+        FactoryGirl.create(:app_factory,
+                           app_id: 'app1',
+                           name: 'cardiac7',
+                           launch_url: 'http://smart.example6.com/',
+                           authorized: true)
+
+        allow(SecureRandom).to receive(:uuid).and_return '11309546-4ef4-4dba-8f36-53ef3834d90e'
+
+        expect_any_instance_of(Igneous::Smart::ApplicationController).to receive(:audit_smart_event)
+          .with(:smart_launch_app,
+                :success,
+                tenant: 'tenant-id',
+                user_id: '400',
+                patient_id: '100',
+                encounter_id: '300',
+                app_id: 'app1')
+
+        get :show, ehr_source_id: 'tenant-id', id: 'app1', 'pat_personid' => '100.00', 'pat_pprcode' => '200.00',
+                   'vis_encntrid' => '300.00', 'usr_personid' => '400.00', 'username' => 'test_username'
+
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body)).to include('smart_launch_url' => 'http://smart.example6.com/' \
+                                                       '?iss=http%3A%2F%2Ffhir.example.com' \
+                                                       '&launch=11309546-4ef4-4dba-8f36-53ef3834d90e',
+                                                     'smart_preauth_url' => 'http://test.host/smart/user/preauth/url?tenant=tenant-id')
+      end
+    end
+  end
+
   context '#create' do
     describe 'when the request is not from the Cerner internal network' do
       it 'returns 404 if the Cerner-Trusted-Traffic header is not present' do

@@ -1,9 +1,9 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.28.0
-    release_date: 2016-xx-xx
+    release_date: 2016-10-26
     changes:
-      - {author: xx, comment: xx, issue: OPENSVC-XX, type: add}
+      - {author: kk014173, comment: Create additional route for SMART MPage preauth (sso), issue: OPENSVC-3227, type: add}
   - version: 1.27.0
     release_date: 2016-10-18
     changes:

@@ -9,7 +9,7 @@ module Igneous
       # rubocop:disable all
       @@app_param_keys = %w(ehr_source_id id pat_personid pat_pprcode vis_encntrid \
                             usr_personid usr_positioncd dev_location app_appname need_patient_banner \
-                            username identity_token)
+                            username)
       # rubocop:enable all
 
       def index
@@ -54,13 +54,7 @@ module Igneous
         context_data = JSON.parse(context.data)
 
         audit_smart_launch_app_success(params, context_data)
-
-        if app.authorized && (app.persona == :provider.to_s)
-          redirect_to controller: 'user', action: 'preauth', context_id: launch_context.context_id,
-                      tenant: params['ehr_source_id'], identity_token: lowercase_params['identity_token']
-        else
-          redirect_to smart_launch_url
-        end
+        render_json_or_redirect(app, launch_context.context_id, smart_launch_url)
       end
 
       def create
@@ -95,6 +89,34 @@ module Igneous
         }.reject { |_k, v| v.nil? }
 
         audit_smart_event(:smart_launch_app, :success, audit_hash)
+      end
+
+      def render_json_or_redirect(app, context_id, smart_launch_url)
+        respond_to do |format|
+          format.json {
+            render_json_response(smart_launch_url)
+          }
+
+          format.html {
+            render_html_redirect(app, context_id, smart_launch_url)
+          }
+        end
+      end
+
+      def render_json_response(smart_launch_url)
+        render json: { smart_launch_url: smart_launch_url,
+                       smart_preauth_url: "#{request.base_url}/smart/user/preauth/url"\
+                                          "?tenant=#{params['ehr_source_id']}"
+               }, status: :ok
+      end
+
+      def render_html_redirect(app, context_id, smart_launch_url)
+        if app.authorized && (app.persona == :provider.to_s)
+          redirect_to controller: 'user', action: 'preauth', context_id: context_id,
+                      tenant: params['ehr_source_id']
+        else
+          redirect_to smart_launch_url
+        end
       end
     end
   end

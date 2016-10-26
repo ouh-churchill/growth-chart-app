@@ -37,4 +37,23 @@ describe Igneous::Smart::UserController, type: :controller do
       expect(response.headers).to have_key('SMART-Launch')
     end
   end
+
+  describe 'GET preauth_url' do
+    it 'renders json response with Authorization server\'s preauth url' do
+      request.env['HTTP_ACCEPT'] = 'application/json'
+
+      get :preauth_url, tenant: 'test-tenant'
+
+      expect(response).to have_http_status(:ok)
+      expect(response.content_type).to eq 'application/json'
+      expect(JSON.parse(response.body)).to include('oauth2_preauth_url' => 'https://authorization.example.com/preauth/?token=')
+    end
+
+    it '406 - not acceptable, when accept header is not application/json' do
+      request.env['HTTP_ACCEPT'] = 'text/html'
+      get :preauth_url, tenant: 'test-tenant'
+
+      expect(response).to have_http_status(:not_acceptable)
+    end
+  end
 end

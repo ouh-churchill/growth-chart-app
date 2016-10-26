@@ -11,45 +11,6 @@ CERNER_SMART_LAUNCH.launchId = '';
 CERNER_SMART_LAUNCH.requestSync = new XMLCclRequest();
 
 /**
- * Retrieve tenant id with getOAuthConsumerKey() call.
- * The tenant id is equivalent to oauth consumer key.
- * Retrieve username with getUsernameByPersonnelId
- * The user_person_id is the USR_PersonId from the query string.
- * Once that is done, we redirect the user to this
- * new URL.
- */
-function retrieveRequiredInfoAndRedirect(urlWithTenantPlaceHolder, user_person_id, persona) {
-
-  if (persona === 'patient') {
-    validateDataAndReportErrors(urlWithTenantPlaceHolder);
-  } else if (persona === 'provider') {
-    retrieveProviderInfoAndRedirect(urlWithTenantPlaceHolder, user_person_id)
-  }
-}
-
-function validateDataAndReportErrors(urlWithTenantPlaceHolder) {
-
-  var missingTenantId = '';
-  var missingUsername = '';
-
-  if (urlWithTenantPlaceHolder.indexOf(':tenant_id') !== -1) {
-    missingTenantId = 'The tenant ID is required to launch the app.';
-    Canadarm.error(missingTenantId, CERNER_SMART_LAUNCH.errorObj);
-    missingTenantId += '<br>';
-  }
-
-  var usernameParamVal = parseQueryParamByStr(urlWithTenantPlaceHolder, 'username');
-  if (!usernameParamVal) {
-    missingUsername = 'The username query parameter is required to launch the app.';
-    Canadarm.error(missingUsername, CERNER_SMART_LAUNCH.errorObj);
-    missingUsername += '<br>';
-  }
-
-  document.getElementById('error-message').innerHTML = '<p>' + missingTenantId + missingUsername + '</p>';
-}
-
-
-/**
  * Get the value of paramStr in query parameter based on the urlStr.
  * urlStr - the URL with query param
  * paramStr - the value of the parameter to search
@@ -73,6 +34,44 @@ function parseQueryParamByStr(urlStr, paramStr) {
   }
 
   return keyValueArr[paramStr];
+}
+
+function validateDataAndReportErrors(urlWithTenantPlaceHolder) {
+
+  var missingTenantId = '';
+  var missingUsername = '';
+
+  if (urlWithTenantPlaceHolder.indexOf(':tenant_id') !== -1) {
+    missingTenantId = 'The tenant ID is required to launch the app.';
+    Canadarm.error(missingTenantId, CERNER_SMART_LAUNCH.errorObj);
+    missingTenantId += '<br>';
+  }
+
+  var usernameParamVal = parseQueryParamByStr(urlWithTenantPlaceHolder, 'username');
+  if (!usernameParamVal) {
+    missingUsername = 'The username query parameter is required to launch the app.';
+    Canadarm.error(missingUsername, CERNER_SMART_LAUNCH.errorObj);
+    missingUsername += '<br>';
+  }
+
+  document.getElementById('error-message').innerHTML = '<p>' + missingTenantId + missingUsername + '</p>';
+}
+
+/**
+ * Retrieve tenant id with getOAuthConsumerKey() call.
+ * The tenant id is equivalent to oauth consumer key.
+ * Retrieve username with getUsernameByPersonnelId
+ * The user_person_id is the USR_PersonId from the query string.
+ * Once that is done, we redirect the user to this
+ * new URL.
+ */
+function retrieveRequiredInfoAndRedirect(urlWithTenantPlaceHolder, user_person_id, persona) {
+
+  if (persona === 'patient') {
+    validateDataAndReportErrors(urlWithTenantPlaceHolder);
+  } else if (persona === 'provider') {
+    retrieveProviderInfoAndRedirect(urlWithTenantPlaceHolder, user_person_id);
+  }
 }
 
 /**

@@ -2,6 +2,8 @@
  * Created by ss025783 on 9/6/16.
  */
 
+/* globals CERNER_SMART_LAUNCH */
+
 /**
  * Determines whether the code is executing in PowerChart context or
  * in a stand alone browser.
@@ -74,21 +76,15 @@ function getOAuthConsumerKey() {
 }
 
 /**
- * Use the identity_token in the query param, if one provided.  Otherwise,
  * Use XMLCclRequest to execute mp_exec_std_request having the target
  * script/EJS as 99999124 - GenerateSingleUseIdentityToken.  This function
  * will return an identity token if the request was successful.  It will
  * return an empty string when the request failed.
  */
 function getMillenniumIntegratedAuthToken() {
-  var identityTokenStr = parseQueryParamByStr(window.location.href, 'identity_token');
-  if (identityTokenStr) {
-    return identityTokenStr.trim();
-  }
 
-  // If this page is not executing in PowerChart and identity_token query string is not provided,
-  // redirect the user to the login page.
-  if (!isRunningInPowerChart() && !identityTokenStr) {
+  // If this page is not executing in PowerChart, redirect the user to the login page.
+  if (!isRunningInPowerChart()) {
     window.location.href = CERNER_SMART_LAUNCH.launchURL;
     Canadarm.info('The application is being launched outside of PowerChart. ' +
       'No preauth needed. Launch Id: ' + CERNER_SMART_LAUNCH.launchId, CERNER_SMART_LAUNCH.errorObj);
