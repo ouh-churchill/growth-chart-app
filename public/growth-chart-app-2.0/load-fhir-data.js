@@ -44,7 +44,8 @@ GC.get_data = function() {
       var vitalsFetch = smart.patient.api.fetchAll({type: "Observation", query: {code: {$or: ['http://loinc.org|3141-9',
         'http://loinc.org|8302-2', 'http://loinc.org|8287-5',
         'http://loinc.org|39156-5', 'http://loinc.org|18185-9',
-        'http://loinc.org|37362-1', 'http://loinc.org|11884-4']}}});
+        'http://loinc.org|37362-1', 'http://loinc.org|11884-4',
+        'http://snomed.info/sct|8021000175101', 'http://snomed.info/sct|8031000175103']}}});
 
       $.when(ptFetch, vitalsFetch).fail(function() {
         onErrorWithWarning(GC.str('STR_Error_LoadingApplication'));
@@ -194,6 +195,24 @@ GC.get_data = function() {
               });
         }
       });
+
+      // Height of Father using SNOMED if familyHistory is not available
+      var observations = vitalsByCode['8021000175101'];
+      if (observations && observations.length > 0 && p.familyHistory.father.height === null){
+        if (observations[0].status.toLowerCase() === 'final' || observations[0].status.toLowerCase() === 'amended') {
+          p.familyHistory.father.height = units.cm(observations[0].valueQuantity);
+          p.familyHistory.father.isBio = true;
+        }
+      }
+
+      // Height of Mother using SNOMED if familyHistory is not available
+      observations = vitalsByCode['8031000175103'];
+      if (observations && observations.length > 0 && p.familyHistory.mother.height === null){
+        if (observations[0].status.toLowerCase() === 'final' || observations[0].status.toLowerCase() === 'amended') {
+          p.familyHistory.mother.height = units.cm(observations[0].valueQuantity);
+          p.familyHistory.mother.isBio = true;
+        }
+      }
 
       window.data = p;
       console.log("Check out the patient's growth data: window.data");
