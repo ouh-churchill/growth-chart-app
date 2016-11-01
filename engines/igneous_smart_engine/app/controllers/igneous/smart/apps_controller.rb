@@ -44,7 +44,7 @@ module Igneous
           }
           return
         elsif lowercase_params['username'].length > 256
-          render :status => 400, :plain => 'Username cannot be longer than 256 characters.'
+          render status: 400, plain: 'Username cannot be longer than 256 characters.'
           return
         end
 

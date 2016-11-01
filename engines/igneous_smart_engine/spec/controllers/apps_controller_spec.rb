@@ -346,6 +346,20 @@ describe Igneous::Smart::AppsController, type: :controller do
         expect(response.headers).to have_key('Location')
       end
 
+      it 'successfully creates two apps with same app name' do
+        post(:create, ehr_source_id: 'foo',
+                      app: { app_id: 'my-app-id1', name: :my_app1, launch_url: 'https://example.com/',
+                             igneous_smart_fhir_server_id: 1, authorized: true })
+
+        post(:create, ehr_source_id: 'foo',
+                      app: { app_id: 'my-app-id2', name: :my_app1, launch_url: 'https://example.com/',
+                             igneous_smart_fhir_server_id: 1, authorized: true })
+
+        app1 = Igneous::Smart::App.find_by app_id: 'my-app-id1'
+        app2 = Igneous::Smart::App.find_by app_id: 'my-app-id2'
+        expect(app1.name).to eq 'my_app1'
+        expect(app2.name).to eq 'my_app1'
+      end
     end
   end
 

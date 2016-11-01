@@ -3,7 +3,7 @@ versions:
   - version: 1.29.0
     release_date: 2016-xx-xx
     changes:
-      - {author: xx, comment: xx, issue: OPENSVC-xxxx, type: add}
+      - {author: kt026311, comment: Remove the unique constaint on SMART Apps name field, issue: OPENSVC-3179, type: add}
   - version: 1.28.0
     release_date: 2016-10-26
     changes:
