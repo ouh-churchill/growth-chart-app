@@ -235,5 +235,6 @@ add_smart_apps(
   # smart_app('82986a80-4585-4b57-b74b-c40b2b2365b5', 'MedSafe', 't', 3, 'http://smartprd1.tch.harvard.edu/medsafe/launch'),
   # smart_app('8d92ccd1-f521-412f-9b47-7c9fbfe27838', 'HealtheRegistries dev', 't', 4, 'https://mill-int-test.registries.devhealtheintent.com/smart/launch'),
   # smart_app('25a189c2-4855-48fa-a28c-101923196df9', 'Juxly Timeline Demo', 't', 3, 'https://chc-timeline.juxlyapps.com/cerner/launch.html'), #This app is added to production.
-  smart_app('84472733-04c4-463e-843a-7c448fa89ca6', 'TriVox - Staging', 't', 4, 'https://staging.trivoxhealth.com/v1/smart/launch.html'),
+  # smart_app('84472733-04c4-463e-843a-7c448fa89ca6', 'TriVox - Staging', 't', 4, 'https://staging.trivoxhealth.com/v1/smart/launch.html'),
+  # smart_app('84472733-04c4-463e-843a-7c448fa89ca6', 'TriVox - CHC Demo', 't', 3, 'https://staging.trivoxhealth.com/v1/smart/launch.html'),
 )
