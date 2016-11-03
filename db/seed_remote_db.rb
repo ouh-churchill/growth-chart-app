@@ -237,4 +237,5 @@ add_smart_apps(
   # smart_app('25a189c2-4855-48fa-a28c-101923196df9', 'Juxly Timeline Demo', 't', 3, 'https://chc-timeline.juxlyapps.com/cerner/launch.html'), #This app is added to production.
   # smart_app('84472733-04c4-463e-843a-7c448fa89ca6', 'TriVox - Staging', 't', 4, 'https://staging.trivoxhealth.com/v1/smart/launch.html'),
   # smart_app('84472733-04c4-463e-843a-7c448fa89ca6', 'TriVox - CHC Demo', 't', 3, 'https://staging.trivoxhealth.com/v1/smart/launch.html'),
+  # smart_app('04060c0c-4066-4a7d-ab78-54eb48467d24', 'HealtheRecord', 't', 3, 'https://cernerdemo.record.healtheintent.com/smart/launch'),
 )
