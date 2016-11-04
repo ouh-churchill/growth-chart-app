@@ -239,4 +239,6 @@ add_smart_apps(
   # smart_app('84472733-04c4-463e-843a-7c448fa89ca6', 'TriVox - CHC Demo', 't', 3, 'https://staging.trivoxhealth.com/v1/smart/launch.html'),
   # smart_app('04060c0c-4066-4a7d-ab78-54eb48467d24', 'HealtheRecord', 't', 3, 'https://cernerdemo.record.healtheintent.com/smart/launch'),
   # smart_app('27397d59-4a27-44bf-a446-8dd1bab0b150', 'ePRISM', 't', 3, 'https://fhir.houtcomes.com/Workflow/Start'),
+  # smart_app('7d23d56f-4d33-4211-ae6c-90bc68358cd9', 'My Legacy', 't', 3, 'https://clinical.familycarepath.nubohealth.com/launch/'),
+  
 )
