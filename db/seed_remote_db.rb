@@ -241,5 +241,6 @@ add_smart_apps(
   # smart_app('27397d59-4a27-44bf-a446-8dd1bab0b150', 'ePRISM', 't', 3, 'https://fhir.houtcomes.com/Workflow/Start'),
   # smart_app('7d23d56f-4d33-4211-ae6c-90bc68358cd9', 'My Legacy', 't', 3, 'https://clinical.familycarepath.nubohealth.com/launch/'),
   # smart_app('5904028f-6228-45a8-83ad-4cdb0a4a98eb', 'Healthwise Patient Education', 't', 3, 'http://clinicianix.fhir.hwapps.net/smart/launch'),
+  # smart_app('b2c639ec-bb07-42d1-b3c7-c9ed5fc92c8e', 'OAuth 2.0 Demo Client', 't', 7, 'https://authz-demo.sandboxcerner.com/client/demo'),
   
 )
