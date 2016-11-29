@@ -3,7 +3,7 @@ versions:
   - version: 1.30.0
     release_date: 2016-xx-xx
     changes:
-      - {author: xx, comment: xx, issue: OPENSVC-xxxx, type: add}
+      - {author: ss025783, comment: Update SMART App Validator DSTU2 for patient access, issue: OPENSVC-3230, type: add}
   - version: 1.29.0
     release_date: 2016-11-01
     changes:
