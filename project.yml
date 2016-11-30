@@ -48,5 +48,6 @@ philter:
                  'public/fhir-client/*',
                  'public/fhir-client-dstu2/fhir-client.js',
                  'public/fhir-client-dstu2/fhir-client.min.js',
-                 'public/embedded_content/*']
+                 'public/embedded_content/*',
+                 'public/polyfill/*']
     globals: ['XMLCclRequest', 'Canadarm', 'FHIR']

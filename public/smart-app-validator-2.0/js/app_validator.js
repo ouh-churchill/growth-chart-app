@@ -291,9 +291,11 @@
           });
         }
 
-        var supportedResources =  ['Patient', 'Encounter', 'AllergyIntolerance', 'Condition_Diagnosis', 'Condition_Problem', 'DiagnosticReport',
-          'Immunization', 'Observation', 'MedicationOrder', 'MedicationStatement', 'DocumentReference'];
-        AppValidator.resources = availableResources.filter(function(r){return ~this.indexOf(r);},supportedResources);
+        var supportedResources = ['Patient', 'Encounter', 'AllergyIntolerance', 'Condition_Diagnosis',
+          'Condition_Problem', 'DiagnosticReport', 'Immunization', 'Observation', 'MedicationOrder',
+          'MedicationStatement', 'DocumentReference'];
+        /* jshint bitwise: false */
+        AppValidator.resources = availableResources.filter(function(r){return ~this.indexOf(r);}, supportedResources);
 
         // Make the UI visible for the resources ready to be called.
         AppValidator.resources.forEach(function(r){
