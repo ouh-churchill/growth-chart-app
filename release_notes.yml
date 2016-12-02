@@ -1,7 +1,11 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
-  - version: 1.30.0
+  - version: 1.31.0
     release_date: 2016-xx-xx
+    changes:
+      - {author: xx, comment: xx, issue: OPENSVC-xxxx, type: add}
+  - version: 1.30.0
+    release_date: 2016-11-30
     changes:
       - {author: ss025783, comment: Update SMART App Validator DSTU2 for patient access, issue: OPENSVC-3230, type: add}
       - {author: kk014173, comment: Update embedded content js in SMART server and pull in new polyfills, issue: OPENSVC-3309, type: add}
