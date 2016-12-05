@@ -4,6 +4,7 @@ versions:
     release_date: 2016-xx-xx
     changes:
       - {author: zp035497, comment: Update Growth Chart App to adjust mid-parental height based off gender, issue: OPENSVC-3098, type: add}
+      - {author: zp035497, comment: Update Growth Chart App to calculate obesity status from BMI, issue: OPENSVC-3095, type: add}
   - version: 1.30.0
     release_date: 2016-11-30
     changes:
