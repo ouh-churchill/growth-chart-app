@@ -1,10 +1,11 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.31.0
-    release_date: 2016-xx-xx
+    release_date: 2016-12-05
     changes:
       - {author: zp035497, comment: Update Growth Chart App to adjust mid-parental height based off gender, issue: OPENSVC-3098, type: add}
       - {author: zp035497, comment: Update Growth Chart App to calculate obesity status from BMI, issue: OPENSVC-3095, type: add}
+      - {author: zp035497, comment: 1.31.0 release review, issue: OPENSVC-3377, type: add}
   - version: 1.30.0
     release_date: 2016-11-30
     changes:
