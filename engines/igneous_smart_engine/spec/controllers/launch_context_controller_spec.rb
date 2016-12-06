@@ -214,21 +214,6 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
           expect(parsed_response_body['error']).to be_nil
         end
 
-        it 'returns failure when resource server is unknown' do
-          post(:resolve, format: 'json', aud: 'https://fhir.example.com/fhir/'\
-                                          '2c400054-42d8-4e74-87b7-80b5bd5fde9f',
-                         launch: '6e1b99f7-e05b-42d1-b304-d8180858ce8c',
-                         sub: 'test-user',
-                         ver: '1.0',
-                         tnt: '2c400054-42d8-4e74-87b7-80b5bd5fde9f')
-
-          expect(response.content_type).to eq 'application/json'
-          expect(response).to have_http_status(:bad_request)
-          parsed_response_body = JSON.parse(response.body)
-          expect(parsed_response_body['error']).to eql 'urn:com:cerner:authorization:error:launch'\
-                                                   ':unknown-resource-server'
-        end
-
         it 'returns failure when the tenant is invalid' do
           post(:resolve, format: 'json', aud: 'https://fhir.devcernerpowerchart.com/fhir/'\
                                           '2c400054-42d8-4e74-87b7-80b5bd5fde45',

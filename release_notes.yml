@@ -4,6 +4,7 @@ versions:
     release_date: 2016-xx-xx
     changes:
       - {author: zp035497, comment: Update Growth Chart App to fix check for previous BMI charting, issue: OPENSVC-3095, type: add}
+      - {author: kt026311, comment: Remove FHIR url validation during launch context resolve, issue: OPENSVC-3291, type: update}
   - version: 1.31.0
     release_date: 2016-12-05
     changes:
