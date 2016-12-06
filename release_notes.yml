@@ -1,5 +1,9 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
+  - version: 1.32.0
+    release_date: 2016-xx-xx
+    changes:
+      - {author: zp035497, comment: Update Growth Chart App to fix check for previous BMI charting, issue: OPENSVC-3095, type: add}
   - version: 1.31.0
     release_date: 2016-12-05
     changes:

@@ -1009,7 +1009,9 @@
                         lastBMIEntry.agemos
                     ) * 100;
                     if (!isNaN(weightPct) || isFinite(weightPct)) {
+                        weightPctNow = weightPct;
                         weightPctPrev = weightPct;
+                        useBMIRange = true;
                     }
                 }
                 
@@ -1029,7 +1031,7 @@
                         prevWeightEntry.agemos
                     ) * 100;
 
-                    if (lastBMIEntry && lastBMIEntry.agemos >= 24) {
+                    if (prevBMIEntry && prevBMIEntry.agemos >= 24) {
                         bmiPctPrev = GC.findPercentileFromX(
                             prevBMIEntry.bmi,
                             GC.DATA_SETS.CDC_BMI,
@@ -1038,7 +1040,11 @@
                         ) * 100;
                         if (!isNaN(bmiPctPrev) || isFinite(bmiPctPrev)) {
                             weightPctPrev = bmiPctPrev;
+                        } else if (useBMIRange) {
+                            weightPctPrev = weightPctNow;
                         }
+                    } else if (useBMIRange) {
+                        weightPctPrev = weightPctNow;
                     }
                 }
 
@@ -1063,7 +1069,6 @@
 
                 if (lastBMIEntry && lastBMIEntry.agemos >= 24) {
                     dataSet = GC.DATA_SETS.CDC_BMI;
-                    useBMIRange = true;
                 }
 
                 healthyWeightMin = GC.findXFromPercentile(
