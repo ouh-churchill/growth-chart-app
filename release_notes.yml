@@ -1,10 +1,11 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.33.0
-    release_date: 2016-xx-xx
+    release_date: 2016-12-13
     changes:
       - {author: kt026311, comment: Implement logic to differentiate FHIR server type, issue: OPENSVC-3337, type: add}
       - {author: kt026311, comment: Remove index index_igneous_smart_apps_on_name, issue: OPENSVC-3296, type: update}
+      - {author: zp035497, comment: 1.33.0 release review, issue: OPENSVC-3411, type: add}
   - version: 1.32.0
     release_date: 2016-12-06
     changes:
