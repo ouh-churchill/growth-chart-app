@@ -16,7 +16,10 @@ module Igneous
 
         filtered_apps.each { |app|
           fhir_server = FhirServer.find_by id: app['igneous_smart_fhir_server_id']
-          app['fhir_spec'] = fhir_server.name
+          if fhir_server
+            app['fhir_spec'] = fhir_server.name
+            app['fhir_url'] = fhir_server.url
+          end
         }
 
         render json: filtered_apps

@@ -45,6 +45,7 @@ describe Igneous::Smart::FhirServersController, type: :controller do
         expect(fhir_server.url).to eq 'https://fhir.example.com/'
         expect(fhir_server.secured).to eq false
         expect(fhir_server.public_access).to eq true
+        expect(fhir_server.server_type).to eq 'provider'
         expect(response).to have_http_status(204)
       end
     end

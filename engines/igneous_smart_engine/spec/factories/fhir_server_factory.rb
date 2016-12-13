@@ -5,5 +5,6 @@ FactoryGirl.define do
     url 'http://fhir.example.com'
     secured 't'
     public_access 't'
+    server_type 'provider'
   end
 end

@@ -3,7 +3,8 @@ versions:
   - version: 1.33.0
     release_date: 2016-xx-xx
     changes:
-      - {author: xx, comment: xx, issue: OPENSVC-xxxx, type: add}
+      - {author: kt026311, comment: Implement logic to differentiate FHIR server type, issue: OPENSVC-3337, type: add}
+      - {author: kt026311, comment: Remove index index_igneous_smart_apps_on_name, issue: OPENSVC-3296, type: update}
   - version: 1.32.0
     release_date: 2016-12-06
     changes:

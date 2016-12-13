@@ -56,8 +56,8 @@ def add_smart_apps(*data)
   end
 end
 
-def fhir_server(name, url, secured, public_access)
-  { fhir_server: { name: name, url: url, secured: secured, public_access: public_access } }.to_json
+def fhir_server(name, url, secured, public_access, server_type)
+  { fhir_server: { name: name, url: url, secured: secured, public_access: public_access, server_type: server_type } }.to_json
 end
 
 def smart_app(app_id, name, authorized, fhir_server_id, launch_url)
@@ -76,11 +76,11 @@ def smart_app_validator_url_dstu2
 end
 
 # add_fhir_servers(
-#   fhir_server('cerner',            "#{FHIR_SERVER}/may2015/@tenant_id@",                         't', 't'),
-#   fhir_server('cerner_open',       "#{FHIR_SERVER}/may2015/open/@tenant_id@",                    'f', 't'),
-#   fhir_server('cerner_dstu2',      "#{FHIR_SERVER}/dstu2/@tenant_id@",                           't', 't'),
-#   fhir_server('cerner_dstu2_open', "#{FHIR_SERVER}/dstu2/open/@tenant_id@",                      'f', 't'),
-#   fhir_server('cerner_staging',    'https://fhir.stagingcernerpowerchart.com/dstu2/@tenant_id@', 't', 't')
+#   fhir_server('cerner',            "#{FHIR_SERVER}/may2015/@tenant_id@",                         't', 't', 'provider'),
+#   fhir_server('cerner_open',       "#{FHIR_SERVER}/may2015/open/@tenant_id@",                    'f', 't', 'provider'),
+#   fhir_server('cerner_dstu2',      "#{FHIR_SERVER}/dstu2/@tenant_id@",                           't', 't', 'provider'),
+#   fhir_server('cerner_dstu2_open', "#{FHIR_SERVER}/dstu2/open/@tenant_id@",                      'f', 't', 'provider'),
+#   fhir_server('cerner_staging',    'https://fhir.stagingcernerpowerchart.com/dstu2/@tenant_id@', 't', 't', 'provider')
 # )
 
 add_smart_apps(

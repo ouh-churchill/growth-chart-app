@@ -48,6 +48,7 @@ describe Igneous::Smart::AppsDetailsController, type: :controller do
 
         expect(response).to have_http_status(200)
         expect(JSON.parse(response.body).count).to eql(2)
+        expect(JSON.parse(response.body)[0]['fhir_url']).to eq 'http://fhir.example.com'
       end
 
       it 'returns 404 when requested SMART app cannot be found' do
