@@ -27,7 +27,7 @@ gem 'spring',        group: :development
 
 gem 'rack-cors', '~> 0.4', require: 'rack/cors'
 gem 'yui-compressor', '0.12.0' # using exact version since different version creates different css compressed file
-gem 'sprockets', '~> 2.11.0' # Require to create gzipped assets
+gem 'sprockets', '~> 2.11' # Require to create gzipped assets
 gem 'libv8', '~> 3.16.14.11' # Since 3.16.14.9 got yanked, we had to restrict to point to the latest one
 
 group :production do
@@ -44,7 +44,7 @@ group :cerner, :default do
   gem 'canadarm_ruby', '~> 1.0',   source: 'http://repo.release.cerner.corp/main/rubygems/'
   gem 'igneous-smart', '1.0.0',    path:   'engines/igneous_smart_engine'
   gem 'ion_profiler_engine', '~> 1.8', source: 'http://repo.release.cerner.corp/main/rubygems/'
-  gem 'embedded_content_engine', '~> 1.0', source: 'http://repo.release.cerner.corp/main/rubygems/'
+  gem 'embedded_content_engine', '~> 1.1', source: 'http://repo.release.cerner.corp/main/rubygems/'
 end
 
 group :development do

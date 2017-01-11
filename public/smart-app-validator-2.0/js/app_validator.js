@@ -88,12 +88,20 @@
           results.successCount += 1;
           htmlStr = '<p> &check; ' + name + ': ' + textStatus + ' - ' + jqXHR.status + buildButton(name) +
               buildResponseBlock(name, url, jqXHR.getAllResponseHeaders(), data, jqXHR.status) + '</p>';
+          if (name === 'Conformance') {
+            processConformance(data);
+          }
         })
         .fail(function(jqXHR, textStatus) {
           buildValidatorResult(name, textStatus, jqXHR, url, false);
           results.failureCount += 1;
           htmlStr = '<p> &cross; ' + name + ': ' + textStatus + ' - ' + jqXHR.status + buildButton(name) +
               buildResponseBlock(name, url, jqXHR.getAllResponseHeaders(), jqXHR, jqXHR.status) + '</p>';
+          if (name === 'Conformance') {
+            //Since conformance call failed we report the error for conformance and dont make any other
+            // service calls.
+            reportResults(AppValidator.deferreds, 1);
+          }
         })
         .always(function() {
           document.getElementById(name).innerHTML = htmlStr;
@@ -121,19 +129,11 @@
         };
       }
 
-      function getResources() {
-        var resources = ['Conformance', 'Patient', 'Encounter', 'AllergyIntolerance', 'Condition_Diagnosis', 'Condition_Problem', 'DiagnosticReport',
-          'Immunization', 'Observation', 'MedicationOrder', 'DocumentReference', 'MedicationStatement'];
-
-        var deferreds = [];
+      function getResources(resources, deferreds) {
 
         for (var j = 0; j < resources.length; j++) {
           var resource = resources[j];
           var resourceDisplayName = '';
-          if (resource === 'Conformance') {
-            deferreds.push(getResource('Conformance', 'metadata'));
-            continue;
-          }
 
           var additionalParam = null;
           if (resource === 'AllergyIntolerance') {
@@ -207,6 +207,13 @@
         var rootURL = serviceURL.slice(0, serviceURL.lastIndexOf('/'));
         // Remove root path
         var fhirBaseURL = rootURL.slice(0, rootURL.lastIndexOf('/'));
+        if (fhirBaseURL.includes('fhir-ehr')) {
+          return (fhirBaseURL.replace('fhir-ehr', 'smart'));
+        }
+        else if (fhirBaseURL.includes('fhir-myrecord')) {
+          return (fhirBaseURL.replace('fhir-myrecord', 'smart'));
+        }
+
         return (fhirBaseURL.replace('fhir', 'smart'));
       };
 
@@ -270,6 +277,35 @@
         }));
       }
 
+      function processConformance(data) {
+
+        var availableResources = [];
+        if (data && data.hasOwnProperty('rest') && Array.isArray(data.rest)) {
+          data.rest[0].resource.forEach(function (resource){
+            if (resource.type === 'Condition'){
+              availableResources.push('Condition_Diagnosis', 'Condition_Problem');
+            }
+            else {
+              availableResources.push(resource.type);
+            }
+          });
+        }
+
+        var supportedResources = ['Patient', 'Encounter', 'AllergyIntolerance', 'Condition_Diagnosis',
+          'Condition_Problem', 'DiagnosticReport', 'Immunization', 'Observation', 'MedicationOrder',
+          'MedicationStatement', 'DocumentReference'];
+        /* jshint bitwise: false */
+        AppValidator.resources = availableResources.filter(function(r){return ~this.indexOf(r);}, supportedResources);
+
+        // Make the UI visible for the resources ready to be called.
+        AppValidator.resources.forEach(function(r){
+          $('#' + r.toString()).show();
+        });
+
+        getResources(AppValidator.resources, AppValidator.deferreds);
+
+      }
+
       for (var i = 0; i < healthChecks.length; i++) {
         var hc = healthChecks[i];
         getHealthChecks(hc.name, hc.display, hc.url);
@@ -288,7 +324,11 @@
         document.getElementById('AuthorizationServer').innerHTML = successStr;
       }
 
-      getResources();
+      AppValidator.deferreds = [];
+      AppValidator.resources = [];
+      //Look for conformance first to build the list of resources to be called for a given
+      //fhir endpoint.
+      AppValidator.deferreds.push(getResource('Conformance', 'metadata'));
 
     }, function(errback) {
       var failureStr = '<p> &cross; Authorization (OAuth2): ' + errback + '</p>';

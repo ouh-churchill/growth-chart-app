@@ -1,9 +1,33 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
-  - version: 1.30.0
-    release_date: 2016-xx-xx
+  - version: 1.34.0
+    release_date: 2017-xx-xx
     changes:
       - {author: xx, comment: xx, issue: OPENSVC-xxxx, type: add}
+  - version: 1.33.0
+    release_date: 2016-12-13
+    changes:
+      - {author: kt026311, comment: Implement logic to differentiate FHIR server type, issue: OPENSVC-3337, type: add}
+      - {author: kt026311, comment: Remove index index_igneous_smart_apps_on_name, issue: OPENSVC-3296, type: update}
+      - {author: zp035497, comment: 1.33.0 release review, issue: OPENSVC-3411, type: add}
+  - version: 1.32.0
+    release_date: 2016-12-06
+    changes:
+      - {author: zp035497, comment: Update Growth Chart App to fix check for previous BMI charting, issue: OPENSVC-3095, type: add}
+      - {author: kt026311, comment: Remove FHIR url validation during launch context resolve, issue: OPENSVC-3291, type: update}
+      - {author: zp035497, comment: 1.32.0 release review, issue: OPENSVC-3377, type: add}
+  - version: 1.31.0
+    release_date: 2016-12-05
+    changes:
+      - {author: zp035497, comment: Update Growth Chart App to adjust mid-parental height based off gender, issue: OPENSVC-3098, type: add}
+      - {author: zp035497, comment: Update Growth Chart App to calculate obesity status from BMI, issue: OPENSVC-3095, type: add}
+      - {author: zp035497, comment: 1.31.0 release review, issue: OPENSVC-3377, type: add}
+  - version: 1.30.0
+    release_date: 2016-11-30
+    changes:
+      - {author: ss025783, comment: Update SMART App Validator DSTU2 for patient access, issue: OPENSVC-3230, type: add}
+      - {author: kk014173, comment: Update embedded content js in SMART server and pull in new polyfills, issue: OPENSVC-3309, type: add}
+      - {author: ss025783, comment: 1.30.0 release review, issue: OPENSVC-3349, type: add}
   - version: 1.29.0
     release_date: 2016-11-01
     changes:

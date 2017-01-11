@@ -10,6 +10,7 @@
     <script src='../fhir-client-dstu2/fhir-client.min.js'></script>
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js'></script>
     <script src='https://code.jquery.com/jquery-migrate-1.2.1.min.js'></script>
+    <script src='./js/app_validator_polyfill.js'></script>
     <script src='./js/app_validator.js'></script>
   </head>
   <body>
@@ -49,18 +50,20 @@
       AppValidator.loadData().then(function(p) {});
 
       $('#Conformance').click(function() { $('#Conformance-details').toggle(); });
-      $('#Patient').click(function() { $('#Patient-details').toggle(); });
-      $('#Encounter').click(function() { $('#Encounter-details').toggle(); });
-      $('#Condition_Diagnosis').click(function() { $('#Condition_Diagnosis-details').toggle(); });
-      $('#Condition_Problem').click(function() { $('#Condition_Problem-details').toggle(); });
-      $('#AllergyIntolerance').click(function() { $('#AllergyIntolerance-details').toggle(); });
-      $('#Observation').click(function() { $('#Observation-details').toggle(); });
-      $('#DiagnosticReport').click(function() { $('#DiagnosticReport-details').toggle(); });
-      $('#Immunization').click(function() { $('#Immunization-details').toggle(); });
-      $('#MedicationOrder').click(function() { $('#MedicationOrder-details').toggle(); });
-      $('#MedicationStatement').click(function() { $('#MedicationStatement-details').toggle(); });
-      $('#DocumentReference').click(function() { $('#DocumentReference-details').toggle(); });
+      $('#Patient').hide().click(function() { $('#Patient-details').toggle(); });
+      $('#Encounter').hide().click(function() { $('#Encounter-details').toggle(); });
+      $('#Condition_Diagnosis').hide().click(function() { $('#Condition_Diagnosis-details').toggle(); });
+      $('#Condition_Problem').hide().click(function() { $('#Condition_Problem-details').toggle(); });
+      $('#AllergyIntolerance').hide().click(function() { $('#AllergyIntolerance-details').toggle(); });
+      $('#Observation').hide().click(function() { $('#Observation-details').toggle(); });
+      $('#DiagnosticReport').hide().click(function() { $('#DiagnosticReport-details').toggle(); });
+      $('#Immunization').hide().click(function() { $('#Immunization-details').toggle(); });
+      $('#MedicationOrder').hide().click(function() { $('#MedicationOrder-details').toggle(); });
+      $('#MedicationStatement').hide().click(function() { $('#MedicationStatement-details').toggle(); });
+      $('#DocumentReference').hide().click(function() { $('#DocumentReference-details').toggle(); });
     </script>
+    <script src='../polyfill/array-includes.js'></script>
+    <script src='../polyfill/es6-shim-0.35.1.js'></script>
     <script src='../embedded_content/embedded_content.min.js'></script>
   </body>
 </html>

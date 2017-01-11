@@ -1,7 +1,7 @@
 name: Igneous Smart Server
 group_id: com.cerner.igneous
 artifact_id: igneous-smart_server
-version: 1.30.0.SNAPSHOT
+version: 1.34.0.SNAPSHOT
 test: rake
 doc: tomdoc
 package:
@@ -48,5 +48,6 @@ philter:
                  'public/fhir-client/*',
                  'public/fhir-client-dstu2/fhir-client.js',
                  'public/fhir-client-dstu2/fhir-client.min.js',
-                 'public/embedded_content/*']
+                 'public/embedded_content/*',
+                 'public/polyfill/*']
     globals: ['XMLCclRequest', 'Canadarm', 'FHIR']
