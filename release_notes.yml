@@ -4,6 +4,7 @@ versions:
     release_date: 2017-xx-xx
     changes:
       - {author: xx, comment: xx, issue: OPENSVC-xxxx, type: add}
+      - {author: mh015940, comment: Update loading indicator, issue: OPENSVC-3300, type: add}
   - version: 1.33.0
     release_date: 2016-12-13
     changes:

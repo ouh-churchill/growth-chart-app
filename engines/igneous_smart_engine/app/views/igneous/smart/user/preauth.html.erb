@@ -8,9 +8,14 @@
 <%= javascript_include_tag "application" %>
 <%= canadarm_logging_tag %>
 <%= javascript_include_tag "igneous-smart.min" %>
+<%= stylesheet_link_tag 'spinner' %>
 </head>
 <body onload="performPreauthentication('<%= oauth2_base_url %>', '<%= smart_launch_url %>')">
-  <p>Loading...</p>
+  <div class="spinner">
+    <div class="bounce1"></div>
+    <div class="bounce2"></div>
+    <div class="bounce3"></div>
+  </div>
   <div id="iframe" style="display:block; visibility:hidden">
     <iframe name="loader" id="loader"></iframe>
   </div>
