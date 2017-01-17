@@ -1,10 +1,10 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.34.0
-    release_date: 2017-xx-xx
+    release_date: 2017-01-16
     changes:
-      - {author: xx, comment: xx, issue: OPENSVC-xxxx, type: add}
       - {author: mh015940, comment: Update loading indicator, issue: OPENSVC-3300, type: add}
+      - {author: zp035497, comment: 1.34.0 release review, issue: OPENSVC-3538, type: add}
   - version: 1.33.0
     release_date: 2016-12-13
     changes:
