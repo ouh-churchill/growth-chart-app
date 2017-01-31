@@ -16987,13 +16987,13 @@ BBClient.ready = function(input, callback, errback){
   if (state && sessionStorage[state] && tokenResponseCheck) { // we're reloading after successful completion
     // Check if 2 minutes from access token expiration timestamp
     var payloadCheck = jwt.decode(tokenResponseCheck.access_token);
-    var nearExpTime = Math.floor(Date.now() / 1000) >= (payloadCheck[“exp”] - 120);
+    var nearExpTime = Math.floor(Date.now() / 1000) >= (payloadCheck["exp"] - 120);
 
     if (tokenResponseCheck.refresh_token
-        && tokenResponseCheck.scope.indexOf(‘online_access’) > -1
+        && tokenResponseCheck.scope.indexOf('online_access') > -1
         && nearExpTime) { // refresh token flow
-          accessTokenResolver = completeRefreshFlow();
-    else { // existing access token flow
+      accessTokenResolver = completeRefreshFlow();
+    } else { // existing access token flow
       accessTokenResolver = completePageReload();
     }
   } else if (isCode) { // code flow
@@ -17451,10 +17451,12 @@ utils.byCode = function(observations, property){
   }
   observations.forEach(function(o){
     if (o.resourceType === "Observation") {
-        o[property].coding.forEach(function(coding){
+      if (o[property] && Array.isArray(o[property].coding)) {
+        o[property].coding.forEach(function (coding) {
           ret[coding.code] = ret[coding.code] || [];
           ret[coding.code].push(o);
         });
+      }
     }
   });
   return ret;
