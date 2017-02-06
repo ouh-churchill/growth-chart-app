@@ -106,10 +106,6 @@
         this.uri = function() {
           var uri = this.name + '?' + 'patient=' + this.patient;
 
-          if (this.encounter) {
-            uri += '&encounter=' + this.encounter;
-          }
-
           if (this.params) {
             uri += '&' + params;
           }
@@ -133,13 +129,6 @@
           }
 
           var additionalParam = null;
-          if (resource === 'AllergyIntolerance') {
-            additionalParam = 'status=unconfirmed';
-          }
-
-          if (resource === 'Condition') {
-            additionalParam = 'category=diagnosis&clinicalstatus=confirmed,unknown';
-          }
 
           if (resource === 'MedicationPrescription') {
             additionalParam = 'status=active&_count=20';
@@ -148,10 +137,6 @@
           var priorDate = new Date();
           var monthsToDeduct = 6;
           priorDate.setMonth(priorDate.getMonth() - monthsToDeduct);
-
-          if ( resource === 'MedicationStatement') {
-            additionalParam = 'status=completed&_count=10&effectivedate=>=' + priorDate.toISOString();
-          }
 
           if (resource === 'Observation') {
             var currentDate = new Date();
@@ -164,13 +149,10 @@
             additionalParam += '&_count=20';
           }
 
-          var resourceObj = new Resource(resource, patientId, encounterId, additionalParam);
+          var resourceObj = new Resource(resource, patientId, additionalParam);
 
           if (resource === 'Patient') {
             deferreds.push(getResourceById(resourceObj.name, resourceObj.patient));
-          }
-          else if ((resource === 'Encounter') && encounterId) {
-            deferreds.push(getResourceById(resourceObj.name, resourceObj.encounter));
           }
           else if (resource === 'DocumentReference') {
             document.getElementById('DocumentReference').innerHTML = '<p>DocumentReference (write): ' +
@@ -265,13 +247,9 @@
       }
 
       var patientId = null;
-      var encounterId = null;
-      var userId = null;
 
       if (smart.tokenResponse) {
         patientId = smart.tokenResponse.patient;
-        encounterId = smart.tokenResponse.encounter;
-        userId = smart.tokenResponse.user;
 
         var successStr = '<p> &check; Authorization (OAuth2): success - 200</p>';
         document.getElementById('AuthorizationServer').innerHTML = successStr;
