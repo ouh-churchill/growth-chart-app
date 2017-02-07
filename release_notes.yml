@@ -1,11 +1,12 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.36.0
-    release_date: 2017-xx-xx
+    release_date: 2017-02-07
     changes:
       - {author: ss025783, comment: Enhanced SMART App Validator May2015 to remove extra parameters for PAM resources, issue: OPENSVC-3555, type: add}
       - {author: ss025783, comment: Pull Parental Heights from new LOINC codes, issue: OPENSVC-3547, type: add}
       - {author: ss025783, comment: Growth Chart update to handle invalid observations, issue: OPENSVC-3642, type: add}
+      - {author: ss025783, comment: 1.36.0 release review, issue: OPENSVC-3649, type: add}
   - version: 1.35.0
     release_date: 2017-01-31
     changes:
