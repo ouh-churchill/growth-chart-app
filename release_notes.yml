@@ -5,6 +5,7 @@ versions:
     changes:
       - {author: ss025783, comment: Enhanced SMART App Validator May2015 to remove extra parameters for PAM resources, issue: OPENSVC-3555, type: add}
       - {author: ss025783, comment: Pull Parental Heights from new LOINC codes, issue: OPENSVC-3547, type: add}
+      - {author: ss025783, comment: Growth Chart update to handle invalid observations, issue: OPENSVC-3642, type: add}
   - version: 1.35.0
     release_date: 2017-01-31
     changes:

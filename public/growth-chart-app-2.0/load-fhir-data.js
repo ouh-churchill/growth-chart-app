@@ -149,9 +149,17 @@ GC.get_data = function() {
         return false;
       }
 
+      function validObservationObj(obj){
+        if (obj.status && (obj.status.toLowerCase() === 'final' || obj.status.toLowerCase() === 'amended') &&
+          obj.hasOwnProperty('valueQuantity') && obj.valueQuantity.value && obj.valueQuantity.code ) {
+          return true;
+        }
+        return false
+      };
+
       function process(observationValues, toUnit, arr){
         observationValues && observationValues.forEach(function(v){
-          if (v.status.toLowerCase() === 'final' || v.status.toLowerCase() === 'amended') {
+          if (validObservationObj(v)) {
             arr.push({
               agemos: months(v.effectiveDateTime, patient.birthDate),
               value: toUnit(v.valueQuantity),
@@ -163,7 +171,7 @@ GC.get_data = function() {
 
       function processBA(boneAgeValues, arr){
         boneAgeValues && boneAgeValues.forEach(function(v){
-          if (v.status.toLowerCase() === 'final' || v.status.toLowerCase() === 'amended') {
+          if (validObservationObj(v)) {
             arr.push({
               date: v.effectiveDateTime,
               boneAgeMos: units.any(v.valueQuantity)
@@ -171,6 +179,8 @@ GC.get_data = function() {
           }
         });
       };
+
+
 
       function months(d){
         return -1 * new XDate(d).diffMonths(new XDate(p.demographics.birthday));
@@ -202,7 +212,7 @@ GC.get_data = function() {
       // Check Height of Father using LOINC first over SNOMED if familyHistory is not available
       var observations = vitalsByCode['83845-8'] ? vitalsByCode['83845-8'] : vitalsByCode['8021000175101'];
       if (observations && observations.length > 0 && p.familyHistory.father.height === null){
-        if (observations[0].status.toLowerCase() === 'final' || observations[0].status.toLowerCase() === 'amended') {
+        if (validObservationObj(observations[0])) {
           p.familyHistory.father.height = units.cm(observations[0].valueQuantity);
           p.familyHistory.father.isBio = true;
         }
@@ -211,7 +221,7 @@ GC.get_data = function() {
       // Check Height of Mother using LOINC first over SNOMED if familyHistory is not available
       observations = vitalsByCode['83846-6'] ? vitalsByCode['83846-6'] : vitalsByCode['8031000175103'];
       if (observations && observations.length > 0 && p.familyHistory.mother.height === null){
-        if (observations[0].status.toLowerCase() === 'final' || observations[0].status.toLowerCase() === 'amended') {
+        if (validObservationObj(observations[0])) {
           p.familyHistory.mother.height = units.cm(observations[0].valueQuantity);
           p.familyHistory.mother.isBio = true;
         }
