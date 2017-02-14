@@ -3,7 +3,7 @@ versions:
   - version: 1.37.0
     release_date: 2017-xx-xx
     changes:
-      - {author: xx, comment: xx, issue: OPENSVC-xxxx, type: add}
+      - {author: kk014173, comment: Consume latest fhir-client.js file (includes new session storage fix + refresh token flow), issue: OPENSVC-3663, type: add}
   - version: 1.36.0
     release_date: 2017-02-07
     changes:

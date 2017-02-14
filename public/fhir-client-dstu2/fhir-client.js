@@ -57,7 +57,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	(function() {
 	    var mkFhir = __webpack_require__(1);
-	    var jquery = _jQuery || jQuery;
+	    var jquery = window['_jQuery'] || window['jQuery'];
 
 	    var defer = function(){
 	        pr = jquery.Deferred();
@@ -74,7 +74,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                headers: args.headers,
 	                dataType: "json",
 	                contentType: "application/json",
-	                data: args.data || args.params
+	                data: args.data || args.params,
+	                withCredentials: args.credentials === 'include',
 	            };
 	            jquery.ajax(opts)
 	                .done(function(data, status, xhr) {ret.resolve({data: data, status: status, headers: xhr.getResponseHeader, config: args});})
@@ -125,6 +126,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                .and($Errors)
 	                .and(auth.$Basic)
 	                .and(auth.$Bearer)
+	                .and(auth.$Credentials)
 	                .and(transport.$JsonData)
 	                .and($$Header('Accept', 'application/json'))
 	                .and($$Header('Content-Type', 'application/json'));
@@ -139,7 +141,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var Path = url.Path;
 	        var BaseUrl = Path(cfg.baseUrl);
 	        var resourceTypePath = BaseUrl.slash(":type || :resource.resourceType");
-	        var searchPath = resourceTypePath.slash("_search");
+	        var searchPath = resourceTypePath;
 	        var resourceTypeHxPath = resourceTypePath.slash("_history");
 	        var resourcePath = resourceTypePath.slash(":id || :resource.id");
 	        var resourceHxPath = resourcePath.slash("_history");
@@ -285,7 +287,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  exports.mergeLists = mergeLists;
 
 	  var absoluteUrl = function(baseUrl, ref) {
-	    if (ref.slice(ref, baseUrl.length + 1) !== baseUrl + "/") {
+	    if (!ref.match(/https?:\/\/./)) {
 	      return baseUrl + "/" + ref;
 	    } else {
 	      return ref;
@@ -562,10 +564,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var identity = utils.identity;
 
 	    var OPERATORS = {
-	        $gt: '>',
-	        $lt: '<',
-	        $lte: '<=',
-	        $gte: '>='
+	        $gt: 'gt',
+	        $lt: 'lt',
+	        $lte: 'lte',
+	        $gte: 'gte'
 	    };
 
 	    var MODIFIERS = {
@@ -754,6 +756,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return "Bearer " + args.auth.bearer;
 	        }
 	    });
+
+	    var credentials;
+	    // this first middleware sets the credentials attribute to empty, so
+	    // adapters cannot use it directly, thus enforcing a valid value to be parsed in.
+	    exports.$Credentials = mw.Middleware(mw.$$Attr('credentials', function(args){
+	      // Assign value for later checking
+	      credentials = args.credentials
+
+	      // Needs to return non-null and not-undefined
+	      // in order for value to be (un)set
+	      return '';
+	    })).and(mw.$$Attr('credentials', function(args){
+	        // check credentials for valid options, valid for fetch
+	        if(['same-origin', 'include'].indexOf(credentials) > -1 ){
+	            return credentials;
+	        }
+	    }));
 
 	}).call(this);
 
@@ -1195,12 +1214,90 @@ return /******/ (function(modules) { // webpackBootstrap
 	          
 	        return ret.promise;
 	    };
-	    
+
+	    function fetchAllWithReferences (searchParams, resolveParams) {
+	        var ret = adapter.defer();
+	          
+	        fhirAPI.search(searchParams)  // TODO: THIS IS NOT CORRECT (need fetchAll, but it does not return a bundle yet)
+	            .then(function(results){
+
+	                var resolvedReferences = {};
+
+	                var queue = [function() {
+	                    var entries = results.data.entry || [];
+	                    var res = entries.map(function(r){
+	                        return r.resource;
+	                    });
+	                    var refs = function (resource, reference) {
+	                        var refID = normalizeRefID(resource,reference);
+	                        return resolvedReferences[refID];
+	                    };
+	                    ret.resolve(res,refs);
+	                }];
+
+	                function normalizeRefID (resource, reference) {
+	                    var refID = reference.reference;
+	                    if (refID.startsWith('#')) {
+	                        var resourceID = resource.resourceType + "/" + resource.id;
+	                        return resourceID + refID;
+	                    } else {
+	                        return refID;
+	                    }
+	                }
+	                
+	                function enqueue (bundle,resource,reference) {
+	                  queue.push(function() {
+	                    resolveReference(bundle,resource,reference);
+	                  });
+	                }
+
+	                function next() {
+	                  (queue.pop())();
+	                }
+
+	                function resolveReference (bundle,resource,reference) {
+	                    var refID = normalizeRefID(resource,reference);
+	                    fhirAPI.resolve({'bundle': bundle, 'resource': resource, 'reference':reference}).then(function(res){
+	                      var referencedObject = res.data || res.content;
+	                      resolvedReferences[refID] = referencedObject;
+	                      next();
+	                    });
+	                }
+
+	                var bundle = results.data;
+
+	                bundle.entry && bundle.entry.forEach(function(element){
+	                  var resource = element.resource;
+	                  var type = resource.resourceType;
+	                  resolveParams && resolveParams.forEach(function(resolveParam){
+	                    var param = resolveParam.split('.');
+	                    var targetType = param[0];
+	                    var targetElement = param[1];
+	                    var reference = resource[targetElement];
+	                    if (type === targetType && reference) {
+	                      var referenceID = reference.reference;
+	                      if (!resolvedReferences[referenceID]) {
+	                        enqueue(bundle,resource,reference);
+	                      }
+	                    }
+	                  });
+	                });
+
+	                next();
+
+	            }, function(){
+	                ret.reject("Could not fetch search results");
+	            });
+	          
+	        return ret.promise;
+	    };
+
 	    function decorate (client, newAdapter) {
 	        fhirAPI = client;
 	        adapter = newAdapter;
 	        client["drain"] = drain;
 	        client["fetchAll"] = fetchAll;
+	        client["fetchAllWithReferences"] = fetchAllWithReferences;
 	        return client;
 	    }
 	    
@@ -16809,7 +16906,8 @@ function urlParam(p, forceArray) {
   for(var i=0; i<data.length; i++) {
     var item = data[i].split("=");
     if (item[0] === p) {
-      result.push(decodeURIComponent(item[1]));
+      var res = item[1].replace(/\+/g, '%20');
+      result.push(decodeURIComponent(res));
     }
   }
 
@@ -16829,11 +16927,21 @@ function stripTrailingSlash(str) {
     return str;
 }
 
+/**
+* Get the previous token stored in sessionStorage
+* based on fullSessionStorageSupport flag.
+* @return object JSON tokenResponse
+*/
 function getPreviousToken(){
-  var state = urlParam('state');
-  var ret = sessionStorage[state];
-  if (ret) ret = JSON.parse(ret).tokenResponse;
-  return ret;
+  var token;
+  
+  if (BBClient.settings.fullSessionStorageSupport) {
+    token = sessionStorage.tokenResponse;
+    return JSON.parse(token);
+  } else {
+    var state = urlParam('state');
+    return JSON.parse(sessionStorage[state]).tokenResponse;
+  }
 }
 
 function completeTokenFlow(hash){
@@ -16871,18 +16979,50 @@ function completeCodeFlow(params){
   var state = JSON.parse(sessionStorage[params.state]);
 
   if (window.history.replaceState && BBClient.settings.replaceBrowserHistory){
-    window.history.replaceState({}, "", window.location.toString().replace(window.location.search, "?state=" + urlParam('state')));
+    window.history.replaceState({}, "", window.location.toString().replace(window.location.search, ""));
+  } 
+
+  // Using window.history.pushState to append state to the query param.
+  // This will allow session data to be retrieved via the state param.
+  if (window.history.pushState && !BBClient.settings.fullSessionStorageSupport) {
+    
+    var queryParam = window.location.search;
+    if (window.location.search.indexOf('state') == -1) {
+      // Append state query param to URI for later.
+      // state query param will be used to look up
+      // token response upon page reload.
+
+      queryParam += (window.location.search ? '&' : '?');
+      queryParam += 'state=' + params.state;
+      
+      var url = window.location.protocol + '//' + 
+                             window.location.host + 
+                             window.location.pathname + 
+                             queryParam;
+
+      window.history.pushState({}, "", url);
+    }
+  }
+
+  var data = {
+      code: params.code,
+      grant_type: 'authorization_code',
+      redirect_uri: state.client.redirect_uri
+  };
+
+  var headers = {};
+
+  if (state.client.secret) {
+    headers['Authorization'] = 'Basic ' + btoa(state.client.client_id + ':' + state.client.secret);
+  } else {
+    data['client_id'] = state.client.client_id;
   }
 
   Adapter.get().http({
     method: 'POST',
     url: state.provider.oauth2.token_uri,
-    data: {
-      code: params.code,
-      grant_type: 'authorization_code',
-      redirect_uri: state.client.redirect_uri,
-      client_id: state.client.client_id
-    },
+    data: data,
+    headers: headers
   }).then(function(authz){
        for (var i in params) {
           if (params.hasOwnProperty(i)) {
@@ -16898,14 +17038,18 @@ function completeCodeFlow(params){
   return ret.promise;
 }
 
-function completeRefreshFlow() {
+/**
+* This code is needed for the page refresh/reload workflow.  
+* When the access token is nearing expriration or is expired, 
+* this function will make an ajax POST call to obtain a new
+* access token using the current refresh token.
+* @return promise object
+*/
+function completeTokenRefreshFlow() {
   var ret = Adapter.get().defer();
-  var params = {
-    state: urlParam('state')
-  };
-
-  var state = JSON.parse(sessionStorage[params.state]);
-  var refresh_token = state.tokenResponse.refresh_token;
+  var tokenResponse = getPreviousToken();
+  var state = JSON.parse(sessionStorage[tokenResponse.state]);
+  var refresh_token = tokenResponse.refresh_token;
 
   Adapter.get().http({
     method: 'POST',
@@ -16914,11 +17058,11 @@ function completeRefreshFlow() {
       grant_type: 'refresh_token',
       refresh_token: refresh_token
     },
-  }).then(function(authz){
-    authz = $.extend(state.tokenResponse, authz);
+  }).then(function(authz) {
+    authz = $.extend(tokenResponse, authz);
     ret.resolve(authz);
-  }, function(){
-    console.log("failed to exchange refresh_token for access_token", arguments);
+  }, function() {
+    console.warn('Failed to exchange refresh_token for access_token', arguments);
     ret.reject();
   });
 
@@ -16970,8 +17114,41 @@ function readyArgs(){
 
 // Client settings
 BBClient.settings = {
-    replaceBrowserHistory: true
+  // Replaces the browser's current URL
+  // using window.history.replaceState API.
+  // Default to true
+  replaceBrowserHistory: true,
+  
+  // When set to true, this variable will fully utilize
+  // HTML5 sessionStorage API.
+  // Default to true
+  // This variable can be overriden to false by setting
+  // FHIR.oauth2.settings.fullSessionStorageSupport = false.
+  // When set to false, the sessionStorage will be keyed 
+  // by a state variable. This is to allow the embedded IE browser
+  // instances instantiated on a single thread to continue to
+  // function without having sessionStorage data shared 
+  // across the embedded IE instances.
+  fullSessionStorageSupport: true
 };
+
+/**
+* Check the tokenResponse object to see if it is valid or not.
+* This is to handle the case of a refresh/reload of the page
+* after the token was already obtain.
+* @return boolean
+*/
+function validTokenResponse() {
+  if (BBClient.settings.fullSessionStorageSupport && sessionStorage.tokenResponse) {
+    return true;
+  } else {
+    if (!BBClient.settings.fullSessionStorageSupport) {
+      var state = urlParam('state') || (args.input && args.input.state);
+      return (state && sessionStorage[state] && JSON.parse(sessionStorage[state]).tokenResponse);
+    }
+  }
+  return false;
+}
 
 BBClient.ready = function(input, callback, errback){
 
@@ -16979,37 +17156,41 @@ BBClient.ready = function(input, callback, errback){
 
   // decide between token flow (implicit grant) and code flow (authorization code grant)
   var isCode = urlParam('code') || (args.input && args.input.code);
-  var state = urlParam('state') || (args.input && args.input.state);
 
   var accessTokenResolver = null;
-  var tokenResponseCheck = JSON.parse(sessionStorage[state]).tokenResponse;
-
-  if (state && sessionStorage[state] && tokenResponseCheck) { // we're reloading after successful completion
+  
+  if (validTokenResponse()) { // we're reloading after successful completion
     // Check if 2 minutes from access token expiration timestamp
-    var payloadCheck = jwt.decode(tokenResponseCheck.access_token);
-    var nearExpTime = Math.floor(Date.now() / 1000) >= (payloadCheck["exp"] - 120);
-
-    if (tokenResponseCheck.refresh_token
-        && tokenResponseCheck.scope.indexOf('online_access') > -1
+    var tokenResponse = getPreviousToken();
+    var payloadCheck = jwt.decode(tokenResponse.access_token);
+    var nearExpTime = Math.floor(Date.now() / 1000) >= (payloadCheck['exp'] - 120);
+ 
+    if (tokenResponse.refresh_token
+        && tokenResponse.scope.indexOf('online_access') > -1
         && nearExpTime) { // refresh token flow
-      accessTokenResolver = completeRefreshFlow();
+          accessTokenResolver = completeTokenRefreshFlow();
     } else { // existing access token flow
-      accessTokenResolver = completePageReload();
+        accessTokenResolver = completePageReload();
     }
   } else if (isCode) { // code flow
     accessTokenResolver = completeCodeFlow(args.input);
   } else { // token flow
     accessTokenResolver = completeTokenFlow(args.input);
   }
-
   accessTokenResolver.done(function(tokenResponse){
 
     if (!tokenResponse || !tokenResponse.state) {
       return args.errback("No 'state' parameter found in authorization response.");
     }
-    
-    var combinedObject = $.extend(true, JSON.parse(sessionStorage[tokenResponse.state]), { 'tokenResponse' : tokenResponse });
-    sessionStorage[tokenResponse.state] = JSON.stringify(combinedObject);
+
+    // Save the tokenReponse object into sessionStorage
+    if (BBClient.settings.fullSessionStorageSupport) {
+      sessionStorage.tokenResponse = JSON.stringify(tokenResponse);
+    } else {
+      //Save the tokenResponse object and the state into sessionStorage keyed by state
+      var combinedObject = $.extend(true, JSON.parse(sessionStorage[tokenResponse.state]), { 'tokenResponse' : tokenResponse });
+      sessionStorage[tokenResponse.state] = JSON.stringify(combinedObject);
+    }
 
     var state = JSON.parse(sessionStorage[tokenResponse.state]);
     if (state.fake_token_response) {
@@ -17047,7 +17228,7 @@ BBClient.ready = function(input, callback, errback){
 
 };
 
-function providers(fhirServiceUrl, callback, errback){
+function providers(fhirServiceUrl, provider, callback, errback){
 
   // Shim for pre-OAuth2 launch parameters
   if (isBypassOAuth()){
@@ -17057,6 +17238,14 @@ function providers(fhirServiceUrl, callback, errback){
     return;
   }
 
+  // Skip conformance statement introspection when overriding provider setting are available
+  if (provider) {
+    provider['url'] = fhirServiceUrl;
+    process.nextTick(function(){
+      callback && callback(provider);
+    });
+    return;
+  }
 
   Adapter.get().http({
     method: "GET",
@@ -17130,6 +17319,9 @@ BBClient.authorize = function(params, errback){
     };
   }
   
+  // prevent inheritance of tokenResponse from parent window
+  delete sessionStorage.tokenResponse;
+  
   if (!params.client){
     params = {
       client: params
@@ -17168,7 +17360,7 @@ BBClient.authorize = function(params, errback){
     params.fake_token_response.patient = urlParam("patientId");
   }
 
-  providers(params.server, function(provider){
+  providers(params.server, params.provider, function(provider){
 
     params.provider = provider;
 
@@ -17176,12 +17368,20 @@ BBClient.authorize = function(params, errback){
     var client = params.client;
 
     if (params.provider.oauth2 == null) {
-      var combinedObject = $.extend(true, params, { 'tokenResponse' : {state: state} });
-      sessionStorage[state] = JSON.stringify(combinedObject);
+
+      // Adding state to tokenResponse object
+      if (BBClient.settings.fullSessionStorageSupport) { 
+        sessionStorage[state] = JSON.stringify(params);
+        sessionStorage.tokenResponse = JSON.stringify({state: state});
+      } else {
+        var combinedObject = $.extend(true, params, { 'tokenResponse' : {state: state} });
+        sessionStorage[state] = JSON.stringify(combinedObject);
+      }
+
       window.location.href = client.redirect_uri + "#state="+encodeURIComponent(state);
       return;
     }
-
+    
     sessionStorage[state] = JSON.stringify(params);
 
     console.log("sending client reg", params.client);
@@ -17205,8 +17405,8 @@ BBClient.authorize = function(params, errback){
 BBClient.resolveAuthType = function (fhirServiceUrl, callback, errback) {
 
       Adapter.get().http({
-         method: "GET",
-         url: stripTrailingSlash(fhirServiceUrl) + "/metadata"
+       method: "GET",
+       url: stripTrailingSlash(fhirServiceUrl) + "/metadata"
       }).then(function(r){
           var type = "none";
           
@@ -17293,7 +17493,7 @@ function FhirClient(p) {
     };
 
     if (!client.server.serviceUrl || !client.server.serviceUrl.match(/https?:\/\/.+[^\/]$/)) {
-      throw "Must supply a `server` propery whose `serviceUrl` begins with http(s) " + 
+      throw "Must supply a `server` property whose `serviceUrl` begins with http(s) " + 
         "and does NOT include a trailing slash. E.g. `https://fhir.aws.af.cm/fhir`";
     }
     
@@ -17377,6 +17577,7 @@ function FhirClient(p) {
 
     return client;
 }
+
 },{"./adapter":45,"./utils":50,"btoa":38}],48:[function(require,module,exports){
 var client = require('./client');
 var oauth2 = require('./bb-client');
