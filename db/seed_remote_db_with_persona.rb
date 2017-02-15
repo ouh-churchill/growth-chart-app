@@ -222,5 +222,6 @@ add_smart_apps(
     # smart_app('689e2c46-ea7a-4bf4-ab65-6325ad731c78', 'ePreop SurgicalValet (Staging)', 't', 4, 'https://services.staging.epreop.com/ExternalServices/OpenIdConnect10/Launch.aspx'),
     # smart_app('4e0974f4-7019-4b23-9341-896862c08024', 'Diabetes Dashboard', 't', 4, 'https://diabetesdashboard.herokuapp.com'),
     # smart_app('d88bd1aa-b138-48fd-9d36-ae219cbf8f2a', 'HealtheInsights Development', 't', 4, 'https://mill-int-test.insights.devhealtheintent.com/smart'),
-    # smart_app('320b4235-01c4-4d82-a750-f9b9e11fb104', 'Medisafe', 't', 7, 'https://sync.medisafeproject.com/api/v1/security/smart/launch','patient')
+    # smart_app('320b4235-01c4-4d82-a750-f9b9e11fb104', 'Medisafe', 't', 7, 'https://sync.medisafeproject.com/api/v1/security/smart/launch','patient'),
+    # smart_app('8ee2ca69-bc9c-4896-bb35-ceddf5caf93a', 'Diabetes+Me', 't', 7, 'https://stg.diabetesplusme.com/initapp/launch','patient')
 )
