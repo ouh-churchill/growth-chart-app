@@ -223,5 +223,9 @@ add_smart_apps(
     # smart_app('4e0974f4-7019-4b23-9341-896862c08024', 'Diabetes Dashboard', 't', 4, 'https://diabetesdashboard.herokuapp.com'),
     # smart_app('d88bd1aa-b138-48fd-9d36-ae219cbf8f2a', 'HealtheInsights Development', 't', 4, 'https://mill-int-test.insights.devhealtheintent.com/smart'),
     # smart_app('320b4235-01c4-4d82-a750-f9b9e11fb104', 'Medisafe', 't', 7, 'https://sync.medisafeproject.com/api/v1/security/smart/launch','patient'),
-    # smart_app('8ee2ca69-bc9c-4896-bb35-ceddf5caf93a', 'Diabetes+Me', 't', 7, 'https://stg.diabetesplusme.com/initapp/launch','patient')
+    # smart_app('8ee2ca69-bc9c-4896-bb35-ceddf5caf93a', 'Diabetes+Me', 't', 7, 'https://stg.diabetesplusme.com/initapp/launch','patient'),
+    # smart_app('600ed6ae-dd20-4f4f-8dc4-71de4b59986b', 'RxCheck (staging)', 't', 6, 'https://staging.rxcheck.com/fhir/launch','provider'),
+    # smart_app('422b2239-9ba5-44fe-b19a-1661893f6682', 'Chadvasc - apps', 't', 6, 'https://apps.clinicalkey.com/cha2ds2vasc','provider'),
+    # smart_app('6a4c154e-a5ea-47fe-a7e2-dd51626d6640', 'HEART Pathway', 't', 6, 'https://app.decisionpointinformatics.com/smart/launch','provider'),
+    # smart_app('aebe5d9f-86a6-4f80-a1f4-c2986d2c16b1', 'My Legacy', 't', 7, 'http://mylegacy.nubohealth.com/launch','patient')
 )
