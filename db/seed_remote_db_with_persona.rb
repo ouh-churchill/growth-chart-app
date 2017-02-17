@@ -227,5 +227,8 @@ add_smart_apps(
     # smart_app('600ed6ae-dd20-4f4f-8dc4-71de4b59986b', 'RxCheck (staging)', 't', 6, 'https://staging.rxcheck.com/fhir/launch','provider'),
     # smart_app('422b2239-9ba5-44fe-b19a-1661893f6682', 'Chadvasc - apps', 't', 6, 'https://apps.clinicalkey.com/cha2ds2vasc','provider'),
     # smart_app('6a4c154e-a5ea-47fe-a7e2-dd51626d6640', 'HEART Pathway', 't', 6, 'https://app.decisionpointinformatics.com/smart/launch','provider'),
-    # smart_app('aebe5d9f-86a6-4f80-a1f4-c2986d2c16b1', 'My Legacy', 't', 7, 'http://mylegacy.nubohealth.com/launch','patient')
+    # smart_app('aebe5d9f-86a6-4f80-a1f4-c2986d2c16b1', 'My Legacy', 't', 7, 'http://mylegacy.nubohealth.com/launch','patient'),
+    # smart_app('4e71cd32-76bb-41a7-8a93-2bb578315f9b', 'Patient - apps', 't', 6, 'https://apps.clinicalkey.com/patient','provider'),
+    # smart_app('f5c90cfb-2911-4eff-9900-7f945b31f842', 'FQDN Sapphire Demo', 't', 6, 'https://sapphire-demo.meliorix.com/ayf/launch-cerner-fhir-smart-demo-server.html','provider')
+
 )
