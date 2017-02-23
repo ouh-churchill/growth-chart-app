@@ -3,7 +3,7 @@ var CERNER_SMART_LAUNCH = {};
 CERNER_SMART_LAUNCH.oauth2BaseURL = '';
 CERNER_SMART_LAUNCH.launchURL = '';
 CERNER_SMART_LAUNCH.preauthTimeoutVar = null;
-CERNER_SMART_LAUNCH.timeoutIntervalSec = 10; // 10 seconds
+CERNER_SMART_LAUNCH.timeoutIntervalSec = 20; // 20 seconds
 CERNER_SMART_LAUNCH.errorObj = new Error();
 CERNER_SMART_LAUNCH.launchId = '';
 
