@@ -1,3 +1,4 @@
+/* globals retrieveRequiredInfoAndRedirect, retrieveProviderInfoAndRedirect */
 // Global variables
 var CERNER_SMART_LAUNCH = {};
 CERNER_SMART_LAUNCH.oauth2BaseURL = '';
@@ -65,6 +66,7 @@ function validateDataAndReportErrors(urlWithTenantPlaceHolder) {
  * Once that is done, we redirect the user to this
  * new URL.
  */
+/* exported retrieveRequiredInfoAndRedirect */
 function retrieveRequiredInfoAndRedirect(urlWithTenantPlaceHolder, user_person_id, persona) {
 
   if (persona === 'patient') {
@@ -77,7 +79,8 @@ function retrieveRequiredInfoAndRedirect(urlWithTenantPlaceHolder, user_person_i
 /**
  * Unable to launch SMART app because tenant id or username could not be obtained.
  */
-var getRequiredInfoFailed = function () {
+/* exported getRequiredInfoFailed */
+var getRequiredInfoFailed = function () { /* jshint unused:false */
   Canadarm.error('Unable to launch SMART app because tenant id ' +
     'or username could not be obtained.', CERNER_SMART_LAUNCH.errorObj);
 };

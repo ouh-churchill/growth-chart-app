@@ -46,8 +46,7 @@ philter:
                  'public/cardiac-risk-app-2.0/**/*',
                  'public/growth-chart-app-2.0/**/*',
                  'public/fhir-client/*',
-                 'public/fhir-client-dstu2/fhir-client.js',
-                 'public/fhir-client-dstu2/fhir-client.min.js',
+                 'public/fhir-client-dstu2/*',
                  'public/embedded_content/*',
                  'public/polyfill/*']
     globals: ['XMLCclRequest', 'Canadarm', 'FHIR']

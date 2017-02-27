@@ -2,7 +2,8 @@
  * Created by ss025783 on 9/6/16.
  */
 
-/* globals CERNER_SMART_LAUNCH */
+/* globals CERNER_SMART_LAUNCH, validateDataAndReportErrors, getRequiredInfoFailed */
+/* jshint latedef:nofunc */
 
 /**
  * Determines whether the code is executing in PowerChart context or
@@ -11,7 +12,7 @@
 function isRunningInPowerChart() {
   return (window.external && typeof window.external.DiscernObjectFactory !== 'undefined');
 }
-
+/* exported retrieveProviderInfoAndRedirect */
 function retrieveProviderInfoAndRedirect(urlWithTenantPlaceHolder, user_person_id) {
   if (isRunningInPowerChart()) {
     var timeoutInterval = setTimeout(getRequiredInfoFailed, CERNER_SMART_LAUNCH.timeoutIntervalSec*1000);
@@ -81,15 +82,8 @@ function getOAuthConsumerKey() {
  * will return an identity token if the request was successful.  It will
  * return an empty string when the request failed.
  */
+/* exported getMillenniumIntegratedAuthToken */
 function getMillenniumIntegratedAuthToken() {
-
-  // If this page is not executing in PowerChart, redirect the user to the login page.
-  if (!isRunningInPowerChart()) {
-    window.location.href = CERNER_SMART_LAUNCH.launchURL;
-    Canadarm.info('The application is being launched outside of PowerChart. ' +
-      'No preauth needed. Launch Id: ' + CERNER_SMART_LAUNCH.launchId, CERNER_SMART_LAUNCH.errorObj);
-    return;
-  }
 
   // Setup a synch request of mp_exec_std_request script
   CERNER_SMART_LAUNCH.requestSync.open('GET','mp_exec_std_request', 0);
