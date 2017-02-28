@@ -6,6 +6,7 @@ versions:
       - {author: kk014173, comment: Consume latest fhir-client.js file (includes new session storage fix + refresh token flow), issue: OPENSVC-3663, type: add}
       - {author: ss025783, comment: Increased timeout interval to 20 for preauth before doing smart launch, issue: OPENSVC-3713, type: add}
       - {author: kk014173, comment: Implement active session check API, issue: OPENSVC-3546, type: add}
+      - {author: ss025783, comment: Logging around LaunchContextController to indicate successful launch resolve, issue: OPENSVC-3678, type: add}
   - version: 1.36.0
     release_date: 2017-02-07
     changes:

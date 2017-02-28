@@ -287,16 +287,14 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
   end
 
   describe '#fhir_url' do
-    it 'returns returns nil when app_id is nil' do
+    it 'returns nil when fhir_spec_url is nil' do
       expect(controller.send(:fhir_url, nil, nil)).to be nil
     end
 
-    it 'returns returns nil when app_id is empty' do
-      expect(controller.send(:fhir_url, '', nil)).to be nil
-    end
-
-    it 'returns returns nil when app_id is provided but app is not found' do
-      expect(controller.send(:fhir_url, '5bf02e61-09fe-49c3-8ca8-05084c30ca22', nil)).to be nil
+    it 'returns substituted value when fhir_spec_url is provided with tenant' do
+      expect(controller.send(:fhir_url, 'https://fhir.devcernerpowerchart.com/dstu2/@tenant_id@',
+                             '5bf02e61-09fe-49c3-8ca8-05084c30ca22')).to eq('https://fhir.devcernerpowerchart.com/'\
+                             'dstu2/5bf02e61-09fe-49c3-8ca8-05084c30ca22')
     end
   end
 
