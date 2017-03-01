@@ -5,5 +5,6 @@ FactoryGirl.define do
     launch_url 'http://smart.example.com/'
     igneous_smart_fhir_server_id 1
     authorized 't'
+    persona 'provider'
   end
 end

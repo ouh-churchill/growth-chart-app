@@ -62,6 +62,17 @@ module Igneous
         head 201, location: app.app_id
       end
 
+      def update
+        app = App.find_by app_id: params[:id]
+
+        if app.nil?
+          ::Rails.logger.info "#{self.class.name}, Failed to retrieve app with app_id #{params[:id]}"
+          return head 404
+        end
+
+        head 200 if app.update_attributes(app_params)
+      end
+
       private
 
       def app_params

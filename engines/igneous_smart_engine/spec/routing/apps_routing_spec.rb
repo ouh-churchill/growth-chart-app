@@ -53,4 +53,14 @@ describe Igneous::Smart::AppsController, type: :routing do
                fhir_server: 'cerner',
                authorized: 'true')
   end
+
+  it 'routes to apps#update' do
+    expect(put('apps/1?name=cardiac&launch_url=https://fhir.example.com&authorized=true')).to \
+      route_to(controller: 'igneous/smart/apps',
+               action: 'update',
+               id: '1',
+               name: 'cardiac',
+               launch_url: 'https://fhir.example.com',
+               authorized: 'true')
+  end
 end

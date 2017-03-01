@@ -363,6 +363,68 @@ describe Igneous::Smart::AppsController, type: :controller do
     end
   end
 
+  context '#update' do
+    describe 'when the request is not from the Cerner internal network' do
+      it 'returns 404 if the Cerner-Trusted-Traffic header is not present' do
+        put(:update, id: 1,
+                     app: { name: :my_app, launch_url: 'https://example.com/', igneous_smart_fhir_server_id: 1,
+                            authorized: true })
+
+        expect(response).to have_http_status(404)
+      end
+
+      it 'returns 404 if the traffic is from a trusted external source' do
+        request.headers['Cerner-Trusted-Traffic'] = 'not-cerner'
+        put(:update, id: 1,
+                     app: { name: :my_app, launch_url: 'https://example.com/', igneous_smart_fhir_server_id: 1,
+                            authorized: true })
+
+        expect(response).to have_http_status(404)
+      end
+    end
+
+    describe 'when the request is from the Cerner internal network' do
+      before(:each) do
+        request.headers['Cerner-Trusted-Traffic'] = 'cerner'
+      end
+
+      it 'successfully updates a App with the given id' do
+
+        FactoryGirl.create(:app_factory,
+                           app_id: 'app1',
+                           name: 'cardiac7',
+                           launch_url: 'http://smart.example6.com/',
+                           igneous_smart_fhir_server_id: 4,
+                           authorized: true)
+
+        put(:update, id: 'app1',
+                     app: { app_id: 'app1', name: 'my_app', launch_url: 'https://example.com/',
+                            igneous_smart_fhir_server_id: 1, authorized: false, persona: 'patient' })
+
+        app = Igneous::Smart::App.find_by app_id: 'app1'
+
+        expect(app.name).to eq 'my_app'
+        expect(app.launch_url).to eq 'https://example.com/'
+        expect(app.igneous_smart_fhir_server_id).to eq 1
+        expect(app.authorized).to eq false
+        expect(app.persona).to eq 'patient'
+        expect(response).to have_http_status(200)
+      end
+
+      describe 'when a SMART app cannot be found' do
+        it 'audits as minor_failure and returns 404' do
+          expect(Rails.logger).to receive(:info).at_least(:once).with(/Failed to retrieve app with app_id/)
+
+          put(:update, id: 'app1',
+                       app: { app_id: 'app1', name: 'my_app', launch_url: 'https://example.com/',
+                              igneous_smart_fhir_server_id: 1, authorized: false, persona: 'patient' })
+          expect(response).to have_http_status(404)
+        end
+      end
+
+    end
+  end
+
   describe '#lowercase_app_params' do
     it 'converts PowerChart query params to lowercase' do
       params = {

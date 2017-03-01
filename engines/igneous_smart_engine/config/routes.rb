@@ -4,7 +4,7 @@ Igneous::Smart::Engine.routes.draw do
     resources :apps, only: [:index, :show]
   end
 
-  resources :apps, only: [:show, :create]
+  resources :apps, only: [:show, :create, :update]
   resources :fhir_servers, only: [:create, :index]
 
   match 'apps/details/:id' => 'apps_details#show', via: [:get]
