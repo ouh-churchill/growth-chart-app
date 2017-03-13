@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" hidden>
+  <head>
+    <meta charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <title>SMART ASCVD Risk App</title>
+    <link rel='stylesheet' type='text/css' href='../embedded_content/embedded_content.min.css'>
+    <script src="../fhir-client-dstu2/fhir-client.min.js"></script>
+    <script src='../fhir-client-dstu2/fhir-client-cerner-additions-1.0.0.min.js'></script>
+  </head>
+  <body>
+    <script>
+      FHIR.oauth2.authorize({
+        'client_id': 'b895e6b1-25f1-4a42-834d-a440d4de3853',
+        'scope': 'patient/Patient.read patient/Observation.read launch online_access openid profile'
+      });
+    </script>
+    <script src='../polyfill/array-includes.js'></script>
+    <script src='../polyfill/es6-shim-0.35.1.js'></script>
+    <script src='../embedded_content/embedded_content.min.js'></script>
+  </body>
+</html>
