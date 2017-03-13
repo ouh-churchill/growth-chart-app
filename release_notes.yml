@@ -5,6 +5,7 @@ versions:
     changes:
       - {author: zp035497, comment: Add SMART ASCVD Risk Calculator app, issue: OPENSVC-3298, type: add}
       - {author: ss025783, comment: Add Canadarm Logging to ASCVD Risk App, issue: OPENSVC-3812, type: add}
+      - {author: ss025783, comment: Add Canadarm Loggin to Growth Chart DSTU2 app, issue: OPENSVC-3777, type: add}
   - version: 1.37.0
     release_date: 2017-02-28
     changes:

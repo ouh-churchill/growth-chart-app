@@ -1,19 +1,71 @@
 window.GC = window.GC || {};
 
+/**
+ * Function to initialize Canadarm logging for the application.
+ */
+function initializeLogging() {
+  Canadarm.init({
+    onError: true,  // Set to false if you do not want window.onerror set.
+    wrapEvents: false, // Set to false if you do not want all event handlers to be logged for errors
+    logLevel: Canadarm.level.INFO, // Will only send logs for level of INFO and above.
+    appenders: [
+      Canadarm.Appender.standardLogAppender
+    ],
+    handlers: [
+      Canadarm.Handler.beaconLogHandler(config.canadarm_beacon_url),
+      Canadarm.Handler.consoleLogHandler
+    ]
+  });
+}
+
 GC.get_data = function() {
+
+  initializeLogging();
+
+  function postCandarmLog(smart, canadarmLog, logLevel){
+    var logMessage = {};
+    logMessage.app_name = 'Growth Chart';
+    if (smart){
+      logMessage.info = {
+        tenant_key:  smart.tokenResponse ? smart.tokenResponse.tenant : '',
+        user_id: smart.tokenResponse ? smart.tokenResponse.user : '',
+        username: smart.tokenResponse ? smart.tokenResponse.username : ''
+      };
+    }
+    logMessage.details = canadarmLog;
+    switch (logLevel) {
+      case 'INFO':
+        Canadarm.info(JSON.stringify(logMessage));
+        break;
+      case 'ERROR':
+        Canadarm.error(JSON.stringify(logMessage));
+        break;
+      case 'DEBUG':
+        Canadarm.debug(JSON.stringify(logMessage));
+        break;
+      default:
+        Canadarm.warn(JSON.stringify(logMessage));
+    }
+  }
+
   var dfd = $.Deferred();
 
   FHIR.oauth2.ready(onReady, onError);
 
-  function onError(){
-    console.log("Loading error", arguments);
+  function onError(errMsg){
+    console.error("Loading error", arguments);
+
+    var canadarmLog = {msg: "Oauth2 failure : " + errMsg};
+    postCandarmLog(undefined, canadarmLog, Canadarm.level.ERROR);
+
     dfd.reject({
       responseText: "Loading error. See console for details."
     });
   };
 
-  function onErrorWithWarning(msg){
-    console.log("Loading error", arguments);
+  function onErrorWithWarning(msg, smart, logLevel){
+    postCandarmLog(smart, canadarmLog, logLevel);
+    console.error("Loading error", arguments);
     dfd.reject({
       responseText: msg,
       showMessage: true,
@@ -48,20 +100,29 @@ GC.get_data = function() {
         'http://loinc.org|83845-8', 'http://loinc.org|83846-6',
         'http://snomed.info/sct|8021000175101', 'http://snomed.info/sct|8031000175103']}}});
 
-      $.when(ptFetch, vitalsFetch).fail(function() {
-        onErrorWithWarning(GC.str('STR_Error_LoadingApplication'));
+      $.when(ptFetch, vitalsFetch).fail(function(jqXHR) {
+        const status = jqXHR ? "Status:"+ jqXHR.status + "StatusText:" + jqXHR.statusText : '';
+        const canadarmLog = {};
+        canadarmLog.msg = "Patient or Observations resource failed Error:" + status;
+        onErrorWithWarning(GC.str('STR_Error_LoadingApplication'), smart, canadarmLog, Canadarm.level.ERROR);
       });
 
       var familyHistoryFetch = defaultOnFail(smart.patient.api.fetchAll({type: "FamilyMemberHistory"}), []);
 
       $.when(ptFetch, vitalsFetch, familyHistoryFetch).done(onData);
     } else {
-      onErrorWithWarning(GC.str('STR_Error_LoadingApplication'));
+      var canadarmLog = {msg: "Patient property unavailable on smart object."};
+      onErrorWithWarning(GC.str('STR_Error_LoadingApplication'), smart, canadarmLog, Canadarm.level.ERROR);
     }
 
     function onData(patient, vitals, familyHistories){
+      var canadarmInfo = {};
+
       // check patient gender
-      if (!isKnownGender(patient.gender)) onErrorWithWarning(GC.str('STR_Error_UnknownGender'));
+      if (!isKnownGender(patient.gender)){
+        var canadarmLog = {msg:"Gender: "+ patient.gender +" - Unrecognized or Unavailable."};
+        onErrorWithWarning(GC.str('STR_Error_UnknownGender'), smart, canadarmLog, Canadarm.level.ERROR);
+      }
 
       var vitalsByCode = smart.byCode(vitals, 'code');
 
@@ -102,9 +163,13 @@ GC.get_data = function() {
       p.demographics.gender = patient.gender;
 
       var gestAge = vitalsByCode['18185-9'];
+      canadarmInfo.gestAgeLoinc = ['18185-9'];
+      canadarmInfo.gestAgeCount = gestAge ? gestAge.length : 0;
       if (gestAge === undefined) {
+        canadarmInfo.gestAgeCernerLoinc = ['11884-4'];
         //handle an alternate mapping of Gest Age used by Cerner
         gestAge = vitalsByCode['11884-4'];
+        canadarmInfo.gestAgeCernerCount = gestAge ? gestAge.length : 0;
       }
       if (gestAge && gestAge.length > 0) {
         var weeks = 0, qty = gestAge[0].valueString ? 
@@ -132,12 +197,35 @@ GC.get_data = function() {
         p.demographics.weeker = weeks;
       }
 
+      canadarmInfo.totalObservationsCount = Array.isArray(vitals) ? vitals.length : 0;
+      canadarmInfo.invalidObservationsCount = 0;
+      canadarmInfo.invalidObservations = [];
+
       var units = smart.units;
-      process(vitalsByCode['3141-9'], units.kg, p.vitals.weightData);
-      process(vitalsByCode['8302-2'],  units.cm,  p.vitals.lengthData);
-      process(vitalsByCode['8287-5'],  units.cm,  p.vitals.headCData);
-      process(vitalsByCode['39156-5'], units.any, p.vitals.BMIData);
-      processBA(vitalsByCode['37362-1'], p.boneAge);
+      var bodyWeightObservations = vitalsByCode['3141-9'];
+      canadarmInfo.bodyWeightMeasuredLoinc = ['3141-9'];
+      canadarmInfo.bodyWeightMeasuredCount = bodyWeightObservations ? bodyWeightObservations.length : 0;
+      process(bodyWeightObservations, units.kg, p.vitals.weightData);
+
+      var bodyHeightObservations = vitalsByCode['8302-2'];
+      canadarmInfo.bodyHeightLoinc = ['8302-2'];
+      canadarmInfo.bodyHeightCount = bodyHeightObservations ? bodyHeightObservations.length : 0;
+      process(bodyHeightObservations,  units.cm,  p.vitals.lengthData);
+
+      var headCircumferenceObservations = vitalsByCode['8287-5'];
+      canadarmInfo.headCircumferenceLoinc = ['8287-5'];
+      canadarmInfo.headCircumferenceCount = headCircumferenceObservations ? headCircumferenceObservations.length : 0;
+      process(headCircumferenceObservations,  units.cm,  p.vitals.headCData);
+
+      var bodyMassIndexObservations = vitalsByCode['39156-5'];
+      canadarmInfo.bodyMassIndexLoinc = ['39156-5'];
+      canadarmInfo.bodyMassIndexCount = bodyMassIndexObservations ? bodyMassIndexObservations.length : 0;
+      process(bodyMassIndexObservations, units.any, p.vitals.BMIData);
+
+      var boneXRayBoneAgeObservations = vitalsByCode['37362-1'];
+      canadarmInfo.boneXRayBoneAgeLoinc = ['37362-1'];
+      canadarmInfo.boneXRayBoneAgeCount = boneXRayBoneAgeObservations ? boneXRayBoneAgeObservations.length : 0;
+      processBA(boneXRayBoneAgeObservations, p.boneAge);
 
       function isKnownGender(gender) {
         switch (gender) {
@@ -154,6 +242,10 @@ GC.get_data = function() {
           obj.hasOwnProperty('valueQuantity') && obj.valueQuantity.value && obj.valueQuantity.code ) {
           return true;
         }
+        var vQ = obj.hasOwnProperty('valueQuantity') ? "value=" + obj.valueQuantity.value + " code=" +
+        obj.valueQuantity.code : "";
+        canadarmInfo.invalidObservations.push("Status=" + obj.status + ",valueQuantity: " + vQ);
+        canadarmInfo.invalidObservationsCount += 1;
         return false
       };
 
@@ -211,6 +303,8 @@ GC.get_data = function() {
 
       // Check Height of Father using LOINC first over SNOMED if familyHistory is not available
       var observations = vitalsByCode['83845-8'] ? vitalsByCode['83845-8'] : vitalsByCode['8021000175101'];
+      canadarmInfo.parentalHeightFatherLoinc = ['83845-8'];
+      canadarmInfo.parentalHeightFatherCount = observations ? observations.length : 0;
       if (observations && observations.length > 0 && p.familyHistory.father.height === null){
         if (validObservationObj(observations[0])) {
           p.familyHistory.father.height = units.cm(observations[0].valueQuantity);
@@ -220,6 +314,8 @@ GC.get_data = function() {
 
       // Check Height of Mother using LOINC first over SNOMED if familyHistory is not available
       observations = vitalsByCode['83846-6'] ? vitalsByCode['83846-6'] : vitalsByCode['8031000175103'];
+      canadarmInfo.parentalHeightMotherLoinc = ['83846-6'];
+      canadarmInfo.parentalHeightMotherCount = observations ? observations.length : 0;
       if (observations && observations.length > 0 && p.familyHistory.mother.height === null){
         if (validObservationObj(observations[0])) {
           p.familyHistory.mother.height = units.cm(observations[0].valueQuantity);
@@ -228,6 +324,7 @@ GC.get_data = function() {
       }
 
       window.data = p;
+      postCandarmLog(smart, canadarmInfo, Canadarm.level.INFO);
       console.log("Check out the patient's growth data: window.data");
       dfd.resolve(p);
     }
