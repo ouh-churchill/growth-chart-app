@@ -6,6 +6,7 @@ window.ASCVDRisk = window.ASCVDRisk || {};
 ((() => {
   const ASCVDRisk = {};
   const PatientInfo = {};
+  const canadarmInfo = {};
   ASCVDRisk.ret = $.Deferred();
 
   /**
@@ -42,7 +43,7 @@ window.ASCVDRisk = window.ASCVDRisk || {};
    */
   const initializeLogger = () => {
     Canadarm.init({
-      onError: false,
+      onError: true,
       wrapEvents: false,
       logLevel: Canadarm.level.INFO,
       appenders: [
@@ -57,11 +58,45 @@ window.ASCVDRisk = window.ASCVDRisk || {};
   ASCVDRisk.initializeLogger = initializeLogger;
 
   /**
+   * Logs app failures and messages to Canadarm end point specified in config.js
+   * @method postCanadarmLog
+   * @param smart - Context received by the application
+   * @param canadarmLog - data to be logged.
+   */
+  const postCanadarmLog = (smart, canadarmLog, logLevel) => {
+    const logMessage = {};
+    logMessage.app_name = 'ASCVD Risk';
+    if (smart) {
+      logMessage.info = {
+        tenant_key: smart.tokenResponse ? smart.tokenResponse.tenant : '',
+        user_id: smart.tokenResponse ? smart.tokenResponse.user : '',
+        username: smart.tokenResponse ? smart.tokenResponse.username : '',
+      };
+    }
+    logMessage.details = canadarmLog;
+    switch (logLevel) {
+      case 'INFO':
+        Canadarm.info(JSON.stringify(logMessage));
+        break;
+      case 'ERROR':
+        Canadarm.error(JSON.stringify(logMessage));
+        break;
+      case 'DEBUG':
+        Canadarm.debug(JSON.stringify(logMessage));
+        break;
+      default:
+        Canadarm.warn(JSON.stringify(logMessage));
+    }
+  };
+  ASCVDRisk.postCanadarmLog = postCanadarmLog;
+
+  /**
    * Makes a call to create a default Patient model if authorization is not successful in the
    * application.
    */
-  const onError = () => {
-    Canadarm.error('Authorization error while loading the application.');
+  const onError = (errMsg) => {
+    const canadarmLog = { msg: `Oauth2 failure : ${errMsg}` };
+    ASCVDRisk.postCanadarmLog(undefined, canadarmLog, Canadarm.level.WARN);
     ASCVDRisk.setDefaultPatient();
   };
   ASCVDRisk.onError = onError;
@@ -130,14 +165,13 @@ window.ASCVDRisk = window.ASCVDRisk || {};
               if ({}.hasOwnProperty.call(ASCVDRisk.unsupportedUnitDataPoint, 'code')) {
                 codeText = ASCVDRisk.unsupportedUnitDataPoint.code.text;
               }
-
-              Canadarm.error('Unsupported unit of measure, Observation :', undefined, {
-                status: ASCVDRisk.unsupportedUnitDataPoint.status,
-                value: ASCVDRisk.unsupportedUnitDataPoint.valueQuantity.value,
-                unit: ASCVDRisk.unsupportedUnitDataPoint.valueQuantity.unit,
-                valueString: ASCVDRisk.unsupportedUnitDataPoint.valueString,
-                codeText,
-              });
+              const errInfo = {};
+              errInfo.unsupportedObsStatus = ASCVDRisk.unsupportedUnitDataPoint.status;
+              errInfo.unsupportedObsValue = ASCVDRisk.unsupportedUnitDataPoint.valueQuantity.value;
+              errInfo.unsupportedObsUnit = ASCVDRisk.unsupportedUnitDataPoint.valueQuantity.unit;
+              errInfo.unsupportedObsValueString = ASCVDRisk.unsupportedUnitDataPoint.valueString;
+              errInfo.msg = `Unsupported unit of measure, Observation :${codeText}`;
+              ASCVDRisk.postCanadarmLog(smart, errInfo, Canadarm.level.WARN);
             } else if (ASCVDRisk.unsupportedObservationStructureDataPoint) {
               let logValue = '';
               let logUnits = '';
@@ -148,26 +182,37 @@ window.ASCVDRisk = window.ASCVDRisk || {};
                 logValue = ASCVDRisk.unsupportedObservationStructureDataPoint.valueQuantity.value;
                 logUnits = ASCVDRisk.unsupportedObservationStructureDataPoint.valueQuantity.unit;
               }
-              Canadarm.error('Unsupported Observation structure, Observation :', undefined, {
-                status: ASCVDRisk.unsupportedObservationStructureDataPoint.status,
-                value: logValue,
-                unit: logUnits,
-                valueString: ASCVDRisk.unsupportedObservationStructureDataPoint.valueString,
-                codeText,
-              });
+
+              const errInfo = {};
+              errInfo.unsupportedObsStatus = ASCVDRisk
+                .unsupportedObservationStructureDataPoint.status;
+              errInfo.unsupportedObsValue = logValue;
+              errInfo.unsupportedObsUnit = logUnits;
+              errInfo.unsupportedObsValueString = ASCVDRisk
+                .unsupportedObservationStructureDataPoint.valueString;
+              errInfo.msg = `Unsupported Observation structure, Observation :${codeText}`;
+              ASCVDRisk.postCanadarmLog(smart, errInfo, Canadarm.level.WARN);
             }
+            const canadarmErrorInfo = {};
+            const labs = `TotalCholesterol: ${PatientInfo.totalCholesterol}, HDL: ${
+              PatientInfo.hdl}, SysBP:${PatientInfo.systolicBloodPressure}`;
+            canadarmErrorInfo.msg = `Required Labs unavailable: ${labs}`;
+            ASCVDRisk.postCanadarmLog(smart, canadarmErrorInfo, Canadarm.level.WARN);
           }
+          ASCVDRisk.postCanadarmLog(smart, canadarmInfo, Canadarm.level.INFO);
           ASCVDRisk.ret.resolve(PatientInfo);
         })
         .fail((jqXHR) => {
-          Canadarm.error('Patient or Observations resource failed: ', undefined, {
-            status: jqXHR.status,
-            error: jqXHR.statusText,
-          });
+          const status = jqXHR ? `Status:${jqXHR.status} StatusText:${jqXHR.statusText}` : '';
+          const canadarmErrorInfo = {};
+          canadarmErrorInfo.msg = `Patient or Observations resource failed Error:${status}`;
+          ASCVDRisk.postCanadarmLog(smart, canadarmErrorInfo, Canadarm.level.WARN);
           ASCVDRisk.setDefaultPatient();
         });
     } else {
-      Canadarm.error('Patient resource failure while loading the application.');
+      const canadarmErrorInfo = {};
+      canadarmErrorInfo.msg = 'Patient property unavailable on smart object.';
+      ASCVDRisk.postCanadarmLog(smart, canadarmErrorInfo, Canadarm.level.WARN);
       ASCVDRisk.setDefaultPatient();
     }
   };
@@ -236,10 +281,20 @@ window.ASCVDRisk = window.ASCVDRisk || {};
   const processLabsData = (labsByLoincs) => {
     ASCVDRisk.hasObservationWithUnsupportedUnits = false;
 
-    PatientInfo.totalCholesterol = ASCVDRisk.getCholesterolValue(labsByLoincs('14647-2', '2093-3'));
-    PatientInfo.hdl = ASCVDRisk.getCholesterolValue(labsByLoincs('2085-9'));
+    let observations = labsByLoincs('14647-2', '2093-3');
+    canadarmInfo.totalCholesterolLoinc = ['14647-2', '2093-3'];
+    canadarmInfo.totalCholesterolCount = observations ? observations.length : 0;
+    PatientInfo.totalCholesterol = ASCVDRisk.getCholesterolValue(observations);
+    observations = labsByLoincs('2085-9');
+    canadarmInfo.hdlLoinc = ['2085-9'];
+    canadarmInfo.hdlCount = observations ? observations.length : 0;
+    PatientInfo.hdl = ASCVDRisk.getCholesterolValue(observations);
     PatientInfo.systolicBloodPressure = ASCVDRisk.getSystolicBloodPressureValue(labsByLoincs('55284-4'));
-    PatientInfo.relatedFactors.smoker = ASCVDRisk.getSmokerStatus(labsByLoincs('72166-2', '229819007'));
+    canadarmInfo.sbpLoinc = ['55284-4'];
+    observations = labsByLoincs('72166-2', '229819007');
+    canadarmInfo.smokerStatusLoinc = ['72166-2', '229819007'];
+    canadarmInfo.smokerStatusCount = observations ? observations.length : 0;
+    PatientInfo.relatedFactors.smoker = ASCVDRisk.getSmokerStatus(observations);
   };
   ASCVDRisk.processLabsData = processLabsData;
 
@@ -293,6 +348,7 @@ window.ASCVDRisk = window.ASCVDRisk || {};
    *                                     valueQuantity elements having units and value
    */
   const getSystolicBloodPressureValue = (sysBPObservations) => {
+    canadarmInfo.sbpCount = sysBPObservations ? sysBPObservations.length : 0;
     const formattedObservations = [];
     sysBPObservations.forEach((observation) => {
       const sysBP = observation.component.find(component => component.code.coding.find(coding => coding.code === '8480-6'));
@@ -302,6 +358,7 @@ window.ASCVDRisk = window.ASCVDRisk || {};
         formattedObservations.push(newObservation);
       }
     });
+    canadarmInfo.formattedSBPCount = formattedObservations ? formattedObservations.length : 0;
     return ASCVDRisk.getFirstValidDataValue(Object.assign([], formattedObservations), (data) => {
       if (data.valueQuantity.unit === 'mm[Hg]' || data.valueQuantity.unit === 'mmHg') {
         return parseFloat(data.valueQuantity.value);

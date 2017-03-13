@@ -36,13 +36,15 @@ describe ('ASCVDRisk', () => {
   describe('onError', () => {
     it('sets a default patient to allow the application to run', () => {
       const spyASCVDRisk = sinon.spy(ASCVDRisk, 'setDefaultPatient');
-      const mockCanadarm = sinonSandbox.mock(Canadarm);
-      mockCanadarm.expects('error').once().returns('');
-      ASCVDRisk.onError();
+      const mockASCVDRisk = sinonSandbox.mock(ASCVDRisk);
+
+      mockASCVDRisk.expects('postCanadarmLog').once().returns(true);
+
+      ASCVDRisk.onError('error message');
 
       spyASCVDRisk.restore();
       sinon.assert.calledOnce(spyASCVDRisk);
-      mockCanadarm.verify();
+      mockASCVDRisk.verify();
     });
   });
 
@@ -129,13 +131,15 @@ describe ('ASCVDRisk', () => {
       };
 
       const spyASCVDRisk = sinon.spy(ASCVDRisk, 'setDefaultPatient');
-      const mockCanadarm = sinonSandbox.mock(Canadarm);
-      mockCanadarm.expects('error').once().returns('');
+      const mockASCVDRisk = sinonSandbox.mock(ASCVDRisk);
+
+      mockASCVDRisk.expects('postCanadarmLog').once().returns(true);
+
       ASCVDRisk.onReady(mockToken);
 
       spyASCVDRisk.restore();
       sinon.assert.calledOnce(spyASCVDRisk);
-      mockCanadarm.verify();
+      mockASCVDRisk.verify();
     });
 
     it('calls to set a default patient model when a patient cannot be pulled in', () => {
@@ -146,13 +150,14 @@ describe ('ASCVDRisk', () => {
       };
 
       const spyASCVDRisk = sinon.spy(ASCVDRisk, 'setDefaultPatient');
-      const mockCanadarm = sinonSandbox.mock(Canadarm);
-      mockCanadarm.expects('error').once().returns('');
+      const mockASCVDRisk = sinonSandbox.mock(ASCVDRisk);
+
+      mockASCVDRisk.expects('postCanadarmLog').once().returns(true);
       ASCVDRisk.onReady(mockToken);
 
       spyASCVDRisk.restore();
       sinon.assert.calledOnce(spyASCVDRisk);
-      mockCanadarm.verify();
+      mockASCVDRisk.verify();
     });
   });
 
