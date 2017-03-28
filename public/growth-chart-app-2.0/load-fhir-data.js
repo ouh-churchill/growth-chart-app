@@ -63,7 +63,7 @@ GC.get_data = function() {
     });
   };
 
-  function onErrorWithWarning(msg, smart, logLevel){
+  function onErrorWithWarning(msg, smart, canadarmLog, logLevel){
     postCandarmLog(smart, canadarmLog, logLevel);
     console.error("Loading error", arguments);
     dfd.reject({

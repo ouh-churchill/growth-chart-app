@@ -3,7 +3,7 @@ versions:
   - version: 1.39.0
     release_date: 2017-xx-xx
     changes:
-      - {author: xx, comment: xx, issue: OPENSVC-xxxx, type: add}
+      - {author: ss025783, comment: Fix for Growth Chart DSTU2 canadarmLog missing issue, issue: OPENSVC-3932, type: add}
   - version: 1.38.0
     release_date: 2017-03-13
     changes:
