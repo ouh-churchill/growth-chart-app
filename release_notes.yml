@@ -1,9 +1,10 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.39.0
-    release_date: 2017-xx-xx
+    release_date: 2017-03-29
     changes:
       - {author: ss025783, comment: Fix for Growth Chart DSTU2 canadarmLog missing issue, issue: OPENSVC-3932, type: add}
+      - {author: ss025783, comment: 1.39.0 release review, issue: OPENSVC-3898, type: add}
   - version: 1.38.0
     release_date: 2017-03-13
     changes:
