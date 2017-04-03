@@ -142,13 +142,22 @@ window.ASCVDRisk = window.ASCVDRisk || {};
       });
       $.when(patientQuery, labsQuery)
         .done((patientData, labResults) => {
-          PatientInfo.firstName = patientData.name[0].given.join(' ');
-          PatientInfo.lastName = patientData.name[0].family.join(' ');
+          PatientInfo.firstName = '';
+          PatientInfo.lastName = '';
+          if (patientData.name && patientData.name[0]) {
+            PatientInfo.firstName = patientData.name[0].given ?
+              patientData.name[0].given.join(' ') : '';
+            PatientInfo.lastName = patientData.name[0].family ?
+              patientData.name[0].family.join(' ') : '';
+          }
           PatientInfo.gender = patientData.gender;
-          PatientInfo.dateOfBirth = new Date((patientData.birthDate).replace(/-/g, '/'));
-          PatientInfo.age = ASCVDRisk
-            .computeAgeFromBirthDate(new Date(PatientInfo.dateOfBirth.valueOf()));
-
+          PatientInfo.dateOfBirth = undefined;
+          PatientInfo.age = undefined;
+          if (patientData.birthDate) {
+            PatientInfo.dateOfBirth = new Date((patientData.birthDate).replace(/-/g, '/'));
+            PatientInfo.age = ASCVDRisk
+              .computeAgeFromBirthDate(new Date(PatientInfo.dateOfBirth.valueOf()));
+          }
           const relatedFactors = {};
           relatedFactors.smoker = undefined;
           relatedFactors.race = undefined;

@@ -159,6 +159,81 @@ describe ('ASCVDRisk', () => {
       sinon.assert.calledOnce(spyASCVDRisk);
       mockASCVDRisk.verify();
     });
+
+    it('calls to set empty string on an invalid name pulled in from patient', () => {
+      mockPatient.name = undefined;
+      mockToken.patient.read = (() => mockPatient);
+      const patientModel = {
+        firstName: '',
+        lastName: '',
+        gender: 'm',
+        dateOfBirth: new Date('1965/02/01'),
+        age: 52,
+        hdl: 45,
+        relatedFactors: {
+          diabetic: undefined,
+          hypertensive: undefined,
+          race: undefined,
+          smoker: true
+        },
+        systolicBloodPressure: 111,
+        totalCholesterol: 240
+      };
+      const mockASCVDRisk = sinonSandbox.mock(ASCVDRisk);
+      mockASCVDRisk.expects('getCholesterolValue').once().withExactArgs(loincCodes('14647-2', '2093-3')).returns(240);
+      mockASCVDRisk.expects('getCholesterolValue').once().withExactArgs(loincCodes('2085-9')).returns(45);
+      mockASCVDRisk.expects('getSystolicBloodPressureValue').once().withExactArgs(loincCodes('8480-6')).returns(111);
+      mockASCVDRisk.expects('getSmokerStatus').once().withExactArgs(loincCodes('72166-2', '229819007')).returns(true);
+      mockASCVDRisk.expects('areRequiredLabsNotAvailable').once().returns(false);
+
+      const retSpy = sinon.spy(ASCVDRisk.ret, 'resolve');
+      ASCVDRisk.onReady(mockToken);
+
+      retSpy.restore();
+      sinon.assert.calledWith(retSpy, patientModel);
+
+      expect(ASCVDRisk.hideDemoBanner).to.equal(false);
+
+      mockASCVDRisk.verify();
+    });
+
+    it('calls to set undefined on date of birth and age if patient DOB pulled in is invalid', () => {
+      mockPatient.birthDate = undefined;
+      mockToken.patient.read = (() => mockPatient);
+
+      const patientModel = {
+        firstName: 'Joe ',
+        lastName: 'Show ',
+        gender: 'm',
+        dateOfBirth: undefined,
+        age: undefined,
+        hdl: 45,
+        relatedFactors: {
+          diabetic: undefined,
+          hypertensive: undefined,
+          race: undefined,
+          smoker: true
+        },
+        systolicBloodPressure: 111,
+        totalCholesterol: 240
+      };
+      const mockASCVDRisk = sinonSandbox.mock(ASCVDRisk);
+      mockASCVDRisk.expects('getCholesterolValue').once().withExactArgs(loincCodes('14647-2', '2093-3')).returns(240);
+      mockASCVDRisk.expects('getCholesterolValue').once().withExactArgs(loincCodes('2085-9')).returns(45);
+      mockASCVDRisk.expects('getSystolicBloodPressureValue').once().withExactArgs(loincCodes('8480-6')).returns(111);
+      mockASCVDRisk.expects('getSmokerStatus').once().withExactArgs(loincCodes('72166-2', '229819007')).returns(true);
+      mockASCVDRisk.expects('areRequiredLabsNotAvailable').once().returns(false);
+
+      const retSpy = sinon.spy(ASCVDRisk.ret, 'resolve');
+      ASCVDRisk.onReady(mockToken);
+
+      retSpy.restore();
+      sinon.assert.calledWith(retSpy, patientModel);
+
+      expect(ASCVDRisk.hideDemoBanner).to.equal(false);
+
+      mockASCVDRisk.verify();
+    });
   });
 
   describe('fetchPatientData', () => {

@@ -3,7 +3,7 @@ versions:
   - version: 1.40.0
     release_date: 2017-xx-xx
     changes:
-      - {author: xx, comment: xx, issue: OPENSVC-xxxx, type: add}
+      - {author: zp035497, comment: Fix to check for empty name or DOB on patient data, issue: OPENSVC-3931, type: add}
   - version: 1.39.0
     release_date: 2017-03-29
     changes:

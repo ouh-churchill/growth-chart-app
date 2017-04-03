@@ -13,7 +13,7 @@
   "scripts": {
     "start": "webpack-dev-server --inline",
     "clean": "rimraf build",
-    "test": "jest; mocha -w --require tests/helpers/browser.js tests/app/*.js",
+    "test": "jest; mocha --require tests/helpers/browser.js tests/app/*.js",
     "test:nightwatch": "WEBPACK_CONFIG_PATH=../../../tests/features/config.js node ./node_modules/terra-toolkit/lib/scripts/nightwatch-process.js --config tests/nightwatch.conf.js --env default-tiny,default-small,default-medium,default-large,default-huge,default-enormous",
     "lint": "eslint app/*.js components/**/**/*.jsx views/**/index.jsx components/**/*.jsx --config .eslintrc --fix",
     "build": "npm run clean && webpack --progress --colors ---display-error-details"
