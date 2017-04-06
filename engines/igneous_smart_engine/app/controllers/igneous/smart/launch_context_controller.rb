@@ -28,7 +28,6 @@ module Igneous
         context_data['username'] = username if context_data
 
         app = App.find_by app_id: context.app_id
-        fhir_server = app.fhir_server unless app.nil?
         if app.nil?
           logger.warn "#{self.class.name}, App is not found for app_id: #{context.app_id}"
         end
@@ -45,24 +44,22 @@ module Igneous
         @response_context['params']['need_patient_banner'] = context.need_patient_banner
 
         @response_context['ver'] = params['ver']
-        fhir_spec_url = fhir_server.url unless fhir_server.nil?
-        @response_context['userfhirurl'] = user_fhir_url(fhir_spec_url, context_data['user'].to_i.to_s, params['tnt'])
+        @response_context['userfhirurl'] = user_fhir_url(context_data['user'].to_i.to_s)
 
         audit_launch_context_resolve(context_data)
-        log_successful_resolve(app, username, context_data, context, fhir_spec_url)
+        log_successful_resolve(app, username, context_data, context)
         render status: :ok, json: @response_context.to_json
       end
 
       private
 
-      def log_successful_resolve(app, username, context_data, context, fhir_spec_url)
+      def log_successful_resolve(app, username, context_data, context)
         app_name_to_log =  app.name unless app.nil?
         persona_to_log = app.persona unless app.nil?
-        fhir_server_url = fhir_spec_url.sub('@tenant_id@', params['tnt']) unless fhir_spec_url.nil?
         log_info("Launch context resolved for: username=#{username}, user_id=#{context_data['user']}, "\
                           "config_version='#{params['ver']}', app_name=#{app_name_to_log}, "\
                           "app_id=#{context.app_id}, persona=#{persona_to_log}, "\
-                          "fhir_url=#{fhir_server_url}")
+                          "fhir_url=#{params['aud']}")
       end
 
       def invalid_request?(context, user)
@@ -151,19 +148,15 @@ module Igneous
         true
       end
 
-      def user_fhir_url(fhir_spec_url, user_id, tenant)
-        "#{fhir_url(fhir_spec_url, tenant)}/Practitioner/#{user_id}"
+      def user_fhir_url(user_id)
+        # Remove the trailing ' / ' from aud if it exists.
+        aud = (params['aud'].to_s[-1, 1].eql?'/') ? params['aud'].to_s.chop : params['aud']
+        "#{aud}/Practitioner/#{user_id}"
       end
 
       def version_components(version)
         major, minor, patch, *other = version.split('.')
         [major, minor, patch, *other]
-      end
-
-      def fhir_url(fhir_spec_url, tenant)
-        return nil if fhir_spec_url.nil?
-
-        fhir_spec_url.sub('@tenant_id@', tenant)
       end
 
       def log_info(info)

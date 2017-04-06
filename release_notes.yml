@@ -4,6 +4,7 @@ versions:
     release_date: 2017-xx-xx
     changes:
       - {author: zp035497, comment: Fix to check for empty name or DOB on patient data, issue: OPENSVC-3931, type: add}
+      - {author: ss025783, comment: Fixed profile URL creation using aud instead of fhir_server_spec from db, issue: OPENSVC-3716, type: add}
   - version: 1.39.0
     release_date: 2017-03-29
     changes:

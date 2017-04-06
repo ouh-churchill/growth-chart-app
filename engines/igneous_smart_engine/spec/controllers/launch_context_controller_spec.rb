@@ -286,15 +286,21 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
     end
   end
 
-  describe '#fhir_url' do
-    it 'returns nil when fhir_spec_url is nil' do
-      expect(controller.send(:fhir_url, nil, nil)).to be nil
+  describe '#user_fhir_url' do
+    it 'returns expected profile url when user_id and no aud' do
+      expect(controller.send(:user_fhir_url, 'user_id')).to eq('/Practitioner/user_id')
     end
 
-    it 'returns substituted value when fhir_spec_url is provided with tenant' do
-      expect(controller.send(:fhir_url, 'https://fhir.devcernerpowerchart.com/dstu2/@tenant_id@',
-                             '5bf02e61-09fe-49c3-8ca8-05084c30ca22')).to eq('https://fhir.devcernerpowerchart.com/'\
-                             'dstu2/5bf02e61-09fe-49c3-8ca8-05084c30ca22')
+    it 'returns expected profile url when user_id and aud are valid' do
+      controller.params['aud'] = 'https://fhir-ehr.sandboxcerner.com/dstu2/0b8a0111-e8e6-4c26-a91c-5069cbc6b1ca'
+      expect(controller.send(:user_fhir_url, 'user_id')).to eq('https://fhir-ehr.sandboxcerner.com/dstu2/'\
+      '0b8a0111-e8e6-4c26-a91c-5069cbc6b1ca/Practitioner/user_id')
+    end
+
+    it 'returns expected profile url when user_id and aud has trailing /' do
+      controller.params['aud'] = 'https://fhir-ehr.sandboxcerner.com/dstu2/0b8a0111-e8e6-4c26-a91c-5069cbc6b1ca/'
+      expect(controller.send(:user_fhir_url, 'user_id')).to eq('https://fhir-ehr.sandboxcerner.com/dstu2/'\
+      '0b8a0111-e8e6-4c26-a91c-5069cbc6b1ca/Practitioner/user_id')
     end
   end
 
