@@ -1,4 +1,6 @@
 
+require 'net/http'
+
 module Igneous
   module Smart
     class ApplicationController < ActionController::Base
@@ -8,6 +10,8 @@ module Igneous
       skip_before_filter :verify_authenticity_token, if: :json_request?
 
       before_action :ensure_request_is_from_cerner_network
+
+      OAUTH2_BASE_URL = Rails.application.config_for(:oauth2)['oauth2_base_url']
 
       def json_request?
         request.format.json?
@@ -44,6 +48,56 @@ module Igneous
           end
         end
       end
+
+      # Private: Make a POST connection to the url with token provided
+      # url - url of the introspection endpoint
+      # token - the token to pass to the server to verify
+      # Return res - HTTP response object
+      def http_connection(url, token)
+        uri = URI(url)
+
+        req = Net::HTTP::Post.new(uri)
+        req.set_form_data(token: token)
+        req['Accept'] = 'application/json'
+
+        Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
+          http.request(req)
+        end
+      end
+
+      # Internal: Verify credential token and fail the request if
+      # token is invalid or request failed.
+      #
+      # Response: 401 - unauthorized if the token is invalid or the
+      # request failed
+      def verify_credential_token
+        introspection_url = "#{OAUTH2_BASE_URL}/introspection"
+
+        auth_header = request.headers['Authorization']
+        return render status: :bad_request, text: 'Authorization header containing Bearer token is required.' \
+        unless auth_header.present?
+
+        token = auth_header.gsub('Bearer ', '')
+
+        res = http_connection(introspection_url, token)
+        case res
+        when Net::HTTPSuccess, Net::HTTPRedirection
+          json_response = JSON.parse(res.body)
+          render_invalid_or_expired_token \
+            unless res.body.present? && json_response['active'] == true \
+                                     && json_response['iss'] == "#{OAUTH2_BASE_URL}/"
+        else
+          logger.warn "#{self.class.name} Failed to verify token"
+          render status: :unauthorized, text: 'Failed to verify token'
+        end
+      end
+
+      def render_invalid_or_expired_token
+        logger.warn "#{self.class.name} Invalid or expired token"
+        render status: :unauthorized, text: 'Invalid or expired token'
+      end
+
+      private :http_connection, :render_invalid_or_expired_token
     end
   end
 end

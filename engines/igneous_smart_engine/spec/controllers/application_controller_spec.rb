@@ -2,7 +2,6 @@ describe Igneous::Smart::ApplicationController do
 
   # An anonymous controller used for the protect_from_forgery test
   controller do
-
     def index
       render text: 'successful'
     end

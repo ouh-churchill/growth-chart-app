@@ -2,11 +2,9 @@ require 'yaml'
 
 module Igneous
   module Smart
-    class UserController < ApplicationController
+    class UserController < Igneous::Smart::ApplicationController
 
       skip_before_action :ensure_request_is_from_cerner_network
-
-      OAUTH2_BASE_URL = YAML.load_file("#{Rails.root}/config/oauth2.yml")[Rails.env]['oauth2_base_url']
 
       def preauth
         return head :bad_request if params[:context_id].blank?
@@ -47,6 +45,7 @@ module Igneous
           }
         end
       end
+
     end
   end
 end

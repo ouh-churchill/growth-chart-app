@@ -149,6 +149,84 @@ Response:
 ```
 Status: 204
 ```
+
+## JSON APIs
+
+The SMART server currently supports several routes via JSON requests.
+
+### Retrieving a list of SMART applications
+
+Set the following headers:
+- `Authorization` header with bearer token of [B2B system account](https://associates.cernercentral.com/system-accounts/) to access this protected resource
+- `Accept` header with `application/json`
+
+`GET /smart/:tenant_id/apps`
+
+#### Example
+
+```
+GET https://smart.cernerpowerchart.com/smart/nya9mWd9vqI_z1LcF5uLfCwewAGCVrY1/apps
+```
+
+```
+Accept: application/json
+Authorization: Bearer put-b2b-token-here
+```
+
+```
+Response:
+Status: 200
+```
+
+```json
+[
+  {
+    "name": "Cardiac Risk App DSTU2",
+    "url": "https://smart.cernerpowerchart.com/smart/nya9mWd9vqI_z1LcF5uLfCwewAGCVrY1/apps/4ae44710-dc6e-4c52-82ef-877106846cab"
+  },
+  {
+    "name": "SMART Pediatric Growth Chart App DSTU2",
+    "url": "https://smart.cernerpowerchart.com/smart/nya9mWd9vqI_z1LcF5uLfCwewAGCVrY1/apps/ddffda5f-3cdc-4efc-bf98-0b1e58a56537"
+  }
+]
+```
+
+### Retrieving SMART launch URL and OAuth2 base URL
+
+This API is helpful if you'd like to retrieve the SMART launch URL with the `launch` id created in the URL.  The caller would also get the OAuth2 base URL with this call.  This is the API to call if you'd like to launch a SMART application outside of PowerChart (e.g. RevenueCycle).
+
+From the API above, the caller gets a list of SMART applications.  The caller would then construct the list of supported and required query parameters like below for the API call: 
+
+```
+PAT_PersonId=123&VIS_EncntrId=456&PAT_PPRCode=1116&USR_PersonId=1900022&username=kk014173
+```
+See the list of supported query parameters below.
+
+Set the following header:
+- `Accept` header with `application/json`
+
+#### Example
+
+```
+GET https://smart.cernerpowerchart.com/smart/nya9mWd9vqI_z1LcF5uLfCwewAGCVrY1/apps/1?PAT_PersonId=123&VIS_EncntrId=456&PAT_PPRCode=1116&USR_PersonId=1900022&username=kk014173
+```
+
+```
+Accept: application/json
+```
+
+```
+Response:
+Status: 200
+```
+
+```json
+{
+  "smart_launch_url": "https://smart.cernerpowerchart.com/smart-app-validator-2.0/launch.html?iss=https%3A%2F%2Ffhir.cernerpowerchart.com%2Fdstu2%2Fnya9mWd9vqI_z1LcF5uLfCwewAGCVrY1&launch=e0cc92a9-f34e-4fb5-b628-7007d7f7972b",
+  "oauth2_base_url": "https://authorization.cerner.com"
+}
+```
+
 ## Required Context Parameter
 
 Name           | Description

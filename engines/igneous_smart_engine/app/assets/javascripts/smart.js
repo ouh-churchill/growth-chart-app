@@ -1,41 +1,11 @@
-/* globals retrieveRequiredInfoAndRedirect, retrieveProviderInfoAndRedirect */
+/* globals retrieveRequiredInfoAndRedirect, retrieveProviderInfoAndRedirect, parseQueryParamByStr */
 // Global variables
-var CERNER_SMART_LAUNCH = {};
-CERNER_SMART_LAUNCH.oauth2BaseURL = '';
-CERNER_SMART_LAUNCH.launchURL = '';
-CERNER_SMART_LAUNCH.preauthTimeoutVar = null;
-CERNER_SMART_LAUNCH.timeoutIntervalSec = 20; // 20 seconds
-CERNER_SMART_LAUNCH.errorObj = new Error();
-CERNER_SMART_LAUNCH.launchId = '';
+var CernerSmartLaunch = {};
+CernerSmartLaunch.timeoutIntervalSec = 20; // 20 seconds
+CernerSmartLaunch.errorObj = new Error();
 
 // Initialize XMLCclRequest
-CERNER_SMART_LAUNCH.requestSync = new XMLCclRequest();
-
-/**
- * Get the value of paramStr in query parameter based on the urlStr.
- * urlStr - the URL with query param
- * paramStr - the value of the parameter to search
- *
- * return value for paramStr or empty string if paramStr not found.
- */
-function parseQueryParamByStr(urlStr, paramStr) {
-  var indexOfParamStr = urlStr.indexOf(paramStr);
-  if (indexOfParamStr === -1) {
-    return '';
-  }
-
-  var beginParam = urlStr.substring(indexOfParamStr, urlStr.length);
-  var keyValuePairArr = beginParam.split('&');
-  var keyValueArr = [];
-  for (var i = 0; i < keyValuePairArr.length; i++) {
-    var tempKeyValArr = keyValuePairArr[i].split('=');
-    if (tempKeyValArr[0] && tempKeyValArr[1]) {
-      keyValueArr[tempKeyValArr[0].valueOf()] = tempKeyValArr[1].valueOf();
-    }
-  }
-
-  return keyValueArr[paramStr];
-}
+CernerSmartLaunch.requestSync = new XMLCclRequest();
 
 function validateDataAndReportErrors(urlWithTenantPlaceHolder) {
 
@@ -44,14 +14,14 @@ function validateDataAndReportErrors(urlWithTenantPlaceHolder) {
 
   if (urlWithTenantPlaceHolder.indexOf(':tenant_id') !== -1) {
     missingTenantId = 'The tenant ID is required to launch the app.';
-    Canadarm.error(missingTenantId, CERNER_SMART_LAUNCH.errorObj);
+    Canadarm.error(missingTenantId, CernerSmartLaunch.errorObj);
     missingTenantId += '<br>';
   }
 
   var usernameParamVal = parseQueryParamByStr(urlWithTenantPlaceHolder, 'username');
   if (!usernameParamVal) {
     missingUsername = 'The username query parameter is required to launch the app.';
-    Canadarm.error(missingUsername, CERNER_SMART_LAUNCH.errorObj);
+    Canadarm.error(missingUsername, CernerSmartLaunch.errorObj);
     missingUsername += '<br>';
   }
 
@@ -82,5 +52,5 @@ function retrieveRequiredInfoAndRedirect(urlWithTenantPlaceHolder, user_person_i
 /* exported getRequiredInfoFailed */
 var getRequiredInfoFailed = function () { /* jshint unused:false */
   Canadarm.error('Unable to launch SMART app because tenant id ' +
-    'or username could not be obtained.', CERNER_SMART_LAUNCH.errorObj);
+    'or username could not be obtained.', CernerSmartLaunch.errorObj);
 };

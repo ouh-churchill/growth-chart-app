@@ -45,9 +45,10 @@ philter:
                  'public/growth-chart-app/**/*',
                  'public/cardiac-risk-app-2.0/**/*',
                  'public/growth-chart-app-2.0/**/*',
-                 'public/ascvd-risk-app/*',
                  'public/fhir-client/*',
                  'public/fhir-client-dstu2/*',
                  'public/embedded_content/*',
-                 'public/polyfill/*']
+                 'public/polyfill/*',
+                 'public/ascvd-risk-app/**/*',
+                 'public/assets/**/*']
     globals: ['XMLCclRequest', 'Canadarm', 'FHIR']

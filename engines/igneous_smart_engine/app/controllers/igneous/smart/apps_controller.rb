@@ -5,6 +5,7 @@ module Igneous
     class AppsController < Igneous::Smart::ApplicationController
 
       skip_before_action :ensure_request_is_from_cerner_network, only: [:show]
+      before_action :verify_credential_token, only: [:index], if: :json_request?
 
       # rubocop:disable all
       @@app_param_keys = %w(ehr_source_id id pat_personid pat_pprcode vis_encntrid \
@@ -13,11 +14,25 @@ module Igneous
       # rubocop:enable all
 
       def index
-        render locals: {
-          ehr_source_id: params['ehr_source_id'],
-          apps: App.all,
-          query_string: request.query_string
-        }
+        respond_to do |format|
+
+          format.html {
+            render locals: {
+              ehr_source_id: params['ehr_source_id'],
+              apps: App.all,
+              query_string: request.query_string
+            }
+          }
+
+          format.json {
+            @apps = App.all
+            @apps_details = []
+            @apps.each do |app|
+              @apps_details << { name: app.name, url: "#{app_url(params['ehr_source_id'], app.app_id)}" }
+            end
+            render json: @apps_details, status: :ok
+          }
+        end
       end
 
       def show
@@ -117,7 +132,9 @@ module Igneous
       def render_json_response(smart_launch_url)
         render json: { smart_launch_url: smart_launch_url,
                        smart_preauth_url: "#{request.base_url}/smart/user/preauth/url"\
-                                          "?tenant=#{params['ehr_source_id']}"
+                                          "?tenant=#{params['ehr_source_id']}",
+                       oauth2_base_url: "#{OAUTH2_BASE_URL}"
+
                }, status: :ok
       end
 

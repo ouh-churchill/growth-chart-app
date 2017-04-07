@@ -4,6 +4,7 @@ require 'igneous/smart/app'
 
 describe Igneous::Smart::AppsController, type: :controller do
   routes { Igneous::Smart::Engine.routes }
+  OAUTH2_BASE_URL = Rails.application.config_for(:oauth2)['oauth2_base_url']
 
   before(:each) do
     FactoryGirl.definition_file_paths = [File.expand_path('../../factories', __FILE__)]
@@ -51,6 +52,102 @@ describe Igneous::Smart::AppsController, type: :controller do
                     'dev_location' => '6', 'app_appname' => '7'
         expect(response).to have_http_status(200)
         expect(response).to render_template(:index)
+      end
+    end
+
+    describe 'when json format is requested' do
+      before(:each) do
+        request.headers['Cerner-Trusted-Traffic'] = 'cerner'
+        request.env['HTTP_ACCEPT'] = 'application/json'
+      end
+
+      it 'returns 401 when Authorization header is not set' do
+        stub_request(:post, /authorization.example.com/)
+          .to_return(status: 401, body: 'unauthorized', headers: {})
+
+        get :index, ehr_source_id: 'foo', 'pat_personid' => '1', 'pat_pprcode' => '2',
+                    'vis_encntrid' => '3', 'usr_personid' => '4', 'usr_positioncd' => '5',
+                    'dev_location' => '6', 'app_appname' => '7', 'username' => 'test_user'
+
+        expect(response).to have_http_status(:bad_request)
+        expect(response.body).to include('Authorization header containing Bearer token is required.')
+      end
+
+      it 'returns 401 when response is not Net::HTTPSuccess or Net::HTTPRedirection' do
+        request.headers['Authorization'] = 'Bearer abc123'
+
+        stub_request(:post, /authorization.example.com/)
+          .to_return(status: 401, body: 'unauthorized', headers: {})
+
+        url = 'https://authorization.example.com/introspection'
+        token = 'abc123'
+        allow(controller).to receive(:http_connection).with(url, token).and_call_original
+
+        get :index, ehr_source_id: 'foo', 'pat_personid' => '1', 'pat_pprcode' => '2',
+                    'vis_encntrid' => '3', 'usr_personid' => '4', 'usr_positioncd' => '5',
+                    'dev_location' => '6', 'app_appname' => '7', 'username' => 'test_user'
+
+        expect(response).to have_http_status(:unauthorized)
+        expect(response.body).to include('Failed to verify token')
+      end
+
+      it 'returns 401 when response is Net::HTTPSuccess but session is not active' do
+        request.headers['Authorization'] = 'Bearer abc123'
+
+        stub_request(:post, /authorization.example.com/)
+          .to_return(status: 200, body: '{"active": false}', headers: {})
+
+        url = 'https://authorization.example.com/introspection'
+        token = 'abc123'
+        allow(controller).to receive(:http_connection).with(url, token).and_call_original
+
+        get :index, ehr_source_id: 'foo', 'pat_personid' => '1', 'pat_pprcode' => '2',
+                    'vis_encntrid' => '3', 'usr_personid' => '4', 'usr_positioncd' => '5',
+                    'dev_location' => '6', 'app_appname' => '7', 'username' => 'test_user'
+
+        expect(response).to have_http_status(:unauthorized)
+        expect(response.body).to include('Invalid or expired token')
+      end
+
+      it 'returns 200 when response is Net::HTTPSuccess and active=true' do
+        request.headers['Authorization'] = 'Bearer abc123'
+
+        stub_request(:post, /authorization.example.com/)
+          .to_return(status: 200, body: '{"active": true, "iss": "https://authorization.example.com/"}', headers: {})
+
+        url = 'https://authorization.example.com/introspection'
+        token = 'abc123'
+        allow(controller).to receive(:http_connection).with(url, token).and_call_original
+
+        get :index, ehr_source_id: 'foo', 'pat_personid' => '1', 'pat_pprcode' => '2',
+                    'vis_encntrid' => '3', 'usr_personid' => '4', 'usr_positioncd' => '5',
+                    'dev_location' => '6', 'app_appname' => '7', 'username' => 'test_user'
+
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'returns 200 with json response of application' do
+        request.headers['Authorization'] = 'Bearer abc123'
+
+        FactoryGirl.create(:app_factory,
+                           app_id: 'app_id1',
+                           name: 'application name',
+                           launch_url: 'https://smart.apps.com/',
+                           authorized: true)
+
+        stub_request(:post, /authorization.example.com/)
+          .to_return(status: 200, body: '{"active": true, "iss": "https://authorization.example.com/"}', headers: {})
+
+        url = 'https://authorization.example.com/introspection'
+        token = 'abc123'
+        allow(controller).to receive(:http_connection).with(url, token).and_call_original
+
+        get :index, ehr_source_id: 'tenant-id', 'pat_personid' => '100.00', 'pat_pprcode' => '200.00',
+                    'vis_encntrid' => '300.00', 'usr_personid' => '400.00', 'username' => 'test_username'
+
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body)).to include('name' => 'application name', \
+                                                     'url' => 'http://test.host/smart/tenant-id/apps/app_id1')
       end
     end
   end
@@ -278,7 +375,8 @@ describe Igneous::Smart::AppsController, type: :controller do
         expect(JSON.parse(response.body)).to include('smart_launch_url' => 'http://smart.example6.com/' \
                                                        '?iss=http%3A%2F%2Ffhir.example.com' \
                                                        '&launch=11309546-4ef4-4dba-8f36-53ef3834d90e',
-                                                     'smart_preauth_url' => 'http://test.host/smart/user/preauth/url?tenant=tenant-id')
+                                                     'smart_preauth_url' => 'http://test.host/smart/user/preauth/url?tenant=tenant-id',
+                                                     'oauth2_base_url' => "#{OAUTH2_BASE_URL}")
       end
     end
   end
