@@ -2,6 +2,7 @@
 /* jshint latedef:nofunc */
 
 var CernerSmartPreauth = {};
+
 CernerSmartPreauth.oauth2BaseURL = '';
 CernerSmartPreauth.launchURL = '';
 CernerSmartPreauth.preauthTimeoutVar = null;
@@ -27,7 +28,9 @@ function submitToken(encodedToken) {
     // to sign into the domain first before proceeding
     // to the SMART app.
     Canadarm.warn('OAuth2 base URL is not set. Launch Id: ' +
-      CernerSmartPreauth.launchId + ' launchURL: ' + CernerSmartPreauth.launchURL, CernerSmartPreauth.errorObj);
+      CernerSmartPreauth.launchId, CernerSmartPreauth.errorObj);
+    Canadarm.info('Navigating to ' + CernerSmartPreauth.launchURL + ' ...', CernerSmartPreauth.errorObj);
+
     window.location.href = CernerSmartPreauth.launchURL;
   }
 
@@ -73,6 +76,7 @@ function receiveMessage(event) {
       CernerSmartPreauth.launchId + ' launchURL: ' + CernerSmartPreauth.launchURL, CernerSmartPreauth.errorObj);
   }
 
+  Canadarm.info('Navigating to ' + CernerSmartPreauth.launchURL + ' ...', CernerSmartPreauth.errorObj);
   window.location.href = CernerSmartPreauth.launchURL;
 }
 
@@ -82,10 +86,11 @@ function receiveMessage(event) {
  */
 var preAuthFailed = function () {
   Canadarm.warn('Pre-authentication was not completed after ' + CernerSmartPreauth.timeoutIntervalSec +
-    ' seconds of waiting. Launch Id: ' + CernerSmartPreauth.launchId + ' launchURL: ' + CernerSmartPreauth.launchURL,
-     CernerSmartPreauth.errorObj);
+    ' seconds of waiting. Launch Id: ' + CernerSmartPreauth.launchId, CernerSmartPreauth.errorObj);
   // The user would need to log into the domain.
   // After logging in, the user will be redirected to the SMART app.
+  Canadarm.info('Navigating to ' + CernerSmartPreauth.launchURL + ' ...', CernerSmartPreauth.errorObj);
+
   window.location.href = CernerSmartPreauth.launchURL;
 };
 
@@ -114,30 +119,31 @@ function performPreauthenticationPowerChart(oauth2BaseUrl, launchUrl) {
 /* exported performPreauthentication */
 function performPreauthentication(identityToken, appURL) {
   
+  var token = decodeURI(identityToken);
+  var url = decodeURIComponent(appURL);
+
   // Make an ajax call to appURL with the following URL format:
   // https://smart.domain.com/smart/{tenant}/apps/{app}?PAT_PersonId=123&PAT_PPRCode=123&
   // USR_PersonId=123&username=username
-  Canadarm.info('Retrieving smart launch URL for appURL: ' + appURL, CernerSmartPreauth.errorObj);
-  
-  getURL(appURL).done(function(data) {
+
+  getURL(url).done(function(data) {
     if (data.smart_launch_url && data.smart_preauth_url) {
       // Store these info in the object for later use
       CernerSmartPreauth.launchURL = data.smart_launch_url;
       CernerSmartPreauth.oauth2BaseURL = data.oauth2_base_url;
-
-      Canadarm.info('Successfully retrieved launch URL: ' + CernerSmartPreauth.launchURL +
-                    ' and OAuth2 Base URL: ' + CernerSmartPreauth.oauth2BaseURL, CernerSmartPreauth.errorObj);
 
       // Store the launch Id from the query param
       CernerSmartPreauth.launchId = parseQueryParamByStr(data.smart_launch_url, 'launch');
 
       // Determine if session is active, and if yes, proceed to load the app
       // If session is inactive or something failed, use the identityToken to preauth
-      checkSessionActive(identityToken);
+
+      checkSessionActive(token);
     }
   })
   .fail(function(jqXHR, textStatus) {
-    Canadarm.error('Unable to proceed due to an error: ' + jqXHR.status + ' - ' + textStatus +' retrieving ' + appURL);
+    Canadarm.error('Unable to proceed due to an error: ' + jqXHR.status + ' - ' + textStatus +' retrieving ' + appURL,
+      CernerSmartPreauth.errorObj);
   });
 }
 
@@ -149,6 +155,8 @@ function checkSessionActive(identityToken) {
     if (data.activeSession === true) {
       // The user's session is active, proceed to load the SMART app.  
       Canadarm.info('The user\'s session is active. Proceed to launch the application.', CernerSmartPreauth.errorObj);
+
+      Canadarm.info('Navigating to ' + CernerSmartPreauth.launchURL + ' ...', CernerSmartPreauth.errorObj);
       window.location.href = CernerSmartPreauth.launchURL;
     } else {
       Canadarm.info('The user\'s session is inactive based on data response: ' + JSON.stringify(data) +
@@ -218,6 +226,7 @@ function getURL(appURL) {
     headers: {
       'Accept': 'application/json; charset=utf-8'
     },
-    url: appURL
+    url: appURL,
+    cache: false
   });
 }

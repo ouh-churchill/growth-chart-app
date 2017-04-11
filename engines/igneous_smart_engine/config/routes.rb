@@ -10,6 +10,7 @@ Igneous::Smart::Engine.routes.draw do
   match 'apps/details/:id' => 'apps_details#show', via: [:get]
   get 'user/preauth' => 'user#preauth'
   get 'user/preauth/url' => 'user#preauth_url'
+  get 'platforms/preauth' => 'platforms#preauth'
   post 'launch/resolve' => 'launch_context#resolve', :constraints => { format: :json }
   post 'validator/results' => 'app_validator#results', :constraints => { format: :json }
 end

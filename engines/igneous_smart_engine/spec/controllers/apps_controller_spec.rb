@@ -81,6 +81,7 @@ describe Igneous::Smart::AppsController, type: :controller do
 
         url = 'https://authorization.example.com/introspection'
         token = 'abc123'
+
         allow(controller).to receive(:http_connection).with(url, token).and_call_original
 
         get :index, ehr_source_id: 'foo', 'pat_personid' => '1', 'pat_pprcode' => '2',
@@ -99,6 +100,7 @@ describe Igneous::Smart::AppsController, type: :controller do
 
         url = 'https://authorization.example.com/introspection'
         token = 'abc123'
+
         allow(controller).to receive(:http_connection).with(url, token).and_call_original
 
         get :index, ehr_source_id: 'foo', 'pat_personid' => '1', 'pat_pprcode' => '2',
@@ -117,6 +119,7 @@ describe Igneous::Smart::AppsController, type: :controller do
 
         url = 'https://authorization.example.com/introspection'
         token = 'abc123'
+
         allow(controller).to receive(:http_connection).with(url, token).and_call_original
 
         get :index, ehr_source_id: 'foo', 'pat_personid' => '1', 'pat_pprcode' => '2',
@@ -140,6 +143,7 @@ describe Igneous::Smart::AppsController, type: :controller do
 
         url = 'https://authorization.example.com/introspection'
         token = 'abc123'
+
         allow(controller).to receive(:http_connection).with(url, token).and_call_original
 
         get :index, ehr_source_id: 'tenant-id', 'pat_personid' => '100.00', 'pat_pprcode' => '200.00',

@@ -157,7 +157,7 @@ The SMART server currently supports several routes via JSON requests.
 ### Retrieving a list of SMART applications
 
 Set the following headers:
-- `Authorization` header with bearer token of [B2B system account](https://associates.cernercentral.com/system-accounts/) to access this protected resource
+- `Authorization` header with bearer token of [B2B OAuth2 system account](https://associates.cernercentral.com/system-accounts/) to access this protected resource
 - `Accept` header with `application/json`
 
 `GET /smart/:tenant_id/apps`
@@ -197,6 +197,7 @@ This API is helpful if you'd like to retrieve the SMART launch URL with the `lau
 
 From the API above, the caller gets a list of SMART applications.  The caller would then construct the list of supported and required query parameters like below for the API call: 
 
+
 ```
 PAT_PersonId=123&VIS_EncntrId=456&PAT_PPRCode=1116&USR_PersonId=1900022&username=kk014173
 ```
@@ -205,14 +206,18 @@ See the list of supported query parameters below.
 Set the following header:
 - `Accept` header with `application/json`
 
-#### Example
-
 ```
 GET https://smart.cernerpowerchart.com/smart/nya9mWd9vqI_z1LcF5uLfCwewAGCVrY1/apps/1?PAT_PersonId=123&VIS_EncntrId=456&PAT_PPRCode=1116&USR_PersonId=1900022&username=kk014173
 ```
 
+#### Example
+
 ```
 Accept: application/json
+```
+
+```
+GET https://smart.cernerpowerchart.com/smart/nya9mWd9vqI_z1LcF5uLfCwewAGCVrY1/apps/1?PAT_PersonId=123&VIS_EncntrId=456&PAT_PPRCode=1116&USR_PersonId=1900022&username=kk014173
 ```
 
 ```
@@ -226,6 +231,39 @@ Status: 200
   "oauth2_base_url": "https://authorization.cerner.com"
 }
 ```
+
+## Launching SMART application outside of PowerChart (non-embedded)
+
+Other platforms (e.g. RevCycle) can launch SMART application as long as the container supports rendering html and JavaScript execution.
+
+First, obtain a list of applications via JSON.  See "Retrieving a list of SMART applications" section above for more information.
+
+Second, construct the URL of the application to load with the following context parameters below.
+
+Example:
+
+```
+GET https://smart.[env]cernerpowerchart.com/smart/nya9mWd9vqI_z1LcF5uLfCwewAGCVrY1/apps/1?PAT_PersonId=123&VIS_EncntrId=456&PAT_PPRCode=1116&USR_PersonId=1900022&username=kk014173
+```
+
+Third, encode the following query parameters:
+- `encodeURI` on the identity token
+- `encodeURIComponent` on the app's URL
+
+Required query parameters:
+- tenant
+- identityToken
+- appURL
+
+Construct the web view and navigate to `https://smart.[env]cernerpowerchart.com/smart/platforms/preauth/?tenant={tenant-id}&identityToken={encodeURI identityToken}&appURL={encodeURIComponent appURL}`
+
+Example:
+
+```
+https://smart.devcernerpowerchart.com/smart/platforms/preauth/?tenant=2c400054-42d8-4e74-87b7-80b5bd5fde9f&identityToken=eyJ0eXAiOiJKV1QiLCJhbGciOiJSU0ExXzUiLCJraWQiOiJBQUFCUWVYaDVqdllram5ZNHdHX2dxZjZ3b2kyWnlnd0FBQUFBQSJ9.eyJleHAiOjE0OTA5MDM5NzA3NjIsImlzcyI6IjJjNDAwMDU0LTQyZDgtNGU3NC04N2I3LTgwYjViZDVmZGU5ZiIsInBybiI6Ik1CNk1zcVBham1XWTI0c0dYclBsOHVVNHVFTSIsInR5cCI6IkNFUk5fTUxfSURfVE9LRU5fVjEifQ.PTGDpPXV9egF8HHSs8R8sISHN3TNl8LN1j4SckiEoT_9cm4ANsjt69e948BrYxYXCHX01ZHVfNO267PmRitXiqstY0AkXev2laWYFBrRMhRMxmPcMgE2fCIPVWwi2M-ZnkdYKYOHnrzOBYa3vgFqkmqtbXPPjlPMkirgRPlgooI&appURL=https%3A%2F%2Fsmart.devcernerpowerchart.com%2Fsmart%2F2c400054-42d8-4e74-87b7-80b5bd5fde9f%2Fapps%2F0a0e0a81-3eba-4142-8da6-3d48fd3d9286%3FPAT_PersonId%3D687923%26PAT_PPRCode%3D1116%26USR_PersonId%3D1900022%26username%3Dkk014173
+```
+
+The SMART application provided in the URL will be loaded once the identityToken is validated and accepted.
 
 ## Required Context Parameter
 

@@ -98,6 +98,7 @@ module Igneous
       end
 
       private :http_connection, :render_invalid_or_expired_token
+
     end
   end
 end
