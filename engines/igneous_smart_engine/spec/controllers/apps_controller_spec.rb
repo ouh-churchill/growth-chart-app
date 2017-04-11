@@ -462,6 +462,17 @@ describe Igneous::Smart::AppsController, type: :controller do
         expect(app1.name).to eq 'my_app1'
         expect(app2.name).to eq 'my_app1'
       end
+
+      it 'successfully creates app with null Launch URL' do
+        post(:create, ehr_source_id: 'foo',
+                      app: { app_id: 'my-app-id1', name: :my_app1,
+                             igneous_smart_fhir_server_id: 1, authorized: true })
+
+        app1 = Igneous::Smart::App.find_by app_id: 'my-app-id1'
+
+        expect(app1.name).to eq 'my_app1'
+        expect(app1.launch_url).to eq nil
+      end
     end
   end
 

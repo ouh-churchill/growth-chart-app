@@ -3,7 +3,7 @@ require 'securerandom'
 module Igneous
   module Smart
     class App < ActiveRecord::Base
-      validates_presence_of :app_id, :name, :launch_url, :igneous_smart_fhir_server_id, :persona
+      validates_presence_of :app_id, :name, :igneous_smart_fhir_server_id, :persona
       validates_uniqueness_of :app_id
 
       belongs_to :fhir_server, foreign_key: :igneous_smart_fhir_server_id

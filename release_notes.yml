@@ -7,6 +7,7 @@ versions:
       - {author: ss025783, comment: Fixed profile URL creation using aud instead of fhir_server_spec from db, issue: OPENSVC-3716, type: add}
       - {author: kk014173, comment: Provide API to retrieve SMART applications via JSON, issue: OPENSVC-741, type: add}
       - {author: kk014173, comment: Enable Single Sign On for non-embedded workflows, issue: OPENSVC-3947, type: add}
+      - {author: kt026311, comment: Make SMART Launch URI optional, issue: OPENSVC-3139, type: update}
   - version: 1.39.0
     release_date: 2017-03-29
     changes:

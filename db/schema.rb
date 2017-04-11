@@ -11,12 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161208185427) do
+ActiveRecord::Schema.define(version: 20170402044231) do
 
   create_table "igneous_smart_apps", force: :cascade do |t|
     t.string   "app_id",                       limit: 36,                       null: false
     t.string   "name",                         limit: 190,                      null: false
-    t.string   "launch_url",                   limit: 190,                      null: false
+    t.string   "launch_url",                   limit: 190
     t.boolean  "authorized",                               default: true,       null: false
     t.datetime "created_at",                                                    null: false
     t.datetime "updated_at",                                                    null: false
