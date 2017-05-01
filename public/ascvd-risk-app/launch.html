@@ -6,10 +6,16 @@
     <meta name='viewport' content='width=device-width, initial-scale=1' />
     <title>SMART ASCVD Risk App</title>
     <link rel='stylesheet' type='text/css' href='../embedded_content/embedded_content.min.css'>
+    <link rel='stylesheet' type='text/css' href='app/spinner.css'>
     <script src="../fhir-client-dstu2/fhir-client.min.js"></script>
     <script src='../fhir-client-dstu2/fhir-client-cerner-additions-1.0.0.min.js'></script>
   </head>
   <body>
+    <div id='loadingSpinner' class='spinner'>
+      <div class='bounce1'></div>
+      <div class='bounce2'></div>
+      <div class='bounce3'></div>
+    </div>
     <script>
       FHIR.oauth2.authorize({
         'client_id': 'b895e6b1-25f1-4a42-834d-a440d4de3853',

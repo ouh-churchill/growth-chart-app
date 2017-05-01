@@ -3,7 +3,7 @@ versions:
   - version: 1.41.0
     release_date: 2017-04-xx
     changes:
-      - {author: xx, comment: xx, issue: OPENSVC-xxxx, type: add}
+      - {author: zp035497, comment: Add a loading spinner to ASCVD Application, issue: OPENSVC-4128, type: add}
   - version: 1.40.0
     release_date: 2017-04-11
     changes:
