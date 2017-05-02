@@ -1,3 +1,4 @@
+# rubocop:disable CyclomaticComplexity
 require 'securerandom'
 
 module Igneous
@@ -20,9 +21,7 @@ module Igneous
       # Returns a context object associated with the given request parameters.
       def context(params, app_id, smart_launch_url)
         smart_context = {}
-
         add_context = lambda do |i, j, is_numeric = true|
-
           if params.key?(j) && params[j].present?
             # PowerChart currently passes in all numeric values as floats with .00 appended.
             # For instance, PAT_PersonId will have value like 123456.00
@@ -50,6 +49,8 @@ module Igneous
         add_context.call('container_name',  'app_appname', false)
 
         banner = (params['need_patient_banner']) ? params['need_patient_banner'] : false
+        add_custom_context(params, smart_context)
+
         LaunchContext.create(context_id: self.context_id,
                              data: smart_context.to_json,
                              app_id: app_id,
@@ -57,6 +58,22 @@ module Igneous
                              tenant: params['ehr_source_id'],
                              need_patient_banner: banner,
                              username: (params['username']) ? params['username'] : '')
+      end
+
+      # Public: Add custom cerner_ prepended variables to smart_context hash
+      #
+      # params - The app parameters hash
+      # smart_context - Hash that contains key/value pairs for the launch context
+      #
+      # Adds request parameter key/value pairs to the smart_context hash if prepended with 'cerner_'
+      def add_custom_context(params, smart_context)
+        params.each do |key, val|
+          if params.key?(key) && params[key].present?
+            if key.starts_with?('cerner_')
+              smart_context[key] = val unless val.nil?
+            end
+          end
+        end
       end
     end
   end

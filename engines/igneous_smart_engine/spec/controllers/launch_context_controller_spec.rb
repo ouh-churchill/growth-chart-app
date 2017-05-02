@@ -42,7 +42,8 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
 
       describe 'POST resolve' do
         before(:each) do
-          data = { patient: '123', encounter: '456', ppr: '567', user: '12345' }.to_json
+          data = { patient: '123', encounter: '456', ppr: '567', user: '12345',
+                   cerner_custom_var: 'custom_var' }.to_json
           FactoryGirl.create(:launch_context_factory,
                              context_id: '6e1b99f7-e05b-42d1-b304-d8180858ce8c',
                              data: data,
@@ -250,7 +251,7 @@ RSpec.describe Igneous::Smart::LaunchContextController, type: :controller do
 
       describe 'POST resolve context having patient and user fields' do
         it 'returns success when the matching record is found' do
-          data = { 'patient' => '123', 'user' => '6789' }.to_json
+          data = { 'patient' => '123', 'user' => '6789', 'cerner_custom_var' => 'custom_var' }.to_json
           FactoryGirl.create(:launch_context_factory,
                              context_id: '6e1b99f7-e05b-42d1-b304-d8180858ce8d',
                              data: data,

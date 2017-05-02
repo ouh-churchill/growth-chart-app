@@ -98,7 +98,11 @@ module Igneous
         # Convert PowerChart params to lowercase as they pass in keys with varying case (see OPENSVC-829)
         app_params = {}
         params.each do |k, v|
-          app_params[k.downcase] = v if @@app_param_keys.include?(k.downcase)
+          if @@app_param_keys.include?(k.downcase)
+            app_params[k.downcase] = v
+          elsif k.downcase.starts_with?('cerner_')
+            app_params[k.downcase] = v
+          end
         end
         app_params
       end

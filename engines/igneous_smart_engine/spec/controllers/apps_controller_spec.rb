@@ -566,6 +566,33 @@ describe Igneous::Smart::AppsController, type: :controller do
 
       expect(controller.send(:lowercase_app_params, params)).to_not include('test' => 'test')
     end
+
+    it 'allows context params with cerner_ prefix' do
+      params = {
+        'PAT_PersonId'   => '1',
+        'PAT_PPRCode'    => '2',
+        'VIS_EncntrId'   => '3',
+        'USR_PersonId'   => '4',
+        'USR_PositionCd' => '5',
+        'DEV_Location'   => '6',
+        'APP_AppName'    => '7',
+        'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc',
+        'id' => 'a3f7b4ef-a793-48a3-8a0b-5729b0ed57a6',
+        'CERNER_TEST' => 'test'
+      }
+
+      expect(controller.send(:lowercase_app_params, params)).to include(
+        'pat_personid'   => '1',
+        'pat_pprcode'    => '2',
+        'vis_encntrid'   => '3',
+        'usr_personid'   => '4',
+        'usr_positioncd' => '5',
+        'dev_location'   => '6',
+        'app_appname'    => '7',
+        'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc',
+        'id' => 'a3f7b4ef-a793-48a3-8a0b-5729b0ed57a6',
+        'cerner_test' => 'test')
+    end
   end
 
   describe '#audit_smart_launch_app_success' do

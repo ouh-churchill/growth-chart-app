@@ -6,7 +6,8 @@
         "tenant": "2c400054-42d8-4e74-87b7-80b5bd5fde9f",
         "username": "test_username",
         "smart_style_url": "http://test.host/styles/smart-v1.json",
-        "need_patient_banner": true
+        "need_patient_banner": true,
+        "cerner_custom_var": "custom_var"
     },
     "claims": {
         "patient": "123",

@@ -18,7 +18,6 @@ module Igneous
       def resolve
         @error_response = {}
         @response_context = {}
-
         context = LaunchContext.find_by context_id: params['launch']
         context_data = JSON.parse(context.data) unless context.blank? || context.data.blank?
         context_data['tenant'] = params['tnt'] if context_data
@@ -42,6 +41,7 @@ module Igneous
 
         @response_context['params']['smart_style_url'] = asset_url('styles/smart-v1.json')
         @response_context['params']['need_patient_banner'] = context.need_patient_banner
+        add_custom_context_response(context_data)
 
         @response_context['ver'] = params['ver']
         @response_context['userfhirurl'] = user_fhir_url(context_data['user'].to_i.to_s)
@@ -52,6 +52,13 @@ module Igneous
       end
 
       private
+
+      def add_custom_context_response(context_data)
+        return unless context_data
+        context_data.each do |key, val|
+          @response_context['params'][key] = val if key.starts_with?('cerner_')
+        end
+      end
 
       def log_successful_resolve(app, username, context_data, context)
         app_name_to_log =  app.name unless app.nil?

@@ -193,5 +193,101 @@ describe Igneous::Smart::LaunchContext do
       expect(context.need_patient_banner).to eq false
 
     end
+
+    it 'accepts arbitrary context values with a cerner_ prefix' do
+      params = {
+        'pat_personid'   => '1',
+        'pat_pprcode'    => '2',
+        'vis_encntrid'   => '3',
+        'usr_personid'   => '4',
+        'usr_positioncd' => '5',
+        'dev_location'   => '6',
+        'app_appname'    => '7',
+        'cerner_value_example'  => '2cool',
+        'cerner_some_arbitrary_thing' => '1234',
+        'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc',
+        'need_patient_banner' => 'false',
+        'username' => 'test_username'
+      }
+
+      context_id = '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
+      app_id = 'd193fa79-c165-4daa-a8fd-c187fba2af4d'
+      smart_launch_url = 'http://example.com/smart/launch.html'
+      allow(SecureRandom).to receive(:uuid).and_return(context_id)
+      launch_context.context(params, app_id, smart_launch_url)
+
+      context = Igneous::Smart::LaunchContext.find_by context_id: context_id
+      expect(JSON.parse(context.data)).to include('patient' => '1', 'ppr' => '2', 'encounter' => '3',
+                                                  'user' => '4', 'position' => '5', 'device_location' => '6',
+                                                  'container_name' => '7', 'cerner_value_example' => '2cool',
+                                                  'cerner_some_arbitrary_thing' => '1234')
+      expect(context.need_patient_banner).to eq false
+    end
+
+    it 'does not accept arbitrary key value pairs if the value is nil' do
+      params = {
+        'pat_personid'   => '1',
+        'pat_pprcode'    => '2',
+        'vis_encntrid'   => '3',
+        'usr_personid'   => '4',
+        'usr_positioncd' => '5',
+        'dev_location'   => '6',
+        'app_appname'    => '7',
+        'cerner_value_example'  => '2cool',
+        'cerner_some_arbitrary_thing' => '1234',
+        'cerner_nil_example' => nil,
+        'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc',
+        'need_patient_banner' => 'false',
+        'username' => 'test_username'
+      }
+
+      context_id = '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
+      app_id = 'd193fa79-c165-4daa-a8fd-c187fba2af4d'
+      smart_launch_url = 'http://example.com/smart/launch.html'
+      allow(SecureRandom).to receive(:uuid).and_return(context_id)
+      launch_context.context(params, app_id, smart_launch_url)
+
+      context = Igneous::Smart::LaunchContext.find_by context_id: context_id
+      expect(JSON.parse(context.data)).to include('patient' => '1', 'ppr' => '2', 'encounter' => '3',
+                                                  'user' => '4', 'position' => '5', 'device_location' => '6',
+                                                  'container_name' => '7', 'cerner_value_example' => '2cool',
+                                                  'cerner_some_arbitrary_thing' => '1234')
+      expect(JSON.parse(context.data)).to_not include('cerner_nil_example' => nil)
+      expect(context.need_patient_banner).to eq false
+    end
+
+    it 'does not include user-customized key value pairs if the key is not prefixed with cerner_' do
+      params = {
+        'pat_personid'   => '1',
+        'pat_pprcode'    => '2',
+        'vis_encntrid'   => '3',
+        'usr_personid'   => '4',
+        'usr_positioncd' => '5',
+        'dev_location'   => '6',
+        'app_appname'    => '7',
+        'cerner_value_example'  => '2cool',
+        'cerner_some_arbitrary_thing' => '1234',
+        'cerner_nil_example' => nil,
+        'ehr_source_id'  => '46134c2c-7412-4d53-b09e-e8ced4c73dbc',
+        'need_patient_banner' => 'false',
+        'username' => 'test_username',
+        'my_custom_var' => 'customed'
+      }
+
+      context_id = '46134c2c-7412-4d53-b09e-e8ced4c73dbc'
+      app_id = 'd193fa79-c165-4daa-a8fd-c187fba2af4d'
+      smart_launch_url = 'http://example.com/smart/launch.html'
+      allow(SecureRandom).to receive(:uuid).and_return(context_id)
+      launch_context.context(params, app_id, smart_launch_url)
+
+      context = Igneous::Smart::LaunchContext.find_by context_id: context_id
+      expect(JSON.parse(context.data)).to include('patient' => '1', 'ppr' => '2', 'encounter' => '3',
+                                                  'user' => '4', 'position' => '5', 'device_location' => '6',
+                                                  'container_name' => '7', 'cerner_value_example' => '2cool',
+                                                  'cerner_some_arbitrary_thing' => '1234')
+      expect(JSON.parse(context.data)).to_not include('cerner_nil_example' => nil,
+                                                      'my_custom_var' => 'customed')
+      expect(context.need_patient_banner).to eq false
+    end
   end
 end
