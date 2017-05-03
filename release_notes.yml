@@ -1,10 +1,11 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.41.0
-    release_date: 2017-04-xx
+    release_date: 2017-05-03
     changes:
       - {author: zp035497, comment: Add a loading spinner to ASCVD Application, issue: OPENSVC-4128, type: add}
       - {author: zp035497, comment: Support arbitrary context params with Cerner prefix, issue: OPENSVC-4071, type: add}
+      - {author: zp035497, comment: 1.41.0 release review, issue: OPENSVC-4166, type: add}
   - version: 1.40.0
     release_date: 2017-04-11
     changes:
