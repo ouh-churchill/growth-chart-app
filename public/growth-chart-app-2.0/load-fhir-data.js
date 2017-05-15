@@ -98,6 +98,7 @@ GC.get_data = function() {
         'http://loinc.org|39156-5', 'http://loinc.org|18185-9',
         'http://loinc.org|37362-1', 'http://loinc.org|11884-4',
         'http://loinc.org|83845-8', 'http://loinc.org|83846-6',
+        'http://loinc.org|85151-9',
         'http://snomed.info/sct|8021000175101', 'http://snomed.info/sct|8031000175103']}}});
 
       $.when(ptFetch, vitalsFetch).fail(function(jqXHR) {
@@ -222,8 +223,8 @@ GC.get_data = function() {
       canadarmInfo.bodyMassIndexCount = bodyMassIndexObservations ? bodyMassIndexObservations.length : 0;
       process(bodyMassIndexObservations, units.any, p.vitals.BMIData);
 
-      var boneXRayBoneAgeObservations = vitalsByCode['37362-1'];
-      canadarmInfo.boneXRayBoneAgeLoinc = ['37362-1'];
+      var boneXRayBoneAgeObservations = vitalsByCode['85151-9'] ? vitalsByCode['85151-9'] : vitalsByCode['37362-1'];
+      canadarmInfo.boneXRayBoneAgeLoinc = vitalsByCode['85151-9'] ? ['85151-9'] : vitalsByCode['37362-1'] ? ['37362-1'] : "";
       canadarmInfo.boneXRayBoneAgeCount = boneXRayBoneAgeObservations ? boneXRayBoneAgeObservations.length : 0;
       processBA(boneXRayBoneAgeObservations, p.boneAge);
 
