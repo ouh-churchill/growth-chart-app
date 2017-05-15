@@ -4,6 +4,7 @@ versions:
     release_date: 2017-xx-xx
     changes:
       - {author: ss025783, comment: Fix for Bone Age not displayed on the table in GC, issue: OPENSVC-4180, type: add}
+      - {author: ss025783, comment: Fix for Growth Chart Printing slowness issue, issue: OPENSVC-4216, type: add}
   - version: 1.41.0
     release_date: 2017-05-03
     changes:
