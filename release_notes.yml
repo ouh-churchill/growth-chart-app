@@ -4,6 +4,7 @@ versions:
     release_date: 2017-05-17
     changes:
       - {author: ss025783, comment: Update GC to consume more LOINCs for better mapping coverage for tenants, issue: OPENSVC-4247, type: add}
+      - {author: kt026311, comment: 1.42.1 release review, issue: OPENSVC-4259, type: add}
   - version: 1.42.0
     release_date: 2017-05-17
     changes:
