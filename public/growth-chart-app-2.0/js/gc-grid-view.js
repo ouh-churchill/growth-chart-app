@@ -489,10 +489,8 @@ XDate, setTimeout, getDataSet*/
     }
     
     function renderTableViewForPrint(container) {
-        if (container) {
-            $(container).empty();
-        }
-
+        $(container).empty();
+        
         var printScheme = [
             {
                 label : "Date",
@@ -675,12 +673,8 @@ XDate, setTimeout, getDataSet*/
         
         
         html[j++] = '</table>';
-
-        if (container){
-            $(container).html(html.join(""));
-        } else {
-            return html;
-        }
+        
+        $(container).html(html.join(""));
     }
     
     function getVelocityUnits(baseUnits) {
@@ -900,11 +894,7 @@ XDate, setTimeout, getDataSet*/
         },
         selectByAge : PRINT_MODE ? $.noop : selectByAge
     };
-
-    NS.TableViewForPrint = function () {
-        return renderTableViewForPrint();
-    };
-
+    
     $(function() {
         if (!PRINT_MODE) {
             $("#stage").bind("scroll resize", updateDataTableLayout);

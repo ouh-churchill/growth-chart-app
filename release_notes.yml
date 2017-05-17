@@ -4,7 +4,6 @@ versions:
     release_date: 2017-xx-xx
     changes:
       - {author: ss025783, comment: Fix for Bone Age not displayed on the table in GC, issue: OPENSVC-4180, type: add}
-      - {author: ss025783, comment: Fix for Growth Chart Printing slowness issue, issue: OPENSVC-4216, type: add}
       - {author: ss025783, comment: Update loinc for bone age, issue: OPENSVC-4117, type: add}
       - {author: zp035497, comment: Update ASCVD to support new clinical recommendations, issue: OPENSVC-4217, type: add}
       - {author: kt026311, comment: Support Patient stand-alone launch for App Validator , issue: OPENSVC-4122, type: add}

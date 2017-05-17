@@ -102,8 +102,8 @@ GC.get_data = function() {
         'http://snomed.info/sct|8021000175101', 'http://snomed.info/sct|8031000175103']}}});
 
       $.when(ptFetch, vitalsFetch).fail(function(jqXHR) {
-        var status = jqXHR ? "Status:"+ jqXHR.status + "StatusText:" + jqXHR.statusText : '';
-        var canadarmLog = {};
+        const status = jqXHR ? "Status:"+ jqXHR.status + "StatusText:" + jqXHR.statusText : '';
+        const canadarmLog = {};
         canadarmLog.msg = "Patient or Observations resource failed Error:" + status;
         onErrorWithWarning(GC.str('STR_Error_LoadingApplication'), smart, canadarmLog, Canadarm.level.ERROR);
       });
