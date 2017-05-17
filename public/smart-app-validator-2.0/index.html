@@ -35,16 +35,26 @@
     <div id='resources'><p><strong>Resources</strong></p></div>
     <div id='Conformance'><p> Conformance:</p></div>
     <div id='Patient'><p> Patient:</p></div>
-    <div id='Encounter'><p> Encounter:</p></div>
-    <div id='Condition_Diagnosis'><p> Condition-Diagnosis:</p></div>
-    <div id='Condition_Problem'><p> Condition-Problem:</p></div>
-    <div id='AllergyIntolerance'><p> AllergyIntolerance:</p></div>
     <div id='Observation'><p> Observation:</p></div>
-    <div id='DiagnosticReport'><p> DiagnosticReport:</p></div>
-    <div id='Immunization'><p> Immunization:</p></div>
-    <div id='MedicationOrder'><p> MedicationOrder:</p></div>
+    <div id='Observation-laboratory'><p> Observation - laboratory:</p></div>
+    <div id='Observation-vital-signs'><p> Observation - vital-signs:</p></div>
+    <div id='Observation-social-history'><p> Observation - social-history:</p></div>
+    <div id='Procedure'><p> Procedure:</p></div>
+    <div id='Condition-problem'><p> Condition - problem:</p></div>
+    <div id='Condition-health-concern'><p> Condition - health-concern:</p></div>
+    <div id='Condition-diagnosis'><p> Condition - diagnosis:</p></div>
     <div id='MedicationStatement'><p> MedicationStatement:</p></div>
+    <div id='MedicationOrder'><p> MedicationOrder:</p></div>
+    <div id='AllergyIntolerance'><p> AllergyIntolerance:</p></div>
+    <div id='CarePlan-CareTeam'><p> CarePlan- CareTeam:</p></div>
+    <div id='Immunization'><p> Immunization:</p></div>
+    <div id='Device'><p> Device:</p></div>
+    <div id='CarePlan-assess-plan'><p> CarePlan - assess-plan:</p></div>
+    <div id='Goal'><p> Goal:</p></div>
     <div id='DocumentReference'><p> DocumentReference:</p></div>
+    <div id='Binary'><p> Binary:</p></div>
+    <div id='DiagnosticReport'><p> DiagnosticReport:</p></div>
+    <div id='Encounter'><p> Encounter:</p></div>
 
     <script>
       // Load the data
@@ -52,16 +62,26 @@
 
       $('#Conformance').click(function() { $('#Conformance-details').toggle(); });
       $('#Patient').hide().click(function() { $('#Patient-details').toggle(); });
-      $('#Encounter').hide().click(function() { $('#Encounter-details').toggle(); });
-      $('#Condition_Diagnosis').hide().click(function() { $('#Condition_Diagnosis-details').toggle(); });
-      $('#Condition_Problem').hide().click(function() { $('#Condition_Problem-details').toggle(); });
-      $('#AllergyIntolerance').hide().click(function() { $('#AllergyIntolerance-details').toggle(); });
       $('#Observation').hide().click(function() { $('#Observation-details').toggle(); });
-      $('#DiagnosticReport').hide().click(function() { $('#DiagnosticReport-details').toggle(); });
-      $('#Immunization').hide().click(function() { $('#Immunization-details').toggle(); });
-      $('#MedicationOrder').hide().click(function() { $('#MedicationOrder-details').toggle(); });
+      $('#Observation-laboratory').hide().click(function() { $('#Observation-laboratory-details').toggle(); });
+      $('#Observation-vital-signs').hide().click(function() { $('#Observation-vital-signs-details').toggle(); });
+      $('#Observation-social-history').hide().click(function() { $('#Observation-social-history-details').toggle(); });
+      $('#Procedure').hide().click(function() { $('#Procedure-details').toggle(); });
+      $('#Condition-problem').hide().click(function() { $('#Condition-problem-details').toggle(); });
+      $('#Condition-health-concern').hide().click(function() { $('#Condition-health-concern-details').toggle(); });
+      $('#Condition-diagnosis').hide().click(function() { $('#Condition-diagnosis-details').toggle(); });
       $('#MedicationStatement').hide().click(function() { $('#MedicationStatement-details').toggle(); });
+      $('#MedicationOrder').hide().click(function() { $('#MedicationOrder-details').toggle(); });
+      $('#AllergyIntolerance').hide().click(function() { $('#AllergyIntolerance-details').toggle(); });
+      $('#CarePlan-CareTeam').hide().click(function() { $('#CarePlan-CareTeam-details').toggle(); });
+      $('#Immunization').hide().click(function() { $('#Immunization-details').toggle(); });
+      $('#Device').hide().click(function() { $('#Device-details').toggle(); });
+      $('#CarePlan-assess-plan').hide().click(function() { $('#CarePlan-assess-plan-details').toggle(); });
+      $('#Goal').hide().click(function() { $('#Goal-details').toggle(); });
       $('#DocumentReference').hide().click(function() { $('#DocumentReference-details').toggle(); });
+      $('#Binary').hide().click(function() { $('#Binary-details').toggle(); });
+      $('#DiagnosticReport').hide().click(function() { $('#DiagnosticReport-details').toggle(); });
+      $('#Encounter').hide().click(function() { $('#Encounter-details').toggle(); });
     </script>
     <script src='../polyfill/array-includes.js'></script>
     <script src='../polyfill/es6-shim-0.35.1.js'></script>

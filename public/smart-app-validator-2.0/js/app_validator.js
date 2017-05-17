@@ -2,6 +2,8 @@
   'use strict';
   var AppValidator = {};
 
+  var tenant = null;
+
   var loadData = function() {
     var ret = $.Deferred();
 
@@ -16,13 +18,14 @@
       var results = {};
       results.browserInfo = $.browser;
       results.userAgent = userAgentInfo;
-      results.tenant = smart.tokenResponse.tenant;
+      results.tenant = tenant;
       results.user = smart.tokenResponse.username;
       results.resources = [];
       results.successCount = 0;
       results.failureCount = 0;
 
-      document.getElementById('tenant').innerHTML = smart.tokenResponse.tenant;
+      var serviceUrl = smart.server.serviceUrl;
+      document.getElementById('tenant').innerHTML = serviceUrl.substr(serviceUrl.lastIndexOf('/') + 1);
 
       var authenticated = function(param) {
         var header = null;
@@ -33,6 +36,7 @@
 
         if (!param.headers) {param.headers = {};}
         param.headers['Content-Type'] = 'application/json+fhir';
+        param.headers['Accept'] = 'application/json+fhir';
         param.headers.Authorization = header;
 
         return param;
@@ -83,29 +87,29 @@
           url: url,
           dataType: 'json'
         }))
-        .done(function(data, textStatus, jqXHR) {
-          buildValidatorResult(name, textStatus, jqXHR, url, true);
-          results.successCount += 1;
-          htmlStr = '<p> &check; ' + name + ': ' + textStatus + ' - ' + jqXHR.status + buildButton(name) +
+            .done(function(data, textStatus, jqXHR) {
+              buildValidatorResult(name, textStatus, jqXHR, url, true);
+              results.successCount += 1;
+              htmlStr = '<p> &check; ' + name + ': ' + textStatus + ' - ' + jqXHR.status + buildButton(name) +
               buildResponseBlock(name, url, jqXHR.getAllResponseHeaders(), data, jqXHR.status) + '</p>';
-          if (name === 'Conformance') {
-            processConformance(data);
-          }
-        })
-        .fail(function(jqXHR, textStatus) {
-          buildValidatorResult(name, textStatus, jqXHR, url, false);
-          results.failureCount += 1;
-          htmlStr = '<p> &cross; ' + name + ': ' + textStatus + ' - ' + jqXHR.status + buildButton(name) +
+              if (name === 'Conformance') {
+                processConformance(data);
+              }
+            })
+            .fail(function(jqXHR, textStatus) {
+              buildValidatorResult(name, textStatus, jqXHR, url, false);
+              results.failureCount += 1;
+              htmlStr = '<p> &cross; ' + name + ': ' + textStatus + ' - ' + jqXHR.status + buildButton(name) +
               buildResponseBlock(name, url, jqXHR.getAllResponseHeaders(), jqXHR, jqXHR.status) + '</p>';
-          if (name === 'Conformance') {
-            //Since conformance call failed we report the error for conformance and dont make any other
-            // service calls.
-            reportResults(AppValidator.deferreds, 1);
-          }
-        })
-        .always(function() {
-          document.getElementById(name).innerHTML = htmlStr;
-        });
+              if (name === 'Conformance') {
+                //Since conformance call failed we report the error for conformance and dont make any other
+                // service calls.
+                reportResults(AppValidator.deferreds, 1);
+              }
+            })
+            .always(function() {
+              document.getElementById(name).innerHTML = htmlStr;
+            });
       };
 
       function Resource(name, patient, encounter, params, displayName) {
@@ -136,56 +140,71 @@
           var resourceDisplayName = '';
 
           var additionalParam = null;
-          if (resource === 'AllergyIntolerance') {
-            additionalParam = 'status=unconfirmed';
-          }
 
-          if (resource === 'Condition_Diagnosis') {
+          if (resource === 'Condition-diagnosis') {
             resource = 'Condition';
-            resourceDisplayName = 'Condition_Diagnosis';
-            additionalParam = 'category=diagnosis&clinicalstatus=active,resolved';
+            resourceDisplayName = 'Condition-diagnosis';
+            additionalParam = 'category=diagnosis';
           }
 
-          if (resource === 'Condition_Problem') {
+          if (resource === 'Condition-problem') {
             resource = 'Condition';
-            resourceDisplayName = 'Condition_Problem';
-            additionalParam = 'category=problem&clinicalstatus=active,resolved';
+            resourceDisplayName = 'Condition-problem';
+            additionalParam = 'category=problem';
           }
 
-          if (resource === 'MedicationOrder') {
-            additionalParam = 'status=active&_count=20';
+          if (resource === 'Condition-health-concern') {
+            resource = 'Condition';
+            resourceDisplayName = 'Condition-health-concern';
+            additionalParam = 'category=health-concern';
           }
 
-          var priorDate = new Date();
-          var monthsToDeduct = 6;
-          priorDate.setMonth(priorDate.getMonth() - monthsToDeduct);
-
-          if ( resource === 'MedicationStatement') {
-            additionalParam = 'status=completed&_count=10&effectivedate=ge' + priorDate.toISOString();
+          if (resource === 'Observation-laboratory') {
+            resource = 'Observation';
+            resourceDisplayName = 'Observation-laboratory';
+            additionalParam = 'category=laboratory';
           }
 
-          if (resource === 'Observation') {
-            var currentDate = new Date();
+          if (resource === 'Observation-vital-signs') {
+            resource = 'Observation';
+            resourceDisplayName = 'Observation-vital-signs';
+            additionalParam = 'category=vital-signs';
+          }
 
-            additionalParam = 'code=http://loinc.org|30522-7,http://loinc.org|14647-2,http://loinc.org|2093-3,' +
-                'http://loinc.org|2085-9,http://loinc.org|8480-6,http://loinc.org|3141-9,http://loinc.org|8302-2,' +
-                'http://loinc.org|8287-5,http://loinc.org|39156-5,http://loinc.org|18185-9,http://loinc.org|37362-1';
+          if (resource === 'Observation-social-history') {
+            resource = 'Observation';
+            resourceDisplayName = 'Observation-social-history';
+            additionalParam = 'category=social-history';
+          }
 
-            additionalParam += '&date=lt' + currentDate.toISOString() + '&date=gt' + priorDate.toISOString();
-            additionalParam += '&_count=20';
+          if (resource === 'CarePlan-CareTeam') {
+            resource = 'CarePlan';
+            resourceDisplayName = 'CarePlan-CareTeam';
+            additionalParam = 'category=http://argonaut.hl7.org|careteam';
+          }
+
+          if (resource === 'CarePlan-assess-plan') {
+            resource = 'CarePlan';
+            resourceDisplayName = 'CarePlan-assess-plan';
+            additionalParam = 'category=assess-plan';
+          }
+
+          if (resource === 'DocumentReference') {
+            resource = 'DocumentReference/$docref';
+            resourceDisplayName = 'DocumentReference';
+            additionalParam = 'type=http://loinc.org|34133-9';
+          }
+
+          if (resource === 'Binary') {
+            resource = 'Binary/$autogen-ccd-if';
+            resourceDisplayName = 'Binary';
+
           }
 
           var resourceObj = new Resource(resource, patientId, encounterId, additionalParam, resourceDisplayName);
 
           if (resource === 'Patient') {
             deferreds.push(getResourceById(resourceObj.name, resourceObj.patient));
-          }
-          else if ((resource === 'Encounter') && encounterId) {
-            deferreds.push(getResourceById(resourceObj.name, resourceObj.encounter));
-          }
-          else if (resource === 'DocumentReference') {
-            document.getElementById('DocumentReference').innerHTML = '<p>DocumentReference (write): ' +
-                'Skipped as validating write transactions are not supported at this time.</p>';
           }
           else {
             deferreds.push(getResource(resourceObj.resourceDisplayName, resourceObj.uri()));
@@ -228,22 +247,22 @@
       }
 
       var healthChecks = [ new HealthCheck('SMARTAppServiceHealthCheck',
-                                           'SMART App Service Health Check',
-                                           getSMARTHealthCheckURL()),
-                           new HealthCheck('FHIRServiceHealthCheck',
-                                           'FHIR Service Health Check',
-                                           getFHIRHealthCheckURL())
-                         ];
+          'SMART App Service Health Check',
+          getSMARTHealthCheckURL()),
+        new HealthCheck('FHIRServiceHealthCheck',
+            'FHIR Service Health Check',
+            getFHIRHealthCheckURL())
+      ];
 
       function getHealthChecks(name, display, url) {
         $.getJSON(url, function(data, textStatus, jqXHR) {
           document.getElementById(name).innerHTML = '<p> &check; ' + display + ': ' + textStatus + ' - ' +
-            jqXHR.status + '</p>';
+          jqXHR.status + '</p>';
         })
-        .fail(function(jqXHR, textStatus)  {
-          document.getElementById(name).innerHTML = '<p> &cross; ' + display + ': ' + textStatus + ' - ' +
-            jqXHR.status + '</p>';
-        });
+            .fail(function(jqXHR, textStatus)  {
+              document.getElementById(name).innerHTML = '<p> &cross; ' + display + ': ' + textStatus + ' - ' +
+              jqXHR.status + '</p>';
+            });
       }
 
       function reportResults(deferreds, resourceCount) {
@@ -283,7 +302,13 @@
         if (data && data.hasOwnProperty('rest') && Array.isArray(data.rest)) {
           data.rest[0].resource.forEach(function (resource){
             if (resource.type === 'Condition'){
-              availableResources.push('Condition_Diagnosis', 'Condition_Problem');
+              availableResources.push('Condition-diagnosis', 'Condition-problem', 'Condition-health-concern');
+            }
+            else if (resource.type === 'Observation') {
+              availableResources.push('Observation', 'Observation-laboratory', 'Observation-vital-signs', 'Observation-social-history');
+            }
+            else if (resource.type === 'CarePlan') {
+              availableResources.push('CarePlan-CareTeam', 'CarePlan-assess-plan');
             }
             else {
               availableResources.push(resource.type);
@@ -291,9 +316,9 @@
           });
         }
 
-        var supportedResources = ['Patient', 'Encounter', 'AllergyIntolerance', 'Condition_Diagnosis',
-          'Condition_Problem', 'DiagnosticReport', 'Immunization', 'Observation', 'MedicationOrder',
-          'MedicationStatement', 'DocumentReference'];
+        var supportedResources = ['Patient', 'Encounter', 'AllergyIntolerance', 'Condition-diagnosis',
+          'Condition-problem', 'Condition-health-concern', 'DiagnosticReport', 'Immunization', 'Observation', 'Observation-laboratory', 'Observation-vital-signs', 'Observation-social-history', 'MedicationOrder',
+          'MedicationStatement', 'DocumentReference', 'CarePlan-CareTeam', 'Device', 'CarePlan-assess-plan', 'Goal', 'Binary', 'Procedure'];
         /* jshint bitwise: false */
         AppValidator.resources = availableResources.filter(function(r){return ~this.indexOf(r);}, supportedResources);
 
@@ -340,13 +365,49 @@
 
   AppValidator.loadData = loadData;
 
+  var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+      sParameterName = sURLVariables[i].split('=');
+
+      if (sParameterName[0] === sParam) {
+        return sParameterName[1] === undefined ? true : sParameterName[1];
+      }
+    }
+  };
+
   var authorize = function(client_id) {
+
+    var iss = getUrlParameter('iss');
+
+    tenant = iss.substr(iss.lastIndexOf('/') + 1);
+
+    if (!iss) {
+      console.log("iss parameter not provided");
+    }
+
+    var launch = getUrlParameter('launch');
+
+    var scopes =  'online_access profile openid ' +
+        'patient/Encounter.read patient/Patient.read patient/Observation.read patient/Immunization.read ' +
+        'patient/AllergyIntolerance.read patient/Condition.read patient/DiagnosticReport.read ' +
+        'patient/MedicationOrder.read patient/MedicationStatement.read patient/Binary.read ' +
+        'patient/CarePlan.read patient/Device.read patient/DocumentReference.read patient/Goal.read ' +
+        'patient/Procedure.read patient/CareTeam.read';
+
+    if (launch) {
+      scopes =  'launch ' + scopes;
+    } else {
+      scopes = 'launch/patient ' + scopes;
+    }
+
     FHIR.oauth2.authorize({
       'client_id': client_id,
-      'scope':  'launch online_access profile openid ' +
-                'patient/Encounter.read patient/Patient.read patient/Observation.read patient/Immunization.read ' +
-                'patient/AllergyIntolerance.read patient/Condition.read patient/DiagnosticReport.read ' +
-                'patient/MedicationOrder.read patient/MedicationStatement.read '
+      'scope': scopes
     }, function() {
       document.getElementById('AuthorizationServer').innerHTML = '<p> &cross; Authorization (OAuth2): ' +
       'Failed to discover the authorization URL.</p>';
