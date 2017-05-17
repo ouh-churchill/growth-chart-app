@@ -93,12 +93,32 @@ GC.get_data = function() {
 
     if (smart.hasOwnProperty('patient')) {
       var ptFetch = smart.patient.read();
-      var vitalsFetch = smart.patient.api.fetchAll({type: "Observation", query: {code: {$or: ['http://loinc.org|3141-9',
-        'http://loinc.org|8302-2', 'http://loinc.org|8287-5',
-        'http://loinc.org|39156-5', 'http://loinc.org|18185-9',
-        'http://loinc.org|37362-1', 'http://loinc.org|11884-4',
-        'http://loinc.org|83845-8', 'http://loinc.org|83846-6',
+      var vitalsFetch = smart.patient.api.fetchAll({type: "Observation", query: {code: {$or: [
+        //Weight
+        'http://loinc.org|3141-9',
+        'http://loinc.org|29463-7',
+        'http://loinc.org|8335-2',
+        //Height
+        'http://loinc.org|8302-2',
+        'http://loinc.org|8301-4',
+        'http://loinc.org|3137-7',
+        //Head Circumference
+        'http://loinc.org|8287-5',
+        //BMI
+        'http://loinc.org|39156-5',
+        //Gestsational Age
+        'http://loinc.org|18185-9',
+        //Gestsational Age Cerner
+        'http://loinc.org|11884-4',
+        //Bone Age
         'http://loinc.org|85151-9',
+        //Bone Age Old To Remove
+        'http://loinc.org|37362-1',
+        //Parental Height Father
+        'http://loinc.org|83845-8',
+        //Parental Height Mother
+        'http://loinc.org|83846-6',
+        //Parental Height Father/Mother To Remove
         'http://snomed.info/sct|8021000175101', 'http://snomed.info/sct|8031000175103']}}});
 
       $.when(ptFetch, vitalsFetch).fail(function(jqXHR) {
@@ -125,7 +145,7 @@ GC.get_data = function() {
         onErrorWithWarning(GC.str('STR_Error_UnknownGender'), smart, canadarmLog, Canadarm.level.ERROR);
       }
 
-      var vitalsByCode = smart.byCode(vitals, 'code');
+      var vitalsByCode = smart.byCodes(vitals, 'code');
 
       var t0 = new Date().getTime();
 
@@ -163,14 +183,12 @@ GC.get_data = function() {
       p.demographics.birthday = patient.birthDate;
       p.demographics.gender = patient.gender;
 
-      var gestAge = vitalsByCode['18185-9'];
-      canadarmInfo.gestAgeLoinc = ['18185-9'];
-      canadarmInfo.gestAgeCount = gestAge ? gestAge.length : 0;
-      if (gestAge === undefined) {
-        canadarmInfo.gestAgeCernerLoinc = ['11884-4'];
+      var gestAge = vitalsByCode('18185-9');
+      updateCanadarmLogs(['18185-9'],'gestAge',vitalsByCode,gestAge.length);
+      if (gestAge === undefined || gestAge.length == 0) {
         //handle an alternate mapping of Gest Age used by Cerner
-        gestAge = vitalsByCode['11884-4'];
-        canadarmInfo.gestAgeCernerCount = gestAge ? gestAge.length : 0;
+        gestAge = vitalsByCode('11884-4');
+        updateCanadarmLogs(['11884-4'],'gestAgeCerner',vitalsByCode,gestAge.length);
       }
       if (gestAge && gestAge.length > 0) {
         var weeks = 0, qty = gestAge[0].valueString ? 
@@ -198,34 +216,40 @@ GC.get_data = function() {
         p.demographics.weeker = weeks;
       }
 
+      function updateCanadarmLogs(loincs,loincKey,vitalsByCode, obsCount) {
+        canadarmInfo[loincKey + 'Loinc'] = [];
+        loincs.forEach(function(loinc){
+          if (vitalsByCode(loinc).length > 0) {
+            canadarmInfo[loincKey + 'Loinc'].push(loinc);
+          }
+        });
+        canadarmInfo[loincKey + 'Count'] = obsCount
+      }
+
       canadarmInfo.totalObservationsCount = Array.isArray(vitals) ? vitals.length : 0;
       canadarmInfo.invalidObservationsCount = 0;
       canadarmInfo.invalidObservations = [];
 
       var units = smart.units;
-      var bodyWeightObservations = vitalsByCode['3141-9'];
-      canadarmInfo.bodyWeightMeasuredLoinc = ['3141-9'];
-      canadarmInfo.bodyWeightMeasuredCount = bodyWeightObservations ? bodyWeightObservations.length : 0;
+      var bodyWeightObservations = vitalsByCode('3141-9','29463-7','8335-2');
+      updateCanadarmLogs(['3141-9','29463-7','8335-2'],'bodyWeightMeasured',vitalsByCode, bodyWeightObservations.length);
       process(bodyWeightObservations, units.kg, p.vitals.weightData);
 
-      var bodyHeightObservations = vitalsByCode['8302-2'];
-      canadarmInfo.bodyHeightLoinc = ['8302-2'];
+      var bodyHeightObservations = vitalsByCode('8302-2','8301-4','3137-7');
+      updateCanadarmLogs(['8302-2','8301-4','3137-7'],'bodyHeight',vitalsByCode,bodyHeightObservations.length);
       canadarmInfo.bodyHeightCount = bodyHeightObservations ? bodyHeightObservations.length : 0;
       process(bodyHeightObservations,  units.cm,  p.vitals.lengthData);
 
-      var headCircumferenceObservations = vitalsByCode['8287-5'];
-      canadarmInfo.headCircumferenceLoinc = ['8287-5'];
-      canadarmInfo.headCircumferenceCount = headCircumferenceObservations ? headCircumferenceObservations.length : 0;
+      var headCircumferenceObservations = vitalsByCode('8287-5');
+      updateCanadarmLogs(['8287-5'],'headCircumference',vitalsByCode,headCircumferenceObservations.length);
       process(headCircumferenceObservations,  units.cm,  p.vitals.headCData);
 
-      var bodyMassIndexObservations = vitalsByCode['39156-5'];
-      canadarmInfo.bodyMassIndexLoinc = ['39156-5'];
-      canadarmInfo.bodyMassIndexCount = bodyMassIndexObservations ? bodyMassIndexObservations.length : 0;
+      var bodyMassIndexObservations = vitalsByCode('39156-5');
+      updateCanadarmLogs(['39156-5'],'bodyMassIndex',vitalsByCode,bodyMassIndexObservations.length);
       process(bodyMassIndexObservations, units.any, p.vitals.BMIData);
 
-      var boneXRayBoneAgeObservations = vitalsByCode['85151-9'] ? vitalsByCode['85151-9'] : vitalsByCode['37362-1'];
-      canadarmInfo.boneXRayBoneAgeLoinc = vitalsByCode['85151-9'] ? ['85151-9'] : vitalsByCode['37362-1'] ? ['37362-1'] : "";
-      canadarmInfo.boneXRayBoneAgeCount = boneXRayBoneAgeObservations ? boneXRayBoneAgeObservations.length : 0;
+      var boneXRayBoneAgeObservations = vitalsByCode('85151-9').length > 0 ? vitalsByCode('85151-9') : vitalsByCode('37362-1');
+      updateCanadarmLogs(['85151-9','37362-1'],'boneXRayBoneAge',vitalsByCode,boneXRayBoneAgeObservations.length);
       processBA(boneXRayBoneAgeObservations, p.boneAge);
 
       function isKnownGender(gender) {
@@ -240,7 +264,7 @@ GC.get_data = function() {
 
       function validObservationObj(obj){
         if (obj.status && (obj.status.toLowerCase() === 'final' || obj.status.toLowerCase() === 'amended') &&
-          obj.hasOwnProperty('valueQuantity') && obj.valueQuantity.value && obj.valueQuantity.code ) {
+          obj.hasOwnProperty('valueQuantity') && obj.valueQuantity.hasOwnProperty('value') && obj.valueQuantity.hasOwnProperty('code')) {
           return true;
         }
         var vQ = obj.hasOwnProperty('valueQuantity') ? "value=" + obj.valueQuantity.value + " code=" +
@@ -303,9 +327,8 @@ GC.get_data = function() {
       // Handle Father and Mother heights :
 
       // Check Height of Father using LOINC first over SNOMED if familyHistory is not available
-      var observations = vitalsByCode['83845-8'] ? vitalsByCode['83845-8'] : vitalsByCode['8021000175101'];
-      canadarmInfo.parentalHeightFatherLoinc = ['83845-8'];
-      canadarmInfo.parentalHeightFatherCount = observations ? observations.length : 0;
+      var observations = vitalsByCode('83845-8').length > 0 ? vitalsByCode('83845-8') : vitalsByCode('8021000175101');
+      updateCanadarmLogs(['83845-8','8021000175101'],'parentalHeightFather',vitalsByCode,observations.length);
       if (observations && observations.length > 0 && p.familyHistory.father.height === null){
         if (validObservationObj(observations[0])) {
           p.familyHistory.father.height = units.cm(observations[0].valueQuantity);
@@ -314,9 +337,8 @@ GC.get_data = function() {
       }
 
       // Check Height of Mother using LOINC first over SNOMED if familyHistory is not available
-      observations = vitalsByCode['83846-6'] ? vitalsByCode['83846-6'] : vitalsByCode['8031000175103'];
-      canadarmInfo.parentalHeightMotherLoinc = ['83846-6'];
-      canadarmInfo.parentalHeightMotherCount = observations ? observations.length : 0;
+      observations = vitalsByCode('83846-6').length > 0 ? vitalsByCode('83846-6') : vitalsByCode('8031000175103');
+      updateCanadarmLogs(['83846-6','8031000175103'],'parentalHeightMother',vitalsByCode,observations.length);
       if (observations && observations.length > 0 && p.familyHistory.mother.height === null){
         if (validObservationObj(observations[0])) {
           p.familyHistory.mother.height = units.cm(observations[0].valueQuantity);
