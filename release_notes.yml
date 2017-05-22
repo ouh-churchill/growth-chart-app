@@ -1,10 +1,11 @@
 issue_base_uri: https://jira2.cerner.com/browse/
 versions:
   - version: 1.43.0
-    release_date: 2017-xx-xx
+    release_date: 2017-05-22
     changes:
       - {author: ss025783, comment: Fix for Growth Chart Printing slowness issue, issue: OPENSVC-4216, type: add}
       - {author: ss025783, comment: Fixed logic to check for invalid observations in ASCVD Risk App, issue: OPENSVC-4280, type: add}
+      - {author: ss025783, comment: 1.43.0 release review, issue: OPENSVC-4286, type: add}
   - version: 1.42.1
     release_date: 2017-05-17
     changes:
