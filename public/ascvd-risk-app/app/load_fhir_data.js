@@ -394,8 +394,9 @@ window.ASCVDRisk = window.ASCVDRisk || {};
     const dataPoints = ASCVDRisk.sortObservationsByTime(observations);
     for (let i = 0; i < dataPoints.length; i += 1) {
       if ((dataPoints[i].status.toLowerCase() === 'final' || dataPoints[i].status.toLowerCase() === 'amended') &&
-        {}.hasOwnProperty.call(dataPoints[i], 'valueQuantity') && dataPoints[i].valueQuantity.value &&
-        dataPoints[i].valueQuantity.unit) {
+        {}.hasOwnProperty.call(dataPoints[i], 'valueQuantity') &&
+        {}.hasOwnProperty.call(dataPoints[i].valueQuantity, 'value') &&
+        {}.hasOwnProperty.call(dataPoints[i].valueQuantity, 'unit')) {
         const dataPointValue = supportedUnitsCriteria(dataPoints[i]);
         if (dataPointValue !== undefined) {
           return dataPointValue;

@@ -557,7 +557,7 @@ describe ('ASCVDRisk', () => {
         }, {
           "valueQuantity" : {
             unit: 'mm[Hg]',
-            value: 119
+            value: 0
           },
           "effectiveDateTime" : "2016-03-07T18:02:00.000Z",
           "status" : 'amended'
