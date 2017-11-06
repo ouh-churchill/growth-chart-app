@@ -19,18 +19,25 @@ window.GC = window.GC || {};
         var out = {};
         out.annotation = { txt : this.note };
         out.agemos = patient.DOB.diffMonths(this.date + 1);
+        if (this.hasOwnProperty('dateString')){
+            out.dateString = this.dateString;
+        }
         return out;
     };
 
-    function SmartBoneage(date, boneAgeMos) {
+    function SmartBoneage(date, boneAgeMos, dateString) {
         this.date = new XDate(date);
         this.boneAgeMos = boneAgeMos;
+        this.dateString = dateString;
     }
 
     SmartBoneage.prototype.toGCBoneage = function(patient) {
         var out = {};
         out.boneAge = this.boneAgeMos;
         out.agemos  = patient.DOB.diffMonths(this.date + 1);
+        if (this.hasOwnProperty('dateString')){
+            out.dateString = this.dateString;
+        }
         return out;
     };
 
@@ -278,7 +285,8 @@ window.GC = window.GC || {};
                 agemos: o.hasOwnProperty("agemos") ?
                     o.agemos :
                     patient.DOB.diffMonths(new XDate(o.date)),
-                value : o.value
+                value : o.value,
+                dateString: o.dateString
             });
         }
 
@@ -336,6 +344,9 @@ window.GC = window.GC || {};
 
         if (boneAgeList && boneAgeList.length) {
             $.each(boneAgeList, function(i, o) {
+                if (o.hasOwnProperty("boneAgeMos") && o.hasOwnProperty("date") && o.hasOwnProperty("dateString")) {
+                    o = new SmartBoneage(o.date, o.boneAgeMos, o.dateString);
+                }
                 if (o instanceof SmartBoneage) {
                     patient.boneAge.push(o.toGCBoneage(patient));
                 } else {
@@ -475,6 +486,9 @@ window.GC = window.GC || {};
                     model[ o.agemos ].lengthAndStature = o.value;
                 } else {
                     model[ o.agemos ] = { "lengthAndStature" : o.value };
+                    if (o.hasOwnProperty('dateString')) {
+                        model[ o.agemos ]['dateString'] = o.dateString;
+                    }
                 }
             });
 
@@ -484,6 +498,9 @@ window.GC = window.GC || {};
                     model[ o.agemos ].weight = o.value;
                 } else {
                     model[ o.agemos ] = { "weight" : o.value };
+                    if (o.hasOwnProperty('dateString')) {
+                        model[ o.agemos ]['dateString'] = o.dateString;
+                    }
                 }
             });
 
@@ -494,6 +511,9 @@ window.GC = window.GC || {};
                 } else {
                     model[ o.agemos ] = { "headc" : o.value };
                 }
+                if (!model[o.agemos].hasOwnProperty("dateString") && o.hasOwnProperty('dateString')) {
+                    model[ o.agemos ]['dateString'] = o.dateString;
+                }
             });
 
             // BMI
@@ -502,6 +522,9 @@ window.GC = window.GC || {};
                     model[ o.agemos ].bmi = o.value;
                 } else {
                     model[ o.agemos ] = { "bmi" : o.value };
+                }
+                if (!model[o.agemos].hasOwnProperty("dateString") && o.hasOwnProperty('dateString')) {
+                    model[ o.agemos ]['dateString'] = o.dateString;
                 }
             });
 
@@ -512,6 +535,9 @@ window.GC = window.GC || {};
                 } else {
                     model[ o.agemos ] = { "boneAge" : o.boneAge };
                 }
+                if (!model[o.agemos].hasOwnProperty("dateString") && o.hasOwnProperty('dateString')) {
+                    model[ o.agemos ]['dateString'] = o.dateString;
+                }
             });
 
             // Annotations
@@ -521,12 +547,18 @@ window.GC = window.GC || {};
                 } else {
                     model[ o.agemos ] = { "annotation" : o.annotation };
                 }
+                if (!model[o.agemos].hasOwnProperty("dateString") && o.hasOwnProperty('dateString')) {
+                    model[ o.agemos ]['dateString'] = o.dateString;
+                }
             });
 
             // Override with custom scratchpad data if available
             if (GC._isPatientDataEditable && GC.scratchpadData && GC.scratchpadData.patientData) {
                 $.each(GC.scratchpadData.patientData, function(i, o) {
                     model[ o.agemos ] = o;
+                    if (!model[o.agemos].hasOwnProperty("dateString") && o.hasOwnProperty('dateString')) {
+                        model[ o.agemos ]['dateString'] = o.dateString;
+                    }
                 });
             }
 

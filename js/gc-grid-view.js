@@ -253,8 +253,9 @@
 
         $.each(model, function( index, data ) {
             //debugger;
+            var dateString = data.hasOwnProperty('dateString') ? data.dateString : '';
             var age  = new GC.TimeInterval(patient.DOB).setMonths(data.agemos),
-                date = new XDate(patient.DOB.getTime()).addMonths(data.agemos),
+                date = new XDate(dateString),
                 dateText = date.toString(GC.chartSettings.dateFormat);//,
                 // years,
                 // months,
@@ -478,8 +479,8 @@
             {
                 label : "Date",
                 get   : function( entry/*, model*/ ) {
-                    return new XDate(patient.DOB.getTime())
-                        .addMonths(entry.agemos)
+                    var dateString = entry.hasOwnProperty('dateString') ? entry.dateString : '';
+                    return new XDate(dateString)
                         .toString(GC.chartSettings.dateFormat);
                 },
                 style : "text-align:left"
