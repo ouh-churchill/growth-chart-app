@@ -161,6 +161,8 @@ GC.get_data = function() {
             process(vitalsByCode['8302-2'],  units.cm,  p.vitals.lengthData);
             process(vitalsByCode['8287-5'],  units.cm,  p.vitals.headCData);
             process(vitalsByCode['39156-5'], units.any, p.vitals.BMIData);
+            //Bone Age: The reason to prefer the LOINC 85151-9 over 37362-1 is because 37362-1 is a LOINC for radiology report (document)
+            // and may not represent a quantitative value which the app needs.
             var boneAgeObservations = vitalsByCode['85151-9'] ? vitalsByCode['85151-9'] : vitalsByCode['37362-1'];
             processBoneAge(boneAgeObservations, p.boneAge, units);
 
