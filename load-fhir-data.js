@@ -185,9 +185,7 @@ GC.get_data = function() {
                 }
             });
 
-            // Handle Father and Mother heights :
-
-            // Height of Father using LOINC if familyHistory is not available
+            // Handle father's and mother's heights using LOINC when Family History FHIR resource is not available.
             var observations = vitalsByCode['83845-8'];
             if (observations && observations.length > 0 && p.familyHistory.father.height === null){
                 if (isValidObservationObj(observations[0])) {
@@ -195,8 +193,6 @@ GC.get_data = function() {
                     p.familyHistory.father.isBio = true;
                 }
             }
-
-            // Height of Mother using LOINC if familyHistory is not available
             observations = vitalsByCode['83846-6'];
             if (observations && observations.length > 0 && p.familyHistory.mother.height === null){
                 if (isValidObservationObj(observations[0])) {
