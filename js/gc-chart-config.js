@@ -24,7 +24,7 @@ window.GC = window.GC || {};
     // been stored on the server too)
     // =========================================================================
     var readOnlySettings = {
-        fileRevision : 208,
+        fileRevision : 209,
 
         // See the toString method for the rendering template
         version : {
@@ -169,12 +169,12 @@ window.GC = window.GC || {};
         nicu : false,
 
         roundPrecision : {
-            length     : { std : 1, nicu : 1 },
+            length     : { std : 1, nicu : 3 },
             weight     : { std : 1, nicu : 3 },
-            headc      : { std : 1, nicu : 1 },
-            bmi        : { std : 1, nicu : 1 },
-            percentile : { std : 0, nicu : 0 },
-            zscore     : { std : 2, nicu : 2 },
+            headc      : { std : 1, nicu : 3 },
+            bmi        : { std : 1, nicu : 3 },
+            percentile : { std : 0, nicu : 3 },
+            zscore     : { std : 2, nicu : 3 },
             velocity   : { std : "year", nicu : "day" }
         },
 

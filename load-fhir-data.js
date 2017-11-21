@@ -107,7 +107,8 @@ GC.get_data = function() {
                     if (isValidObservationObj(v)) {
                         arr.push({
                             agemos: months(v.effectiveDateTime, patient.birthDate),
-                            value: toUnit(v.valueQuantity)
+                            value: toUnit(v.valueQuantity),
+                            display: v.effectiveDateTime
                         })
                     }
                 });
@@ -140,6 +141,9 @@ GC.get_data = function() {
                             40;
 
                 if (typeof qty == 'string') {
+                    if (qty.indexOf("weeks") > 0 ) {
+                        qty = qty.replace(/ weeks/gi, "W");
+                    }
                     qty.replace(/(\d+)([WD])\s*/gi, function(token, num, code) {
                         num = parseFloat(num);
                         if (code.toUpperCase() == 'D') {
@@ -190,6 +194,22 @@ GC.get_data = function() {
                 }
             });
 
+            // Handle father's and mother's heights using LOINC when Family History FHIR resource is not available.
+            var observations = vitalsByCode['83845-8'];
+            if (observations && observations.length > 0 && p.familyHistory.father.height === null){
+                if (isValidObservationObj(observations[0])) {
+                    p.familyHistory.father.height = units.cm(observations[0].valueQuantity);
+                    p.familyHistory.father.isBio = true;
+                }
+            }
+            observations = vitalsByCode['83846-6'];
+            if (observations && observations.length > 0 && p.familyHistory.mother.height === null){
+                if (isValidObservationObj(observations[0])) {
+                    p.familyHistory.mother.height = units.cm(observations[0].valueQuantity);
+                    p.familyHistory.mother.isBio = true;
+                }
+            }
+
             window.data = p;
             console.log("Check out the patient's growth data: window.data");
             dfd.resolve(p);
@@ -216,6 +236,8 @@ GC.get_data = function() {
                                 'http://loinc.org|18185-9',
                                 'http://loinc.org|37362-1',
                                 'http://loinc.org|11884-4',
+                                'http://loinc.org|83845-8',
+                                'http://loinc.org|83846-6',
                                 'http://loinc.org|85151-9'
                             ]
                         }
