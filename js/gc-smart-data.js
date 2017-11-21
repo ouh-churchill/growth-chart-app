@@ -68,13 +68,17 @@ window.GC = window.GC || {};
             }
 
             // If this record was NOT made at the same day as the previous one -
-            // get it, but first get the buffer if not empty
+            // get it, but first get the buffer if not empty and overwrite first same day entry
             else {
                 if (buffer > -1) {
-                    out.push(data[buffer]);
+                    out[out.length-1] = data[buffer];
                     buffer = -1;
                 }
                 out.push(rec);
+            }
+
+            if (idx === len-1 && buffer !== -1) {
+                out[out.length - 1] = rec;
             }
 
             lastDay = day;
@@ -286,6 +290,7 @@ window.GC = window.GC || {};
                     o.agemos :
                     patient.DOB.diffMonths(new XDate(o.date)),
                 value : o.value,
+                display: o.display,
                 dateString: o.dateString
             });
         }
@@ -503,6 +508,24 @@ window.GC = window.GC || {};
                     }
                 }
             });
+
+            // Display
+            var setDisplayInModel = function(i, o) {
+                if ( model.hasOwnProperty(o.agemos) ) {
+                    if (!model.hasOwnProperty("display")) {
+                        model[o.agemos].display = o.display;
+                    }
+                } else {
+                    model[ o.agemos ] = { "display" : o.display };
+                }
+                if (!model[o.agemos].hasOwnProperty("dateString") && o.hasOwnProperty('dateString')) {
+                    model[ o.agemos ]['dateString'] = o.dateString;
+                }
+            };
+
+            $.each(this.data.weight, setDisplayInModel);
+            $.each(this.data.headc, setDisplayInModel);
+            $.each(this.data.lengthAndStature, setDisplayInModel);
 
             // HEADC
             $.each(this.data.headc, function(i, o) {
