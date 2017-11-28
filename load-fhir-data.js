@@ -167,7 +167,12 @@ GC.get_data = function() {
             process(vitalsByCode['8302-2'],  units.cm,  p.vitals.lengthData);
             process(vitalsByCode['8287-5'],  units.cm,  p.vitals.headCData);
             process(vitalsByCode['39156-5'], units.any, p.vitals.BMIData);
-            processBoneAge(vitalsByCode['37362-1'], p.boneAge, units);
+            //Bone Age: The reason to prefer the LOINC 85151-9 over 37362-1 is because 37362-1 is a LOINC for radiology report (document)
+            // and may not represent a quantitative value which the app needs.
+            var boneAgeObservations = vitalsByCode['85151-9'] ? vitalsByCode['85151-9'] : vitalsByCode['37362-1'];
+            processBoneAge(boneAgeObservations, p.boneAge, units);
+
+
 
             $.each(familyHistories, function(index, fh) {
                 if (fh.resourceType === "FamilyMemberHistory") {
@@ -190,6 +195,22 @@ GC.get_data = function() {
                     });
                 }
             });
+
+            // Handle father's and mother's heights using LOINC when Family History FHIR resource is not available.
+            var observations = vitalsByCode['83845-8'];
+            if (observations && observations.length > 0 && p.familyHistory.father.height === null){
+                if (isValidObservationObj(observations[0])) {
+                    p.familyHistory.father.height = units.cm(observations[0].valueQuantity);
+                    p.familyHistory.father.isBio = true;
+                }
+            }
+            observations = vitalsByCode['83846-6'];
+            if (observations && observations.length > 0 && p.familyHistory.mother.height === null){
+                if (isValidObservationObj(observations[0])) {
+                    p.familyHistory.mother.height = units.cm(observations[0].valueQuantity);
+                    p.familyHistory.mother.isBio = true;
+                }
+            }
 
             window.data = p;
             console.log("Check out the patient's growth data: window.data");
@@ -216,7 +237,10 @@ GC.get_data = function() {
                                 'http://loinc.org|39156-5',
                                 'http://loinc.org|18185-9',
                                 'http://loinc.org|37362-1',
-                                'http://loinc.org|11884-4'
+                                'http://loinc.org|11884-4',
+                                'http://loinc.org|83845-8',
+                                'http://loinc.org|83846-6',
+                                'http://loinc.org|85151-9'
                             ]
                         }
                     }
