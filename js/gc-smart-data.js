@@ -19,18 +19,25 @@ window.GC = window.GC || {};
         var out = {};
         out.annotation = { txt : this.note };
         out.agemos = patient.DOB.diffMonths(this.date + 1);
+        if (this.hasOwnProperty('dateString')){
+            out.dateString = this.dateString;
+        }
         return out;
     };
 
-    function SmartBoneage(date, boneAgeMos) {
+    function SmartBoneage(date, boneAgeMos, dateString) {
         this.date = new XDate(date);
         this.boneAgeMos = boneAgeMos;
+        this.dateString = dateString;
     }
 
     SmartBoneage.prototype.toGCBoneage = function(patient) {
         var out = {};
         out.boneAge = this.boneAgeMos;
         out.agemos  = patient.DOB.diffMonths(this.date + 1);
+        if (this.hasOwnProperty('dateString')){
+            out.dateString = this.dateString;
+        }
         return out;
     };
 
@@ -61,13 +68,17 @@ window.GC = window.GC || {};
             }
 
             // If this record was NOT made at the same day as the previous one -
-            // get it, but first get the buffer if not empty
+            // get it, but first get the buffer if not empty and overwrite first same day entry
             else {
                 if (buffer > -1) {
-                    out.push(data[buffer]);
+                    out[out.length-1] = data[buffer];
                     buffer = -1;
                 }
                 out.push(rec);
+            }
+
+            if (idx === len-1 && buffer !== -1) {
+                out[out.length - 1] = rec;
             }
 
             lastDay = day;
@@ -278,7 +289,9 @@ window.GC = window.GC || {};
                 agemos: o.hasOwnProperty("agemos") ?
                     o.agemos :
                     patient.DOB.diffMonths(new XDate(o.date)),
-                value : o.value
+                value : o.value,
+                display: o.display,
+                dateString: o.dateString
             });
         }
 
@@ -336,6 +349,9 @@ window.GC = window.GC || {};
 
         if (boneAgeList && boneAgeList.length) {
             $.each(boneAgeList, function(i, o) {
+                if (o.hasOwnProperty("boneAgeMos") && o.hasOwnProperty("date") && o.hasOwnProperty("dateString")) {
+                    o = new SmartBoneage(o.date, o.boneAgeMos, o.dateString);
+                }
                 if (o instanceof SmartBoneage) {
                     patient.boneAge.push(o.toGCBoneage(patient));
                 } else {
@@ -472,61 +488,100 @@ window.GC = window.GC || {};
             // Length and Stature
             $.each(this.data.lengthAndStature, function(i, o) {
                 if ( model.hasOwnProperty(o.agemos) ) {
-                    model[ o.agemos ].lengthAndStature = o.value;
+                    model[o.agemos].lengthAndStature = o.value;
                 } else {
-                    model[ o.agemos ] = { "lengthAndStature" : o.value };
+                    model[o.agemos] = { "lengthAndStature" : o.value };
+                    if (o.hasOwnProperty('dateString')) {
+                        model[o.agemos]['dateString'] = o.dateString;
+                    }
                 }
             });
 
             // Weight
             $.each(this.data.weight, function(i, o) {
                 if ( model.hasOwnProperty(o.agemos) ) {
-                    model[ o.agemos ].weight = o.value;
+                    model[o.agemos].weight = o.value;
                 } else {
-                    model[ o.agemos ] = { "weight" : o.value };
+                    model[o.agemos] = { "weight" : o.value };
+                    if (o.hasOwnProperty('dateString')) {
+                        model[o.agemos]['dateString'] = o.dateString;
+                    }
                 }
             });
+
+            // Display
+            var setDisplayInModel = function(i, o) {
+                if ( model.hasOwnProperty(o.agemos) ) {
+                    if (!model.hasOwnProperty("display")) {
+                        model[o.agemos].display = o.display;
+                    }
+                } else {
+                    model[ o.agemos ] = { "display" : o.display };
+                }
+                if (!model[o.agemos].hasOwnProperty("dateString") && o.hasOwnProperty('dateString')) {
+                    model[ o.agemos ]['dateString'] = o.dateString;
+                }
+            };
+
+            $.each(this.data.weight, setDisplayInModel);
+            $.each(this.data.headc, setDisplayInModel);
+            $.each(this.data.lengthAndStature, setDisplayInModel);
 
             // HEADC
             $.each(this.data.headc, function(i, o) {
                 if ( model.hasOwnProperty(o.agemos) ) {
-                    model[ o.agemos ].headc = o.value;
+                    model[o.agemos].headc = o.value;
                 } else {
-                    model[ o.agemos ] = { "headc" : o.value };
+                    model[o.agemos] = { "headc" : o.value };
+                }
+                if (!model[o.agemos].hasOwnProperty("dateString") && o.hasOwnProperty('dateString')) {
+                    model[o.agemos]['dateString'] = o.dateString;
                 }
             });
 
             // BMI
             $.each(this.data.bmi, function(i, o) {
                 if ( model.hasOwnProperty(o.agemos) ) {
-                    model[ o.agemos ].bmi = o.value;
+                    model[o.agemos].bmi = o.value;
                 } else {
-                    model[ o.agemos ] = { "bmi" : o.value };
+                    model[o.agemos] = { "bmi" : o.value };
+                }
+                if (!model[o.agemos].hasOwnProperty("dateString") && o.hasOwnProperty('dateString')) {
+                    model[o.agemos]['dateString'] = o.dateString;
                 }
             });
 
             // Bone Age
             $.each(this.boneAge, function(i, o) {
                 if ( model.hasOwnProperty(o.agemos) ) {
-                    model[ o.agemos ].boneAge = o.boneAge;
+                    model[o.agemos].boneAge = o.boneAge;
                 } else {
-                    model[ o.agemos ] = { "boneAge" : o.boneAge };
+                    model[o.agemos] = { "boneAge" : o.boneAge };
+                }
+                if (!model[o.agemos].hasOwnProperty("dateString") && o.hasOwnProperty('dateString')) {
+                    model[o.agemos]['dateString'] = o.dateString;
                 }
             });
 
             // Annotations
             $.each(this.annotations, function(i, o) {
                 if ( model.hasOwnProperty(o.agemos) ) {
-                    model[ o.agemos ].annotation = o.annotation;
+                    model[o.agemos].annotation = o.annotation;
                 } else {
-                    model[ o.agemos ] = { "annotation" : o.annotation };
+                    model[o.agemos] = { "annotation" : o.annotation };
+                }
+                if (!model[o.agemos].hasOwnProperty("dateString") && o.hasOwnProperty('dateString')) {
+                    model[o.agemos]['dateString'] = o.dateString;
                 }
             });
 
             // Override with custom scratchpad data if available
             if (GC._isPatientDataEditable && GC.scratchpadData && GC.scratchpadData.patientData) {
                 $.each(GC.scratchpadData.patientData, function(i, o) {
-                    model[ o.agemos ] = o;
+                    model[o.agemos] = o;
+                    if (!model[o.agemos].hasOwnProperty("dateString") && o.hasOwnProperty('dateString')) {
+                        model[o.agemos]['dateString'] = o.dateString;
+                    }
                 });
             }
 
