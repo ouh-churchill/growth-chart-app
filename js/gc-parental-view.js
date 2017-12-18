@@ -975,10 +975,11 @@
                 lastHeightEntry = PATIENT.getLastEnryHaving("lengthAndStature"),
                 lastBMIEntry    = PATIENT.getLastEnryHaving("bmi"),
                 prevWeightEntry,
+                prevBMIEntry,
                 dataSet = GC.DATA_SETS.CDC_WEIGHT,
                 weightPctNow,
                 weightPctPrev,
-                healthyWeightMin, healthyWeightMax, weightPctDiff, obesity;
+                bmiPctPrev, healthyWeightMin, healthyWeightMax, weightPctDiff, weightPct, useBMIRange;
 
             out.name = PATIENT.name;
 
@@ -1002,8 +1003,26 @@
 
                 weightPctPrev = weightPctNow;
 
+                if (lastBMIEntry && lastBMIEntry.agemos >= 24) {
+                    weightPct = GC.findPercentileFromX(
+                        lastBMIEntry.bmi,
+                        GC.DATA_SETS.CDC_BMI,
+                        PATIENT.gender,
+                        lastBMIEntry.agemos
+                      ) * 100;
+                    if (!isNaN(weightPct) || isFinite(weightPct)) {
+                        weightPctNow = weightPct;
+                        weightPctPrev = weightPct;
+                        useBMIRange = true;
+                    }
+                }
+
                 prevWeightEntry = PATIENT.getLastModelEntry(function(entry) {
                     return entry.weight !== undefined && entry.agemos < lastWeightEntry.agemos;
+                });
+
+                prevBMIEntry = PATIENT.getLastModelEntry(function(entry) {
+                    return entry.bmi !== undefined && entry.agemos < lastBMIEntry.agemos;
                 });
 
                 if (prevWeightEntry) {
@@ -1013,41 +1032,62 @@
                         PATIENT.gender,
                         prevWeightEntry.agemos
                     ) * 100;
+
+                    if (prevBMIEntry && prevBMIEntry.agemos >= 24) {
+                        bmiPctPrev = GC.findPercentileFromX(
+                            prevBMIEntry.bmi,
+                            GC.DATA_SETS.CDC_BMI,
+                            PATIENT.gender,
+                            prevBMIEntry.agemos
+                          ) * 100;
+                        if (!isNaN(bmiPctPrev) || isFinite(bmiPctPrev)) {
+                            weightPctPrev = bmiPctPrev;
+                        } else if (useBMIRange) {
+                            weightPctPrev = weightPctNow;
+                        }
+                    } else if (useBMIRange) {
+                        weightPctPrev = weightPctNow;
+                    }
                 }
 
+                // CDC - calculate weight percentile by last BMI measurement taken for patients 2 y/o and over
                 if (lastBMIEntry && lastBMIEntry.agemos >= 24) {
-                    obesity = GC.findPercentileFromX(
+                    weightPct = GC.findPercentileFromX(
                         lastBMIEntry.bmi,
                         GC.DATA_SETS.CDC_BMI,
                         PATIENT.gender,
                         lastBMIEntry.agemos
                     ) * 100;
 
-                    if (isNaN(obesity) || !isFinite(obesity)) {
-                        obesity = weightPctNow;
+                    if (isNaN(weightPct) || !isFinite(weightPct)) {
+                        weightPct = weightPctNow;
                     }
                 }
                 else {
-                    obesity = weightPctNow;
+                    weightPct = weightPctNow;
+                }
+
+                if (lastBMIEntry && lastBMIEntry.agemos >= 24) {
+                    dataSet = GC.DATA_SETS.CDC_BMI;
                 }
 
                 healthyWeightMin = GC.findXFromPercentile(
                     0.05,
                     dataSet,
                     PATIENT.gender,
-                    lastWeightEntry.agemos
+                    useBMIRange ? lastBMIEntry.agemos : lastWeightEntry.agemos
                 );
 
                 healthyWeightMax = GC.findXFromPercentile(
                     0.85,
                     dataSet,
                     PATIENT.gender,
-                    lastWeightEntry.agemos
+                    useBMIRange ? lastBMIEntry.agemos : lastWeightEntry.agemos
                 );
 
-                weightPctDiff = weightPctNow - weightPctPrev;
+                weightPctDiff = weightPct - weightPctPrev;
 
-                if (obesity < 5) {
+                if (weightPct < 5) {
                     out.state = WEIGHT_STATES.UNDERWEIGHT;
                     if (weightPctDiff < -1) {
                         out.stateGoingTo = WEIGHT_TRENDS.MORE_UNDERWEIGHT;
@@ -1056,16 +1096,16 @@
                     } else {
                         out.stateGoingTo = WEIGHT_TRENDS.IMPROVING;
                     }
-                } else if (obesity <= 85) {
+                } else if (weightPct < 85) {
                     out.state = WEIGHT_STATES.HEALTHY;
-                    if (weightPctDiff < -1 && weightPctNow <= 10) {
+                    if (weightPctDiff < -1 && weightPct <= 10) {
                         out.stateGoingTo = WEIGHT_TRENDS.RISK_FOR_UNDERWEIGHT;
-                    } else if (weightPctDiff > -1 && weightPctNow > 80) {
+                    } else if (weightPctDiff > -1 && weightPct > 80) {
                         out.stateGoingTo = WEIGHT_TRENDS.RISK_FOR_OVERWEIGHT;
                     } else {
                         out.stateGoingTo = WEIGHT_TRENDS.NONE;
                     }
-                } else if ( obesity <= 95) {
+                } else if ( weightPct < 95) {
                     out.state = WEIGHT_STATES.OVERWEIGHT;
                     if (weightPctDiff < -1) {
                         out.stateGoingTo = WEIGHT_TRENDS.IMPROVING;
@@ -1088,6 +1128,7 @@
                 out.lastWeight       = lastWeightEntry.weight;
                 out.healthyWeightMin = healthyWeightMin;
                 out.healthyWeightMax = healthyWeightMax;
+                out.useBMIRange = useBMIRange;
             }
 
             return out;
@@ -1144,13 +1185,23 @@
                 // The standard healthy weight message
                 // -------------------------------------------------------------
                 if (meta.healthyWeightMin && meta.healthyWeightMax) {
-                    msg[i++] = GC.str(PATIENT.gender == "male" ? "STR_163" : "STR_164");
-                    msg[i++] = GC.Util.format(meta.healthyWeightMin, { type : "weight", system: "metric" });
-                    msg[i++] = " &mdash; ";
-                    msg[i++] = GC.Util.format(meta.healthyWeightMax, { type : "weight", system: "metric" });
-                    msg[i++] = "(" + GC.Util.format(meta.healthyWeightMin, { type : "weight", system: "eng" });
-                    msg[i++] = " &mdash; ";
-                    msg[i++] = GC.Util.format(meta.healthyWeightMax, { type : "weight", system: "eng" }) + ").";
+                    if (meta.useBMIRange) {
+                        msg[i++] = GC.str(PATIENT.gender == "male" ? "STR_BMIRange_Male" : "STR_BMIRange_Female");
+                        msg[i++] = GC.Util.format(meta.healthyWeightMin, { type : "bmi", system: "metric" });
+                        msg[i++] = " &mdash; ";
+                        msg[i++] = GC.Util.format(meta.healthyWeightMax, { type : "bmi", system: "metric" });
+                        msg[i++] = "(" + GC.Util.format(meta.healthyWeightMin, { type : "bmi", system: "eng" });
+                        msg[i++] = " &mdash; ";
+                        msg[i++] = GC.Util.format(meta.healthyWeightMax, { type : "bmi", system: "eng" }) + ").";
+                    } else {
+                        msg[i++] = GC.str(PATIENT.gender == "male" ? "STR_163" : "STR_164");
+                        msg[i++] = GC.Util.format(meta.healthyWeightMin, { type : "weight", system: "metric" });
+                        msg[i++] = " &mdash; ";
+                        msg[i++] = GC.Util.format(meta.healthyWeightMax, { type : "weight", system: "metric" });
+                        msg[i++] = "(" + GC.Util.format(meta.healthyWeightMin, { type : "weight", system: "eng" });
+                        msg[i++] = " &mdash; ";
+                        msg[i++] = GC.Util.format(meta.healthyWeightMax, { type : "weight", system: "eng" }) + ").";
+                    }
 
                     $("#vitals-message .weight-range").html(msg.join(" "));
 
