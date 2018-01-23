@@ -848,8 +848,17 @@ window.GC = (function(NS) {
             en : "Greyscale - High Contrast",
             es : "Gris - аlto contraste",
             bg : "Черно-бял - висок контраст"
+        },
+        "STR_BMIRange_Male" : {
+            en : "The healthy BMI for his age and height is",
+            es : "El IMC saludable para su edad y altura es",
+            bg : ""
+        },
+        "STR_BMIRange_Female" : {
+            en : "The healthy BMI for her age and height is",
+            es : "El IMC saludable para su edad y altura es",
+            bg : ""
         }
-
     };
 
     NS.locales = locales;
