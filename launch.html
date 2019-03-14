@@ -7,8 +7,9 @@
     <script src="node_modules/fhirclient/fhir-client.js"></script>
     <script>
       FHIR.oauth2.authorize({
-        "client_id": "growth_chart",
-        "scope":  "patient/*.read"
+        "client_id": "", //"growth_chart" - replace with client id guid from code.cerner interface
+        // "scope":  "patient/*.read"  -- Cerner do not support Wildcard scopes even though its in the spec
+        "scope": "patient/Patient.read patient/Observation.read"  // Wants FamilyMemberHistory.read, but this isn't one Cerner provides; Ignite isn't concerned with separation by spaces or commas, both seem to work - Capitalisation of the Resourse though, does matter!
       });
     </script>
   </head>

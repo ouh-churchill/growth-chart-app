@@ -41,7 +41,7 @@ window.GC = window.GC || {};
             }
         },
 
-        appEnvironment : "PRODUCTION", // DEVELOPMENT | PRODUCTION
+        appEnvironment : "DEVELOPMENT", // DEVELOPMENT | PRODUCTION
 
         // Used to log the execution time of some important methods
         timeLogsEnabled : false,

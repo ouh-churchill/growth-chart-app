@@ -1,6 +1,6 @@
 {
   "name": "growthchart",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "scripts": {
     "serve": "./node_modules/http-server/bin/http-server -p 9000 -c-1 .",
     "start": "npm run serve"
@@ -10,6 +10,6 @@
     "fhirclient": "^0.1.9"
   },
   "devDependencies": {
-    "http-server": "^0.9.0"
+    "http-server": "0.11.1"
   }
 }
