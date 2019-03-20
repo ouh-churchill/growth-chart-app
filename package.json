@@ -1,13 +1,13 @@
 {
   "name": "growthchart",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "scripts": {
     "serve": "./node_modules/http-server/bin/http-server -p 9000 -c-1 .",
     "start": "npm run serve"
   },
   "dependencies": {
-    "eslint": "^3.9.1",
-    "fhirclient": "^0.1.9"
+    "eslint": "^5.15.3",
+    "fhirclient": "^0.1.15"
   },
   "devDependencies": {
     "http-server": "0.11.1"
